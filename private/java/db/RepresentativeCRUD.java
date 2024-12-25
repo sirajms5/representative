@@ -53,7 +53,7 @@ public class RepresentativeCRUD {
                         }                        
 
                         if(hocMember.getRoles() != null) {
-                            String sqlRoles = "INSERT INTO representative_roles (representative_id, role_name) VALUES (?, ?) ON DUPLICATE KEY UPDATE role_name = VALUES(role_name);";
+                            String sqlRoles = "INSERT INTO representative_roles (representative_id, role_name) VALUES (?, ?) ON DUPLICATE KEY UPDATE role_name = VALUES(role_name) ON DUPLICATE KEY UPDATE type = VALUES(type), postal_code = VALUES(postal_code);";
                             stmtRoles = conn.prepareStatement(sqlRoles);
                             for(int index = 0; index < hocMember.getRoles().size(); index++){
                                 stmtRoles.setInt(1, representativeId);
@@ -68,7 +68,7 @@ public class RepresentativeCRUD {
                 }
             }
         } catch (SQLException e) {
-
+            e.printStackTrace();
         } finally {
             if(stmtRepresemtatives != null) {
                 try {
@@ -89,6 +89,30 @@ public class RepresentativeCRUD {
             if(stmtRoles != null) {
                 try {
                     stmtRoles.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void insertUnavailableRepresentative(HOCMember hocMember) {
+        String sqlUnavilableRepresentative = "INSERT INTO unavilable_representative (first_name, last_name) VALUES (?, ?) ON DUPLICATE KEY UPDATE first_name = first_name, last_name = last_name";
+        PreparedStatement stmtUnavilableRepresentative = null;
+
+        try (Connection conn = DbManager.getConn()) {
+            stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableRepresentative);
+            stmtUnavilableRepresentative.setString(1, hocMember.getFirstName());
+            stmtUnavilableRepresentative.setString(2, hocMember.getLastName());
+            stmtUnavilableRepresentative.executeUpdate();
+            System.out.println("Inserted unavilable representative number: " + hocMember.getFirstName() + " " + hocMember.getLastName());
+            Helpers.sleep(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(stmtUnavilableRepresentative != null) {
+                try {
+                    stmtUnavilableRepresentative.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

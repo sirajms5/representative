@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import classes.HOCMember;
 import classes.Office;
+import db.RepresentativeCRUD;
 import utilities.Helpers;
 
 public class HOCApiFetch {
@@ -28,6 +29,7 @@ public class HOCApiFetch {
                     hocMember.getPosition()
                 );
 
+                System.out.println("Fetching data for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -35,7 +37,8 @@ public class HOCApiFetch {
 
                 // Check response code
                 if (conn.getResponseCode() != 200) {
-                    throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                    RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
+                    representativeCRUD.insertUnavailableRepresentative(hocMember);
                 }
 
                 // Read the response
