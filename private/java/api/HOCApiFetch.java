@@ -17,7 +17,8 @@ public class HOCApiFetch {
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
         List<HOCMember> updatedMembers = new ArrayList<>();
 
-        for (HOCMember hocMember : hocMembers) {
+        // for (HOCMember hocMember : hocMembers) {
+        HOCMember hocMember = hocMembers.get(0);
             try {
                 // Build API URL with parameters from hocMember
                 String apiUrl = String.format(
@@ -97,7 +98,13 @@ public class HOCApiFetch {
                     // Set boundaryExternalId
                     JSONObject related = obj.optJSONObject("related");
                     if (related != null) {
-                        hocMember.setBoundaryExternalId(related.optString("boundary_url", null));
+                        String boundaryUrl = related.optString("boundary_url", null);
+                        if (boundaryUrl != null && boundaryUrl.matches(".*/(\\d+)/?$")) {
+                            String boundaryId = boundaryUrl.replaceAll(".*/(\\d+)/?$", "$1");
+                            hocMember.setBoundaryExternalId(boundaryId);
+                        } else {
+                            hocMember.setBoundaryExternalId(null);
+                        }
                     }
 
                     // Add updated member to the list
@@ -107,7 +114,7 @@ public class HOCApiFetch {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        // }
 
         return updatedMembers;
     }

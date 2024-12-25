@@ -3,6 +3,7 @@ import java.util.List;
 import api.HOCApiFetch;
 import classes.HOCMember;
 import csv.CSVReader;
+import disk.DiskUtilities;
 
 public class Main{
     public static void main(String[] args) {
@@ -10,6 +11,19 @@ public class Main{
         List<HOCMember> members = csvReader.readCSV("C:\\xampp\\htdocs\\representative\\private\\java\\csv\\files\\export.csv");
         HOCApiFetch hocApiFetch = new HOCApiFetch();
         List<HOCMember> updatedMembers = hocApiFetch.fetchHOCMembersFromApi(members);
+        // Build a JSON string from the updated members
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[");
+        for (int i = 0; i < updatedMembers.size(); i++) {
+            HOCMember member = updatedMembers.get(i);
+            jsonBuilder.append(member.toJson());
+            if (i < updatedMembers.size() - 1) {
+                jsonBuilder.append(",");
+            }
+        }
 
+        jsonBuilder.append("]");
+        DiskUtilities diskUtilities = new DiskUtilities();
+        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\HOCjson.json");
     }
 }
