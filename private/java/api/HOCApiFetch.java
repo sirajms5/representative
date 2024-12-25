@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import classes.HOCMember;
 import classes.Office;
+import utilities.Helpers;
 
 public class HOCApiFetch {
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
@@ -109,6 +110,8 @@ public class HOCApiFetch {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            Helpers.sleep(1);
         }
 
         return updatedMembers;

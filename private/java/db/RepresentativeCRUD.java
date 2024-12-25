@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import classes.HOCMember;
+import utilities.Helpers;
 
 public class RepresentativeCRUD {
 
@@ -31,6 +32,7 @@ public class RepresentativeCRUD {
             stmtRepresemtatives.setString(11, hocMember.getLanguages());
 
             int insertedHOCId = stmtRepresemtatives.executeUpdate();
+            Helpers.sleep(1);
 
             if (insertedHOCId > 0) {
                 try (ResultSet generatedKeys = stmtRepresemtatives.getGeneratedKeys()) {
@@ -46,6 +48,7 @@ public class RepresentativeCRUD {
                                 stmtOffices.setString(4, hocMember.getOffices().get(index).getTel());
                                 stmtOffices.setString(5, hocMember.getOffices().get(index).getFax());
                                 stmtOffices.executeUpdate();
+                                Helpers.sleep(1);
                             }
                         }                        
 
@@ -56,6 +59,7 @@ public class RepresentativeCRUD {
                                 stmtRoles.setInt(1, representativeId);
                                 stmtRoles.setString(2, hocMember.getRoles().get(index));
                                 stmtRoles.executeUpdate();
+                                Helpers.sleep(1);
                             }     
                         }     
                         
