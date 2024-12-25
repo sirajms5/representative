@@ -14,6 +14,7 @@ import classes.HOCMember;
 import classes.Office;
 import db.RepresentativeCRUD;
 import utilities.Helpers;
+import utilities.LoggerUtility;
 
 public class HOCApiFetch {
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
@@ -29,7 +30,7 @@ public class HOCApiFetch {
                     hocMember.getPosition()
                 );
 
-                System.out.println("Fetching data for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
+                LoggerUtility.logInfo("Fetching data for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -39,6 +40,7 @@ public class HOCApiFetch {
                 if (conn.getResponseCode() != 200) {
                     RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
                     representativeCRUD.insertUnavailableRepresentative(hocMember);
+                    throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
                 }
 
                 // Read the response
@@ -110,6 +112,8 @@ public class HOCApiFetch {
                     updatedMembers.add(hocMember);
                 }
 
+            } catch (RuntimeException re) {
+                LoggerUtility.logInfo("Managed exception for unavilable representative above");
             } catch (Exception e) {
                 e.printStackTrace();
             }

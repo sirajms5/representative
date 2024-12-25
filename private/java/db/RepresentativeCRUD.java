@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import classes.HOCMember;
 import utilities.Helpers;
+import utilities.LoggerUtility;
 
 public class RepresentativeCRUD {
 
@@ -63,7 +64,7 @@ public class RepresentativeCRUD {
                             }     
                         }     
                         
-                        System.out.println("Inserted representative number: " + representativeId);
+                        LoggerUtility.logInfo("Inserted representative number: " + representativeId);
                     }
                 }
             }
@@ -105,7 +106,7 @@ public class RepresentativeCRUD {
             stmtUnavilableRepresentative.setString(1, hocMember.getFirstName());
             stmtUnavilableRepresentative.setString(2, hocMember.getLastName());
             stmtUnavilableRepresentative.executeUpdate();
-            System.out.println("Inserted unavilable representative number: " + hocMember.getFirstName() + " " + hocMember.getLastName());
+            LoggerUtility.logInfo("Inserted unavilable representative number: " + hocMember.getFirstName() + " " + hocMember.getLastName());
             Helpers.sleep(1);
         } catch (SQLException e) {
             e.printStackTrace();
