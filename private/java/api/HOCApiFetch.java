@@ -115,7 +115,7 @@ public class HOCApiFetch {
             } catch (RuntimeException re) {
                 LoggerUtility.logInfo("Managed exception for unavilable representative above");
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerUtility.logError(e.getMessage());
             }
 
             Helpers.sleep(1);

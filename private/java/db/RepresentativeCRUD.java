@@ -69,13 +69,13 @@ public class RepresentativeCRUD {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggerUtility.logError(e.getMessage());
         } finally {
             if(stmtRepresemtatives != null) {
                 try {
                     stmtRepresemtatives.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    LoggerUtility.logError(e.getMessage());
                 }
             }
 
@@ -83,7 +83,7 @@ public class RepresentativeCRUD {
                 try {
                     stmtOffices.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    LoggerUtility.logError(e.getMessage());
                 }
             }
 
@@ -91,7 +91,7 @@ public class RepresentativeCRUD {
                 try {
                     stmtRoles.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    LoggerUtility.logError(e.getMessage());
                 }
             }
         }
@@ -109,13 +109,13 @@ public class RepresentativeCRUD {
             LoggerUtility.logInfo("Inserted unavilable representative number: " + hocMember.getFirstName() + " " + hocMember.getLastName());
             Helpers.sleep(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggerUtility.logError(e.getMessage());
         } finally {
             if(stmtUnavilableRepresentative != null) {
                 try {
                     stmtUnavilableRepresentative.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    LoggerUtility.logError(e.getMessage());
                 }
             }
         }
