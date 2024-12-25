@@ -3,6 +3,7 @@ import java.util.List;
 import api.HOCApiFetch;
 import classes.HOCMember;
 import csv.CSVReader;
+import db.RepresentativeCRUD;
 import disk.DiskUtilities;
 
 public class Main{
@@ -14,10 +15,10 @@ public class Main{
         // Build a JSON string from the updated members
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[");
-        for (int i = 0; i < updatedMembers.size(); i++) {
-            HOCMember member = updatedMembers.get(i);
+        for (int index = 0; index < updatedMembers.size(); index++) {
+            HOCMember member = updatedMembers.get(index);
             jsonBuilder.append(member.toJson());
-            if (i < updatedMembers.size() - 1) {
+            if (index < updatedMembers.size() - 1) {
                 jsonBuilder.append(",");
             }
         }
@@ -25,5 +26,9 @@ public class Main{
         jsonBuilder.append("]");
         DiskUtilities diskUtilities = new DiskUtilities();
         diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\HOCjson.json");
+        RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
+        for (HOCMember hocMember : updatedMembers) {
+            representativeCRUD.insertHOCMemeber(hocMember);
+        }
     }
 }

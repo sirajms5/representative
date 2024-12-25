@@ -2,6 +2,8 @@ package classes;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+
 public class HOCMember {
     private String honorificTitle;
     private String firstName;
@@ -13,10 +15,11 @@ public class HOCMember {
     private String endDate;
     private String position = "MP";
     private String photoUrl;// photo
-    private List<String> languages;
+    private String languages;
     private List<Office> offices;
     private List<String> roles;
     private String boundaryExternalId;
+    private String level = "Federal";
 
     // Constructor
     public HOCMember(String honorificTitle, String firstName, String lastName,
@@ -112,11 +115,11 @@ public class HOCMember {
         this.photoUrl = photoUrl;
     }
 
-    public List<String> getLanguages() {
+    public String getLanguages() {
         return languages;
     }
 
-    public void setLanguages(List<String> languages) {
+    public void setLanguages(String languages) {
         this.languages = languages;
     }
 
@@ -144,60 +147,16 @@ public class HOCMember {
         this.boundaryExternalId = boundaryExternalId;
     }
 
-    public String toJson() {
-        StringBuilder json = new StringBuilder();
-        json.append("{");
-        json.append("\"honorificTitle\":\"").append(honorificTitle).append("\",");
-        json.append("\"firstName\":\"").append(firstName).append("\",");
-        json.append("\"lastName\":\"").append(lastName).append("\",");
-        json.append("\"constituency\":\"").append(constituency).append("\",");
-        json.append("\"provinceOrTerritory\":\"").append(provinceOrTerritory).append("\",");
-        json.append("\"politicalAffiliation\":\"").append(politicalAffiliation).append("\",");
-        json.append("\"startDate\":\"").append(startDate).append("\",");
-        json.append("\"endDate\":\"").append(endDate).append("\",");
-        json.append("\"position\":\"").append(position).append("\",");
-        json.append("\"photoUrl\":\"").append(photoUrl).append("\",");
-    
-        // Add languages
-        json.append("\"languages\":[");
-        if (languages != null && !languages.isEmpty()) {
-            for (int i = 0; i < languages.size(); i++) {
-                json.append("\"").append(languages.get(i)).append("\"");
-                if (i < languages.size() - 1) json.append(",");
-            }
-        }
-        json.append("],");
-    
-        // Add offices
-        json.append("\"offices\":[");
-        if (offices != null && !offices.isEmpty()) {
-            for (int i = 0; i < offices.size(); i++) {
-                Office office = offices.get(i);
-                json.append("{");
-                json.append("\"fax\":\"").append(office.getFax()).append("\",");
-                json.append("\"tel\":\"").append(office.getTel()).append("\",");
-                json.append("\"type\":\"").append(office.getType()).append("\",");
-                json.append("\"postal\":\"").append(office.getPostal()).append("\"");
-                json.append("}");
-                if (i < offices.size() - 1) json.append(",");
-            }
-        }
-        json.append("],");
-    
-        // Add roles
-        json.append("\"roles\":[");
-        if (roles != null && !roles.isEmpty()) {
-            for (int i = 0; i < roles.size(); i++) {
-                json.append("\"").append(roles.get(i)).append("\"");
-                if (i < roles.size() - 1) json.append(",");
-            }
-        }
-        json.append("],");
-    
-        // Add boundaryExternalId
-        json.append("\"boundaryExternalId\":\"").append(boundaryExternalId).append("\"");
-        json.append("}");
-    
-        return json.toString();
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }    
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 }

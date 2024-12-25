@@ -17,8 +17,7 @@ public class HOCApiFetch {
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
         List<HOCMember> updatedMembers = new ArrayList<>();
 
-        // for (HOCMember hocMember : hocMembers) {
-        HOCMember hocMember = hocMembers.get(0);
+        for (HOCMember hocMember : hocMembers) {
             try {
                 // Build API URL with parameters from hocMember
                 String apiUrl = String.format(
@@ -61,11 +60,7 @@ public class HOCApiFetch {
                     JSONObject extra = obj.optJSONObject("extra");
                     if (extra != null && extra.has("preferred_languages")) {
                         JSONArray languagesArray = extra.getJSONArray("preferred_languages");
-                        List<String> languages = new ArrayList<>();
-                        for (int j = 0; j < languagesArray.length(); j++) {
-                            languages.add(languagesArray.getString(j).trim());
-                        }
-                        hocMember.setLanguages(languages);
+                        hocMember.setLanguages(languagesArray.getString(0));
                     }
 
                     // Set offices
@@ -114,7 +109,7 @@ public class HOCApiFetch {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        // }
+        }
 
         return updatedMembers;
     }
