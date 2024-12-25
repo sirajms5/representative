@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.HOCMember;
+
 public class CSVReader {
     public List<HOCMember> readCSV(String filePath) {
         List<HOCMember> members = new ArrayList<>();

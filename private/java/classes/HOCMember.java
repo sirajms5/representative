@@ -1,4 +1,4 @@
-package csv;
+package classes;
 public class HOCMember {
     private String honorificTitle;
     private String firstName;

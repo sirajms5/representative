@@ -1,7 +1,7 @@
 import java.util.List;
 
+import classes.HOCMember;
 import csv.CSVReader;
-import csv.HOCMember;
 
 public class Main{
     public static void main(String[] args) {
