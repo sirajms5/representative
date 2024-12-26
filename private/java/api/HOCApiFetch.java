@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,6 @@ import classes.HOCMember;
 import classes.Office;
 import db.RepresentativeCRUD;
 import utilities.Helpers;
-// import utilities.LoggerUtility;
 
 public class HOCApiFetch {
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
@@ -22,17 +23,20 @@ public class HOCApiFetch {
         int fetchCounter = 0;
         for (HOCMember hocMember : hocMembers) {
             try {
+                String encodedFirstName = URLEncoder.encode(hocMember.getFirstName(),
+                        StandardCharsets.UTF_8.toString());
+                String encodedLastName = URLEncoder.encode(hocMember.getLastName(), StandardCharsets.UTF_8.toString());
+                String encodedPosition = URLEncoder.encode(hocMember.getPosition(), StandardCharsets.UTF_8.toString());
                 // Build API URL with parameters from hocMember
                 String apiUrl = String.format(
-                    "https://represent.opennorth.ca/representatives/house-of-commons/?first_name=%s&last_name=%s&elected_office=%s",
-                    hocMember.getFirstName(),
-                    hocMember.getLastName(),
-                    hocMember.getPosition()
-                );
+                        "https://represent.opennorth.ca/representatives/house-of-commons/?first_name=%s&last_name=%s&elected_office=%s",
+                        encodedFirstName,
+                        encodedLastName,
+                        encodedPosition);
 
-                // LoggerUtility.logInfo("Fetching data for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
-                fetchCounter = fetchCounter + 1;  
-                System.out.println("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
+                fetchCounter = fetchCounter + 1;
+                System.out.println("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " "
+                        + hocMember.getLastName());
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -40,8 +44,7 @@ public class HOCApiFetch {
 
                 // Check response code
                 if (conn.getResponseCode() != 200) {
-                    RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
-                    representativeCRUD.insertUnavailableRepresentative(hocMember);
+                    unavilableHocMember(hocMember);
                     continue;
                 }
 
@@ -78,11 +81,10 @@ public class HOCApiFetch {
                         for (int j = 0; j < officesArray.length(); j++) {
                             JSONObject officeObj = officesArray.getJSONObject(j);
                             Office office = new Office(
-                                officeObj.optString("fax", null),
-                                officeObj.optString("tel", null),
-                                officeObj.optString("type", null),
-                                officeObj.optString("postal", null)
-                            );
+                                    officeObj.optString("fax", null),
+                                    officeObj.optString("tel", null),
+                                    officeObj.optString("type", null),
+                                    officeObj.optString("postal", null));
                             offices.add(office);
                         }
                         hocMember.setOffices(offices);
@@ -112,16 +114,23 @@ public class HOCApiFetch {
 
                     // Add updated member to the list
                     updatedMembers.add(hocMember);
+                } else {
+                    unavilableHocMember(hocMember);                   
+                    continue;
                 }
 
             } catch (Exception e) {
-                // LoggerUtility.logError(e.getMessage());
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
-          
+
             Helpers.sleep(1);
         }
 
         return updatedMembers;
+    }
+
+    private void unavilableHocMember(HOCMember hocMember) {
+        RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
+        representativeCRUD.insertUnavailableRepresentative(hocMember);  
     }
 }
