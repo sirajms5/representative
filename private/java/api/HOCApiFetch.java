@@ -14,12 +14,12 @@ import classes.HOCMember;
 import classes.Office;
 import db.RepresentativeCRUD;
 import utilities.Helpers;
-import utilities.LoggerUtility;
+// import utilities.LoggerUtility;
 
 public class HOCApiFetch {
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
         List<HOCMember> updatedMembers = new ArrayList<>();
-
+        int fetchCounter = 0;
         for (HOCMember hocMember : hocMembers) {
             try {
                 // Build API URL with parameters from hocMember
@@ -30,7 +30,9 @@ public class HOCApiFetch {
                     hocMember.getPosition()
                 );
 
-                LoggerUtility.logInfo("Fetching data for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
+                // LoggerUtility.logInfo("Fetching data for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
+                fetchCounter = fetchCounter + 1;  
+                System.out.println("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -40,7 +42,7 @@ public class HOCApiFetch {
                 if (conn.getResponseCode() != 200) {
                     RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
                     representativeCRUD.insertUnavailableRepresentative(hocMember);
-                    throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                    continue;
                 }
 
                 // Read the response
@@ -112,12 +114,11 @@ public class HOCApiFetch {
                     updatedMembers.add(hocMember);
                 }
 
-            } catch (RuntimeException re) {
-                LoggerUtility.logInfo("Managed exception for unavilable representative above");
             } catch (Exception e) {
-                LoggerUtility.logError(e.getMessage());
+                // LoggerUtility.logError(e.getMessage());
+                System.out.println(e.getMessage());
             }
-
+          
             Helpers.sleep(1);
         }
 

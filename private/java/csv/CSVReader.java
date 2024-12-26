@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.HOCMember;
-import utilities.LoggerUtility;
+// import utilities.LoggerUtility;
 
 public class CSVReader {
     public List<HOCMember> readCSV(String filePath) {
@@ -36,7 +36,8 @@ public class CSVReader {
                         provinceOrTerritory, politicalAffiliation, startDate, endDate));
             }
         } catch (IOException e) {
-            LoggerUtility.logError(e.getMessage());
+            // LoggerUtility.logError(e.getMessage());
+            System.out.println(e.getMessage());
         }
 
         return members;

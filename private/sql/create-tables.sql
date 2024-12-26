@@ -77,24 +77,26 @@ CREATE TABLE representatives (
     boundary_external_id VARCHAR(50),  
     level VARCHAR(50),
     languages VARCHAR(50),
-    UNIQUE (position, level, boundary_external_id)            
+    UNIQUE (position, level, boundary_external_id, first_name, last_name)            
 );
 
 CREATE TABLE representative_offices (
     id INT AUTO_INCREMENT PRIMARY KEY,     
-    representative_id INT NOT NULL UNIQUE,         
+    representative_id INT NOT NULL,         
     type VARCHAR(50),                      
     postal_code VARCHAR(255),             
     phone VARCHAR(50),                      
     fax VARCHAR(50),                       
-    FOREIGN KEY (representative_id) REFERENCES representatives(id) ON DELETE CASCADE 
+    FOREIGN KEY (representative_id) REFERENCES representatives(id) ON DELETE CASCADE,
+    UNIQUE (representative_id, type, postal_code, phone, fax)
 );
 
 CREATE TABLE representative_roles (
     id INT AUTO_INCREMENT PRIMARY KEY,    
-    representative_id INT NOT NULL UNIQUE,         
+    representative_id INT NOT NULL,         
     role_name VARCHAR(255) NOT NULL,       
-    FOREIGN KEY (representative_id) REFERENCES representatives(id) ON DELETE CASCADE
+    FOREIGN KEY (representative_id) REFERENCES representatives(id) ON DELETE CASCADE,
+    UNIQUE (representative_id, role_name)
 );
 
 CREATE TABLE unavilable_representative (

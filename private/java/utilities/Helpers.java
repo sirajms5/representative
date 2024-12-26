@@ -5,7 +5,8 @@ public class Helpers {
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {
-            LoggerUtility.logError(e.getMessage());
+            // LoggerUtility.logError(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }
