@@ -20,6 +20,12 @@ public class HOCMember {
     private List<String> roles;
     private String boundaryExternalId;
     private String level = "Federal";
+    private String email;
+
+    public HOCMember(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     // Constructor
     public HOCMember(String honorificTitle, String firstName, String lastName,
@@ -153,7 +159,15 @@ public class HOCMember {
 
     public void setLevel(String level) {
         this.level = level;
-    }    
+    }   
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String toJson() {
         Gson gson = new Gson();

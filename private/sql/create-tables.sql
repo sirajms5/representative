@@ -71,6 +71,7 @@ CREATE TABLE representatives (
     constituency VARCHAR(255),       
     province_or_territory VARCHAR(255),
     political_affiliation VARCHAR(255),
+    email VARCHAR(255),
     start_date VARCHAR(30),                 
     position VARCHAR(255),             
     photo_url TEXT,                    

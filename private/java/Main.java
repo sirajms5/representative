@@ -5,6 +5,7 @@ import classes.HOCMember;
 import csv.CSVReader;
 import db.RepresentativeCRUD;
 import disk.DiskUtilities;
+import selenium.ScrappingRemaningHocMembers;
 
 public class Main{
     public static void main(String[] args) {
@@ -29,6 +30,16 @@ public class Main{
         RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
         for (HOCMember hocMember : updatedMembers) {
             representativeCRUD.insertHOCMemeber(hocMember);
+        }
+
+        List<HOCMember> unavilableHocMembers = representativeCRUD.getUnavilableHOCMembers();
+        ScrappingRemaningHocMembers scrappingRemaningHocMembers = new ScrappingRemaningHocMembers();
+        List<HOCMember> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
+        for (HOCMember hocMember : scrappedHOCMembers) {
+            boolean isInserted = representativeCRUD.insertHOCMemeber(hocMember);
+            if(isInserted) {
+                representativeCRUD.updateUnavilableHOCMember(hocMember, isInserted);
+            }
         }
     }
 }

@@ -5,14 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import classes.HOCMember;
 import utilities.Helpers;
 
 public class RepresentativeCRUD {
 
-    public void insertHOCMemeber(HOCMember hocMember) {
-        String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    public boolean insertHOCMemeber(HOCMember hocMember) {
+        boolean isInserted = false;
+        String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmtRepresemtatives = null;
         PreparedStatement stmtOffices= null;
         PreparedStatement stmtRoles = null;
@@ -31,11 +34,13 @@ public class RepresentativeCRUD {
             stmtRepresemtatives.setString(9, hocMember.getBoundaryExternalId());
             stmtRepresemtatives.setString(10, hocMember.getLevel());
             stmtRepresemtatives.setString(11, hocMember.getLanguages());
+            stmtRepresemtatives.setString(12, hocMember.getEmail());
 
             int insertedHOCId = stmtRepresemtatives.executeUpdate();
             Helpers.sleep(1);
 
             if (insertedHOCId > 0) {
+                isInserted = true;
                 try (ResultSet generatedKeys = stmtRepresemtatives.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         representativeId = generatedKeys.getInt(1);                        
@@ -95,6 +100,8 @@ public class RepresentativeCRUD {
                 }
             }
         }
+
+        return isInserted;
     }
 
     public void insertUnavailableRepresentative(HOCMember hocMember) {
@@ -114,6 +121,60 @@ public class RepresentativeCRUD {
             if(stmtUnavilableRepresentative != null) {
                 try {
                     stmtUnavilableRepresentative.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public List<HOCMember> getUnavilableHOCMembers() {
+        String sql = "SELECT first_name, last_name FROM unavilable_representative WHERE added = 0";
+        List<HOCMember> unavailableMembers = new ArrayList<>();
+
+        try (Connection conn = DbManager.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+
+                HOCMember hocMember = new HOCMember(firstName, lastName);
+                unavailableMembers.add(hocMember);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return unavailableMembers;
+    }
+
+    public void updateUnavilableHOCMember(HOCMember hocMember, boolean added) {
+        String sqlUpdate;
+        String firstName = hocMember.getFirstName();
+        String lastName = hocMember.getLastName();
+        if(added) {
+            sqlUpdate = "UPDATE unavilable_representative SET added = 1 WHERE first_name = ? AND last_name = ?;";
+        } else {
+            sqlUpdate = "UPDATE unavilable_representative SET added = 1 WHERE first_name = ? AND last_name = ?;";
+        }
+
+        PreparedStatement stmtUpdate = null;
+        try (Connection conn = DbManager.getConn()) {
+            stmtUpdate = conn.prepareStatement(sqlUpdate);
+            stmtUpdate.setString(1, firstName);
+            stmtUpdate.setString(2, lastName);    
+            int rowsUpdated = stmtUpdate.executeUpdate();
+    
+            System.out.println("Updated " + rowsUpdated + " row(s) in the unavilable_representative table for " + firstName + " " + lastName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (stmtUpdate != null) {
+                try {
+                    stmtUpdate.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
