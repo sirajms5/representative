@@ -16,8 +16,12 @@ import classes.HOCMember;
 import classes.Office;
 import db.RepresentativeCRUD;
 import utilities.Helpers;
+import utilities.LogKeeper;
 
 public class HOCApiFetch {
+
+    private LogKeeper logKeeper = LogKeeper.getInstance();
+
     public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
         List<HOCMember> updatedMembers = new ArrayList<>();
         int fetchCounter = 0;
@@ -35,8 +39,7 @@ public class HOCApiFetch {
                         encodedPosition);
 
                 fetchCounter = fetchCounter + 1;
-                System.out.println("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " "
-                        + hocMember.getLastName());
+                logKeeper.appendLog("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -121,7 +124,7 @@ public class HOCApiFetch {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logKeeper.appendLog(e.getMessage());
             }
 
             Helpers.sleep(1);

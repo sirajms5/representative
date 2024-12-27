@@ -15,9 +15,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import api.BoundariesApiFetch;
 import classes.HOCMember;
 import classes.Office;
+import utilities.LogKeeper;
 import utilities.SeleniumHelpers;
 
 public class ScrappingRemaningHocMembers {
+
+    private LogKeeper logKeeper = LogKeeper.getInstance();
+
     public List<HOCMember> scrapHocMembers(List<HOCMember> hocMembers) {
         List<HOCMember> hocMembersUpdated = new ArrayList<>();
         WebDriver webDriver = null;        
@@ -28,6 +32,7 @@ public class ScrappingRemaningHocMembers {
             seleniumHelpers.startBrowser(webDriver, hocUrl);
             seleniumHelpers.makeScreenFullSize(webDriver);        
             for(HOCMember hocMember : hocMembers) {
+                logKeeper.appendLog("Web scrapping for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 WebElement searchField = seleniumHelpers.getWebElementByXPath(webDriver, "(//div/input)[2]");
                 String hocMemberName = hocMember.getFirstName() + " " + hocMember.getLastName();
                 seleniumHelpers.sendKeysToWebElement(searchField, hocMemberName);
@@ -78,7 +83,7 @@ public class ScrappingRemaningHocMembers {
                 hocMembersUpdated.add(hocMember);
             }           
         } catch (Exception e) {
-            e.printStackTrace();
+            logKeeper.appendLog(e.getMessage());
         } finally {
             if (webDriver != null) {
                 webDriver.quit();
@@ -98,7 +103,7 @@ public class ScrappingRemaningHocMembers {
             String fax = matcher.group(2);  
             telAndFaxMap.put("fax", fax);
         } else {
-            System.out.println("No matches found for telephone and fax!");
+            logKeeper.appendLog("No matches found for telephone and fax!");
         }
 
         return telAndFaxMap;

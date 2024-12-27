@@ -13,14 +13,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utilities.Helpers;
+import utilities.LogKeeper;
 
 public class BoundariesApiFetch {
+
+    private LogKeeper logKeeper = LogKeeper.getInstance();
+
     public String fetchBoundaryExternalIdByConstituency(String constituency) {
         String boundaryExternalId = null;
         try {
             String encodedConstituency = URLEncoder.encode(constituency, StandardCharsets.UTF_8.toString());
             String apiUrl = String.format("https://represent.opennorth.ca/boundaries/?name=%s", encodedConstituency);
-            System.out.println("Fetching boundary for: " + constituency);
+            logKeeper.appendLog("Fetching boundary external id for: " + constituency);
             URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -46,14 +50,14 @@ public class BoundariesApiFetch {
                 if (objectsArray.length() > 0) {
                     JSONObject obj = objectsArray.getJSONObject(0); // Assume the first result is correct
                     boundaryExternalId = obj.optString("external_id", null);
-                    System.out.println("Found external id for " + constituency + ": " + boundaryExternalId);
+                    logKeeper.appendLog("Found external id for " + constituency + ": " + boundaryExternalId);
                     Helpers.sleep(1);
                 } else {
-                    System.out.println("Response 200 but no actual boundaries found");
+                    logKeeper.appendLog("Response 200 but no actual boundaries found");
                 }
 
         } catch (Exception e) {
-
+            logKeeper.appendLog(e.getMessage());
         }
         return boundaryExternalId;
     }

@@ -10,8 +10,11 @@ import java.util.List;
 
 import classes.HOCMember;
 import utilities.Helpers;
+import utilities.LogKeeper;
 
 public class RepresentativeCRUD {
+
+    private LogKeeper logKeeper = LogKeeper.getInstance();
 
     public boolean insertHOCMemeber(HOCMember hocMember) {
         boolean isInserted = false;
@@ -69,18 +72,18 @@ public class RepresentativeCRUD {
                             }     
                         }     
                         
-                        System.out.println("Inserted representative " + representativeId + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
+                        logKeeper.appendLog("Inserted representative " + representativeId + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
                     }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logKeeper.appendLog(e.getMessage());
         } finally {
             if(stmtRepresemtatives != null) {
                 try {
                     stmtRepresemtatives.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logKeeper.appendLog(e.getMessage());
                 }
             }
 
@@ -88,7 +91,7 @@ public class RepresentativeCRUD {
                 try {
                     stmtOffices.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logKeeper.appendLog(e.getMessage());
                 }
             }
 
@@ -96,7 +99,7 @@ public class RepresentativeCRUD {
                 try {
                     stmtRoles.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logKeeper.appendLog(e.getMessage());
                 }
             }
         }
@@ -113,16 +116,16 @@ public class RepresentativeCRUD {
             stmtUnavilableRepresentative.setString(1, hocMember.getFirstName());
             stmtUnavilableRepresentative.setString(2, hocMember.getLastName());
             stmtUnavilableRepresentative.executeUpdate();
-            System.out.println("Inserted unavilable representative number: " + hocMember.getFirstName() + " " + hocMember.getLastName());
+            logKeeper.appendLog("Inserted unavilable representative number: " + hocMember.getFirstName() + " " + hocMember.getLastName());
             Helpers.sleep(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logKeeper.appendLog(e.getMessage());
         } finally {
             if(stmtUnavilableRepresentative != null) {
                 try {
                     stmtUnavilableRepresentative.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logKeeper.appendLog(e.getMessage());
                 }
             }
         }
@@ -145,7 +148,7 @@ public class RepresentativeCRUD {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logKeeper.appendLog(e.getMessage());
         }
 
         return unavailableMembers;
@@ -168,15 +171,15 @@ public class RepresentativeCRUD {
             stmtUpdate.setString(2, lastName);    
             int rowsUpdated = stmtUpdate.executeUpdate();
     
-            System.out.println("Updated " + rowsUpdated + " row(s) in the unavilable_representative table for " + firstName + " " + lastName);
+            logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the unavilable_representative table for " + firstName + " " + lastName);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logKeeper.appendLog(e.getMessage());
         } finally {
             if (stmtUpdate != null) {
                 try {
                     stmtUpdate.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logKeeper.appendLog(e.getMessage());
                 }
             }
         }
