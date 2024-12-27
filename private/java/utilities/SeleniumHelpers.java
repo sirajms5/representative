@@ -16,42 +16,42 @@ public class SeleniumHelpers {
     }
 
     public WebElement getWebElementById(WebDriver webDriver, String id) {
-        WebElement webElement = webDriver.findElement(By.id(id));
         Helpers.sleep(1);
+        WebElement webElement = webDriver.findElement(By.id(id));
         return webElement;
     }
 
     public void sendKeysToWebElement(WebElement webElement, String keys) {
-        webElement.sendKeys(keys);
         Helpers.sleep(1);
+        webElement.sendKeys(keys);
     }
 
     public void clickElement(WebElement webElement) {
-        webElement.click();
         Helpers.sleep(1);
+        webElement.click();
     }
 
     public WebElement getWebElementByXPath(WebDriver webDriver, String xPath) {
-        WebElement webElement = webDriver.findElement(By.xpath(xPath));
         Helpers.sleep(1);
+        WebElement webElement = webDriver.findElement(By.xpath(xPath));
         return webElement;
     }
 
     public String getElementAttributeValue(WebElement webElement, String attribute) {
-        String attributeValue = webElement.getDomAttribute(attribute);
         Helpers.sleep(1);
+        String attributeValue = webElement.getDomAttribute(attribute);
         return attributeValue;
     }
 
     public List<WebElement> getWebElementsByXPath(WebDriver webDriver, String xPath) {
-        List<WebElement> webElements = webDriver.findElements(By.xpath(xPath));
         Helpers.sleep(1);
+        List<WebElement> webElements = webDriver.findElements(By.xpath(xPath));
         return webElements;
     }
 
     public List<WebElement> getWebElementsFromWebElementByTagName(WebElement webElement, String tagName) {
-        List<WebElement> webElements = webElement.findElements(By.tagName(tagName));
         Helpers.sleep(1);
+        List<WebElement> webElements = webElement.findElements(By.tagName(tagName));
         return webElements;
     }
 
@@ -67,23 +67,25 @@ public class SeleniumHelpers {
     }
 
     public WebElement getWebElementFromWebElementByXPath(WebElement webElement, String xPath) {
-        WebElement newWebElement = webElement.findElement(By.xpath(xPath));
         Helpers.sleep(1);
+        WebElement newWebElement = webElement.findElement(By.xpath(xPath));
         return newWebElement;
     }
 
     public String getStringFromWebElement(WebElement webElement) {
-        String value = webElement.getText();
         Helpers.sleep(1);
+        String value = webElement.getText();
         return value;
     }
 
     public void navigateTo(WebDriver webDriver, String url) {
+        Helpers.sleep(1);
         webDriver.navigate().to(url);
         Helpers.sleep(3);
     }
 
     public void makeScreenFullSize(WebDriver webDriver) {
+        Helpers.sleep(1);
         webDriver.manage().window().maximize();
         Helpers.sleep(1);        
     }

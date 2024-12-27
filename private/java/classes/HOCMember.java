@@ -27,7 +27,6 @@ public class HOCMember {
         this.lastName = lastName;
     }
 
-    // Constructor
     public HOCMember(String honorificTitle, String firstName, String lastName,
                     String constituency, String provinceOrTerritory,
                     String politicalAffiliation, String startDate, String endDate) {
@@ -39,7 +38,26 @@ public class HOCMember {
         this.politicalAffiliation = politicalAffiliation;
         this.startDate = startDate;
         this.endDate = endDate;
-    }    
+    }        
+
+    public HOCMember(String honorificTitle, String firstName, String lastName, String constituency,
+            String provinceOrTerritory, String politicalAffiliation, String startDate, String endDate, String position,
+            String photoUrl, String languages, String boundaryExternalId, String level, String email) {
+        this.honorificTitle = honorificTitle;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.constituency = constituency;
+        this.provinceOrTerritory = provinceOrTerritory;
+        this.politicalAffiliation = politicalAffiliation;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.position = position;
+        this.photoUrl = photoUrl;
+        this.languages = languages;
+        this.boundaryExternalId = boundaryExternalId;
+        this.level = level;
+        this.email = email;
+    }
 
     public String getHonorificTitle() {
         return honorificTitle;

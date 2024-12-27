@@ -9,6 +9,6 @@ public class Main{
         HocJob hocJob = new HocJob();
         hocJob.executeHocJob();
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
-        logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\logs\\backend-log.txt");
+        logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");
     }
 }

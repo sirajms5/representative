@@ -6,7 +6,7 @@ import api.HOCApiFetch;
 import classes.HOCMember;
 import csv.CSVReader;
 import db.RepresentativeCRUD;
-import disk.DiskUtilities;
+import disk.JsonWriter;
 import selenium.ScrappingRemaningHocMembers;
 import utilities.LogKeeper;
 
@@ -17,23 +17,9 @@ public class HocJob {
     public void executeHocJob() {
         logKeeper.appendLog("======================================== Executing HOC Job ========================================");
         CSVReader csvReader = new CSVReader();
-        List<HOCMember> members = csvReader.readCSV("C:\\xampp\\htdocs\\representative\\private\\java\\csv\\files\\export.csv");
+        List<HOCMember> members = csvReader.readCSV("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\csv\\export.csv");
         HOCApiFetch hocApiFetch = new HOCApiFetch();
-        List<HOCMember> updatedMembers = hocApiFetch.fetchHOCMembersFromApi(members);
-        // Build a JSON string from the updated members
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("[");
-        for (int index = 0; index < updatedMembers.size(); index++) {
-            HOCMember member = updatedMembers.get(index);
-            jsonBuilder.append(member.toJson());
-            if (index < updatedMembers.size() - 1) {
-                jsonBuilder.append(",");
-            }
-        }
-
-        jsonBuilder.append("]");
-        DiskUtilities diskUtilities = new DiskUtilities();
-        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\HOCjson.json");
+        List<HOCMember> updatedMembers = hocApiFetch.fetchHOCMembersFromApi(members);        
         RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
         for (HOCMember hocMember : updatedMembers) {
             representativeCRUD.insertHOCMemeber(hocMember);
@@ -49,6 +35,8 @@ public class HocJob {
             }
         }
 
+        JsonWriter jsonWriter = new JsonWriter();
+        jsonWriter.writeHocMembersJson();
         logKeeper.appendLog("======================================== Finished HOC Job ========================================");
     }
 }
