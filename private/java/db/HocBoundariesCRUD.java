@@ -78,6 +78,7 @@ public class HocBoundariesCRUD {
             stmtBoundaries.setDouble(5, boundary.getMinLongitude());
             stmtBoundaries.setDouble(6, boundary.getMaxLongitude());
             stmtBoundaries.setString(7, boundary.getSimepleShapeUrl());
+            stmtBoundaries.executeUpdate();
             logKeeper.appendLog("Inserted boundary external id: " + boundary.getExternalId());
 
             Helpers.sleep(1);
