@@ -3,6 +3,7 @@ package disk;
 import java.util.List;
 
 import classes.Boundary;
+import classes.GeoJsonFeatureCollection;
 import classes.HOCMember;
 import db.HocBoundariesCRUD;
 import db.HocRepresentativeCRUD;
@@ -27,7 +28,7 @@ public class JsonWriter {
 
         jsonBuilder.append("]");
         DiskUtilities diskUtilities = new DiskUtilities();
-        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\HOCMembers.json");
+        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\hoc\\HOCMembers.json");
         logKeeper.appendLog("Created JSON file for HOC members");
     }   
     
@@ -46,7 +47,14 @@ public class JsonWriter {
 
         jsonBuilder.append("]");
         DiskUtilities diskUtilities = new DiskUtilities();
-        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\HOCBoundaries.json");
+        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\hoc\\HOCBoundaries.json");
         logKeeper.appendLog("Created JSON file for HOC boundaries");
+    }
+
+    public void writeHocBoundariesGeoJson (GeoJsonFeatureCollection geoJsonFeatureCollection) {
+        String geoCollectionJson =  geoJsonFeatureCollection.toJson();
+        DiskUtilities diskUtilities = new DiskUtilities();
+        diskUtilities.txtWriter(geoCollectionJson, "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\hoc\\GeoJsonCollection.json");
+        logKeeper.appendLog("Created JSON file for HOC boundaries geo json");
     }
 }

@@ -114,37 +114,4 @@ public class BoundariesApiFetch {
         HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
         hocBoundariesCRUD.insertUnavilableBoundary(hocMember);
     }
-
-    private void unavilableHocSimpleShapeBoundary(HOCMember hocMember, String simpleShapeUrl) {
-        HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
-        hocBoundariesCRUD.insertUnavilableSimpleShape(hocMember, simpleShapeUrl);
-    }
-
-    private List<List<List<List<Double>>>> parseCoordinates(JSONArray jsonArray) {
-        List<List<List<List<Double>>>> coordinates = new ArrayList<>();
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONArray outerArray = jsonArray.getJSONArray(i);
-            List<List<List<Double>>> outerList = new ArrayList<>();
-
-            for (int j = 0; j < outerArray.length(); j++) {
-                JSONArray middleArray = outerArray.getJSONArray(j);
-                List<List<Double>> middleList = new ArrayList<>();
-
-                for (int k = 0; k < middleArray.length(); k++) {
-                    JSONArray innerArray = middleArray.getJSONArray(k);
-                    List<Double> innerList = new ArrayList<>();
-
-                    for (int l = 0; l < innerArray.length(); l++) {
-                        innerList.add(innerArray.getDouble(l));
-                    }
-                    middleList.add(innerList);
-                }
-                outerList.add(middleList);
-            }
-            coordinates.add(outerList);
-        }
-
-        return coordinates;
-    }
 }

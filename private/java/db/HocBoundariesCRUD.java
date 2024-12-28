@@ -40,16 +40,16 @@ public class HocBoundariesCRUD {
         }
     }
 
-    public void insertUnavilableSimpleShape(HOCMember hocMember, String simpleShapeUrl) {
+    public void insertUnavilableSimpleShape(String boundaryExternalId, String simpleShapeUrl) {
         String sqlUnavilableSimpleShape = "INSERT IGNORE INTO unavilable_hoc_simple_shape (boundary_external_id, simple_shape_url) VALUES (?, ?);";
         PreparedStatement stmtUnavilableRepresentative = null;
 
         try (Connection conn = DbManager.getConn()) {
             stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableSimpleShape);
-            stmtUnavilableRepresentative.setString(1, hocMember.getBoundaryExternalId());
+            stmtUnavilableRepresentative.setString(1, boundaryExternalId);
             stmtUnavilableRepresentative.setString(2, simpleShapeUrl);
             stmtUnavilableRepresentative.executeUpdate();
-            logKeeper.appendLog("Inserted unavilable simple shape boundary number: " + hocMember.getBoundaryExternalId()
+            logKeeper.appendLog("Inserted unavilable simple shape boundary number: " + boundaryExternalId
                     + ". url: " + simpleShapeUrl);
             Helpers.sleep(1);
         } catch (SQLException e) {
