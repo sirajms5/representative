@@ -10,7 +10,7 @@ public class Main{
         HocRepresentativesJob hocRepresentativesJob = new HocRepresentativesJob();
         hocRepresentativesJob.executeHocRepresentativesJob();
         HocBoundariesJob hocBoundariesJob = new HocBoundariesJob();
-        hocBoundariesJob.executeHocBoundaries();
+        hocBoundariesJob.executeHocBoundariesJob();
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
         logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");
     }

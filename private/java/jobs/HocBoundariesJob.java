@@ -14,7 +14,7 @@ public class HocBoundariesJob {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public void executeHocBoundaries() {
+    public void executeHocBoundariesJob() {
         logKeeper.appendLog("======================================== Executing HOC Boundaries Job ========================================");
         HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
         List<HOCMember> hocMembers = hocRepresentativeCRUD.getHocMembers();

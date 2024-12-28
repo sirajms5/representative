@@ -94,8 +94,6 @@ public class BoundariesApiFetch {
                     String simpleShapeUrl = "https://represent.opennorth.ca"
                             + boundaryResponse.getJSONObject("related").getString("simple_shape_url");
 
-                    Helpers.sleep(1);
-
                     Boundary boundary = new Boundary(externalId, name, minLatitude, maxLatitude, minLongitude,
                             maxLongitude, simpleShapeUrl);
                     boundaries.add(boundary);
