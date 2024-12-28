@@ -4,14 +4,12 @@ public class Properties {
     
     private String representative;
     private String constituency;
-    private double centroidLatitude;
-    private double centroidLongitude;
+    private String politicalAffiliation;
 
-    public Properties(String representative, String constituency, double centroidLatitude, double centroidLongitude) {
+    public Properties(String representative, String constituency, String politicalAffiliation) {
         this.representative = representative;
         this.constituency = constituency;
-        this.centroidLatitude = centroidLatitude;
-        this.centroidLongitude = centroidLongitude;
+        this.politicalAffiliation = politicalAffiliation;
     }
 
     public String getRepresentative() {
@@ -30,20 +28,12 @@ public class Properties {
         this.constituency = constituency;
     }
 
-    public double getCentroidLatitude() {
-        return centroidLatitude;
+    public String getPoliticalAffiliation() {
+        return politicalAffiliation;
     }
 
-    public void setCentroidLatitude(double centroidLatitude) {
-        this.centroidLatitude = centroidLatitude;
-    }
-
-    public double getCentroidLongitude() {
-        return centroidLongitude;
-    }
-
-    public void setCentroidLongitude(double centroidLongitude) {
-        this.centroidLongitude = centroidLongitude;
+    public void setPoliticalAffiliation(String politicalAffiliation) {
+        this.politicalAffiliation = politicalAffiliation;
     }
 }
 

@@ -5,25 +5,21 @@ import com.google.gson.Gson;
 public class Boundaries {
 
     private String externalId;
-    private String name;
+    private String boundaryName;
     private double minLatitude;
     private double maxLatitude;
     private double minLongitude;
     private double maxLongitude;
-    private double centroidLatitude;
-    private double centroidLogitude;
     private MultiPolygon multiPolygon;
 
-    public Boundaries(String externalId, String name, double minLatitude, double maxLatitude, double minLongitude,
-            double maxLongitude, double centroidLatitude, double centroidLogitude, MultiPolygon multiPolygon) {
+    public Boundaries(String externalId, String boundaryName, double minLatitude, double maxLatitude, double minLongitude,
+            double maxLongitude, MultiPolygon multiPolygon) {
         this.externalId = externalId;
-        this.name = name;
+        this.boundaryName = boundaryName;
         this.minLatitude = minLatitude;
         this.maxLatitude = maxLatitude;
         this.minLongitude = minLongitude;
         this.maxLongitude = maxLongitude;
-        this.centroidLatitude = centroidLatitude;
-        this.centroidLogitude = centroidLogitude;
         this.multiPolygon = multiPolygon;
     }
 
@@ -35,12 +31,12 @@ public class Boundaries {
         this.externalId = externalId;
     }
 
-    public String getName() {
-        return name;
+    public String getBoundaryName() {
+        return boundaryName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBoundaryName(String boundaryName) {
+        this.boundaryName = boundaryName;
     }
 
     public double getMinLatitude() {
@@ -73,22 +69,6 @@ public class Boundaries {
 
     public void setMaxLongitude(double maxLongitude) {
         this.maxLongitude = maxLongitude;
-    }
-
-    public double getCentroidLatitude() {
-        return centroidLatitude;
-    }
-
-    public void setCentroidLatitude(double centroidLatitude) {
-        this.centroidLatitude = centroidLatitude;
-    }
-
-    public double getCentroidLogitude() {
-        return centroidLogitude;
-    }
-
-    public void setCentroidLogitude(double centroidLogitude) {
-        this.centroidLogitude = centroidLogitude;
     }
 
     public MultiPolygon getMultiPolygon() {

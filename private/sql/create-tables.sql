@@ -108,3 +108,25 @@ CREATE TABLE unavilable_representative (
     UNIQUE (first_name, last_name)
 );
 
+CREATE TABLE boundaries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    external_id VARCHAR(255) NOT NULL UNIQUE,
+    boundary_name VARCHAR(255) NOT NULL, 
+    min_latitude DOUBLE NOT NULL,          
+    max_latitude DOUBLE NOT NULL,        
+    min_longitude DOUBLE NOT NULL,   
+    max_longitude DOUBLE NOT NULL   
+);
+
+CREATE TABLE boundary_coordinates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    boundary_external_id VARCHAR(255) NOT NULL, 
+    polygon_index INT NOT NULL,                 
+    ring_index INT NOT NULL,                    
+    coordinate_index INT NOT NULL,              
+    latitude DOUBLE NOT NULL,                   
+    longitude DOUBLE NOT NULL,                  
+    FOREIGN KEY (boundary_external_id) REFERENCES boundaries(external_id) ON DELETE CASCADE
+);
+
+
