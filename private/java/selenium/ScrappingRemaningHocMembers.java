@@ -46,10 +46,10 @@ public class ScrappingRemaningHocMembers {
                 List<WebElement> detailsLabels = seleniumHelpers.getWebElementsFromWebElementByTagName(hocDetailsOverview, "dt");
                 List<WebElement> detailsValues = seleniumHelpers.getWebElementsFromWebElementByTagName(hocDetailsOverview, "dd");
                 Map<String, String> hocOverview = seleniumHelpers.mergeListsOfElementToMap(detailsLabels, detailsValues);
-                String politicalAffiliation = hocOverview.get("Political-Affiliation:"); // HOC political affiliation
+                String politicalAffiliation = hocOverview.get("Political-Affiliation"); // HOC political affiliation
                 String constituency = hocOverview.get("Constituency"); // HOC constituency
                 String provinceOrTerritory = hocOverview.get("Province-Territory"); // HOC provinceOrTerritory
-                String languages = hocOverview.get("Preferred Language:"); // HOC languages
+                String languages = hocOverview.get("Preferred Language"); // HOC languages
                 WebElement emailWebElement = seleniumHelpers.getWebElementByXPath(webDriver, "(//*[@id = 'contact']//div//p[1])[1]");
                 String email = seleniumHelpers.getStringFromWebElement(emailWebElement); // HOC email
                 WebElement legislativeOffice = seleniumHelpers.getWebElementByXPath(webDriver, "(//*[@id = 'contact']//div//p[1])[2]");
