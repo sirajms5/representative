@@ -10,6 +10,7 @@ public class MultiPolygon {
 
     public MultiPolygon(List<List<List<List<Double>>>> coordinates, String boundaryExternalId) {
         this.coordinates = coordinates;
+        this.boundaryExternalId = boundaryExternalId;
     }
 
     public String getType() {

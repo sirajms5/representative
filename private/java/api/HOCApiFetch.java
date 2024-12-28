@@ -14,7 +14,8 @@ import org.json.JSONObject;
 
 import classes.HOCMember;
 import classes.Office;
-import db.RepresentativeCRUD;
+import db.HocRepresentativeCRUD;
+import utilities.APIHelpers;
 import utilities.Helpers;
 import utilities.LogKeeper;
 
@@ -40,10 +41,7 @@ public class HOCApiFetch {
 
                 fetchCounter = fetchCounter + 1;
                 logKeeper.appendLog("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
-                URL url = new URL(apiUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Accept", "application/json");
+                HttpURLConnection conn = APIHelpers.createHttpConnection(apiUrl);
 
                 // Check response code
                 if (conn.getResponseCode() != 200) {
@@ -51,17 +49,11 @@ public class HOCApiFetch {
                     continue;
                 }
 
-                // Read the response
-                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    response.append(line);
-                }
+                JSONObject respnse = APIHelpers.parseJsonResponse(conn);
                 conn.disconnect();
 
                 // Parse JSON response
-                JSONObject jsonResponse = new JSONObject(response.toString());
+                JSONObject jsonResponse = new JSONObject(respnse.toString());
                 JSONArray objectsArray = jsonResponse.getJSONArray("objects");
 
                 if (objectsArray.length() > 0) {
@@ -69,7 +61,7 @@ public class HOCApiFetch {
 
                     // Update hocMember with API data
                     hocMember.setPhotoUrl(obj.optString("photo_url", null));
-                    hocMember.setEmail(obj.optString("email", line));
+                    hocMember.setEmail(obj.optString("email", null));
 
                     // Set languages
                     JSONObject extra = obj.optJSONObject("extra");
@@ -134,7 +126,7 @@ public class HOCApiFetch {
     }
 
     private void unavilableHocMember(HOCMember hocMember) {
-        RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
-        representativeCRUD.insertUnavailableRepresentative(hocMember);  
+        HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
+        hocRepresentativeCRUD.insertUnavailableRepresentative(hocMember);  
     }
 }

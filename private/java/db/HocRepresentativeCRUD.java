@@ -13,7 +13,7 @@ import classes.Office;
 import utilities.Helpers;
 import utilities.LogKeeper;
 
-public class RepresentativeCRUD {
+public class HocRepresentativeCRUD {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
@@ -118,7 +118,7 @@ public class RepresentativeCRUD {
             stmtUnavilableRepresentative.setString(1, hocMember.getFirstName());
             stmtUnavilableRepresentative.setString(2, hocMember.getLastName());
             stmtUnavilableRepresentative.executeUpdate();
-            logKeeper.appendLog("Inserted unavilable representative number: " + hocMember.getFirstName() + " "
+            logKeeper.appendLog("Inserted unavilable representative: " + hocMember.getFirstName() + " "
                     + hocMember.getLastName());
             Helpers.sleep(1);
         } catch (SQLException e) {

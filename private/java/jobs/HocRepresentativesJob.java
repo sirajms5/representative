@@ -5,38 +5,38 @@ import java.util.List;
 import api.HOCApiFetch;
 import classes.HOCMember;
 import csv.CSVReader;
-import db.RepresentativeCRUD;
+import db.HocRepresentativeCRUD;
 import disk.JsonWriter;
 import selenium.ScrappingRemaningHocMembers;
 import utilities.LogKeeper;
 
-public class HocJob {
+public class HocRepresentativesJob {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public void executeHocJob() {
-        logKeeper.appendLog("======================================== Executing HOC Job ========================================");
+    public void executeHocRepresentativesJob() {
+        logKeeper.appendLog("======================================== Executing HOC Representatives Job ========================================");
         CSVReader csvReader = new CSVReader();
         List<HOCMember> members = csvReader.readCSV("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\csv\\export.csv");
         HOCApiFetch hocApiFetch = new HOCApiFetch();
         List<HOCMember> updatedMembers = hocApiFetch.fetchHOCMembersFromApi(members);        
-        RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
+        HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
         for (HOCMember hocMember : updatedMembers) {
-            representativeCRUD.insertHOCMemeber(hocMember);
+            hocRepresentativeCRUD.insertHOCMemeber(hocMember);
         }
 
-        List<HOCMember> unavilableHocMembers = representativeCRUD.getUnavilableHOCMembers();
+        List<HOCMember> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers();
         ScrappingRemaningHocMembers scrappingRemaningHocMembers = new ScrappingRemaningHocMembers();
         List<HOCMember> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
         for (HOCMember hocMember : scrappedHOCMembers) {
-            boolean isInserted = representativeCRUD.insertHOCMemeber(hocMember);
+            boolean isInserted = hocRepresentativeCRUD.insertHOCMemeber(hocMember);
             if(isInserted) {
-                representativeCRUD.updateUnavilableHOCMember(hocMember, isInserted);
+                hocRepresentativeCRUD.updateUnavilableHOCMember(hocMember, isInserted);
             }
         }
 
         JsonWriter jsonWriter = new JsonWriter();
         jsonWriter.writeHocMembersJson();
-        logKeeper.appendLog("======================================== Finished HOC Job ========================================");
+        logKeeper.appendLog("======================================== Finished HOC Representatives Job ========================================");
     }
 }

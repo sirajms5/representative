@@ -2,7 +2,7 @@ package classes;
 
 import com.google.gson.Gson;
 
-public class Boundaries {
+public class Boundary {
 
     private String externalId;
     private String boundaryName;
@@ -10,17 +10,17 @@ public class Boundaries {
     private double maxLatitude;
     private double minLongitude;
     private double maxLongitude;
-    private MultiPolygon multiPolygon;
+    private String simepleShapeUrl;
 
-    public Boundaries(String externalId, String boundaryName, double minLatitude, double maxLatitude, double minLongitude,
-            double maxLongitude, MultiPolygon multiPolygon) {
+    public Boundary(String externalId, String boundaryName, double minLatitude, double maxLatitude, double minLongitude,
+            double maxLongitude, String simepleShapeUrl) {
         this.externalId = externalId;
         this.boundaryName = boundaryName;
         this.minLatitude = minLatitude;
         this.maxLatitude = maxLatitude;
         this.minLongitude = minLongitude;
         this.maxLongitude = maxLongitude;
-        this.multiPolygon = multiPolygon;
+        this.simepleShapeUrl = simepleShapeUrl;
     }
 
     public String getExternalId() {
@@ -71,12 +71,12 @@ public class Boundaries {
         this.maxLongitude = maxLongitude;
     }
 
-    public MultiPolygon getMultiPolygon() {
-        return multiPolygon;
+    public String getSimepleShapeUrl() {
+        return simepleShapeUrl;
     }
 
-    public void setMultiPolygon(MultiPolygon multiPolygon) {
-        this.multiPolygon = multiPolygon;
+    public void setSimepleShapeUrl(String simepleShapeUrl) {
+        this.simepleShapeUrl = simepleShapeUrl;
     }
     
     public String toJson() {

@@ -1,4 +1,5 @@
-import jobs.HocJob;
+import jobs.HocBoundariesJob;
+import jobs.HocRepresentativesJob;
 import utilities.LogKeeper;
 
 public class Main{
@@ -6,8 +7,10 @@ public class Main{
 
         LogKeeper logKeeper = LogKeeper.getInstance();
         logKeeper.appendLog("======================================== Starting Backend Jobs ========================================");
-        HocJob hocJob = new HocJob();
-        hocJob.executeHocJob();
+        HocRepresentativesJob hocRepresentativesJob = new HocRepresentativesJob();
+        hocRepresentativesJob.executeHocRepresentativesJob();
+        HocBoundariesJob hocBoundariesJob = new HocBoundariesJob();
+        hocBoundariesJob.executeHocBoundaries();
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
         logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");
     }

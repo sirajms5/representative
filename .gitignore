@@ -1,5 +1,7 @@
 .vscode
 private/java/disk/files/logs
 private/java/disk/files/csv
+private/java/disk/files/json/HOCMembers.json
+private/java/disk/files/json/HOCBoundaries.json
 private/testing
 private/java/libs

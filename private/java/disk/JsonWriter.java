@@ -2,8 +2,10 @@ package disk;
 
 import java.util.List;
 
+import classes.Boundary;
 import classes.HOCMember;
-import db.RepresentativeCRUD;
+import db.HocBoundariesCRUD;
+import db.HocRepresentativeCRUD;
 import utilities.LogKeeper;
 
 public class JsonWriter {
@@ -11,8 +13,8 @@ public class JsonWriter {
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
     public void writeHocMembersJson() {
-        RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
-        List<HOCMember> hocMembers = representativeCRUD.getHocMembers();
+        HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
+        List<HOCMember> hocMembers = hocRepresentativeCRUD.getHocMembers();
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[");
         for (int index = 0; index < hocMembers.size(); index++) {
@@ -27,5 +29,24 @@ public class JsonWriter {
         DiskUtilities diskUtilities = new DiskUtilities();
         diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\HOCMembers.json");
         logKeeper.appendLog("Created JSON file for HOC members");
-    }    
+    }   
+    
+    public void writeHocBoundariesJson () {
+        HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
+        List<Boundary> boundaries = hocBoundariesCRUD.getHocBoundaries();
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[");
+        for (int index = 0; index < boundaries.size(); index++) {
+            Boundary boundary = boundaries.get(index);
+            jsonBuilder.append(boundary.toJson());
+            if (index < boundaries.size() - 1) {
+                jsonBuilder.append(",");
+            }
+        }
+
+        jsonBuilder.append("]");
+        DiskUtilities diskUtilities = new DiskUtilities();
+        diskUtilities.txtWriter(jsonBuilder.toString(), "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\HOCBoundaries.json");
+        logKeeper.appendLog("Created JSON file for HOC boundaries");
+    }
 }
