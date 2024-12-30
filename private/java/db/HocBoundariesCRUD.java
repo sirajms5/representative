@@ -40,17 +40,17 @@ public class HocBoundariesCRUD {
         }
     }
 
-    public void insertUnavilableSimpleShape(String boundaryExternalId, String simpleShapeUrl) {
-        String sqlUnavilableSimpleShape = "INSERT IGNORE INTO unavilable_hoc_simple_shape (boundary_external_id, simple_shape_url) VALUES (?, ?);";
+    public void insertUnavilableShape(String boundaryExternalId, String shapeUrl) {
+        String sqlUnavilableShape = "INSERT IGNORE INTO unavilable_hoc_shape (boundary_external_id, shape_url) VALUES (?, ?);";
         PreparedStatement stmtUnavilableRepresentative = null;
 
         try (Connection conn = DbManager.getConn()) {
-            stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableSimpleShape);
+            stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableShape);
             stmtUnavilableRepresentative.setString(1, boundaryExternalId);
-            stmtUnavilableRepresentative.setString(2, simpleShapeUrl);
+            stmtUnavilableRepresentative.setString(2, shapeUrl);
             stmtUnavilableRepresentative.executeUpdate();
             logKeeper.appendLog("Inserted unavilable simple shape boundary number: " + boundaryExternalId
-                    + ". url: " + simpleShapeUrl);
+                    + ". url: " + shapeUrl);
             Helpers.sleep(1);
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
@@ -67,7 +67,7 @@ public class HocBoundariesCRUD {
 
     public boolean insertBoundary(Boundary boundary) {
         boolean isInserted = false;
-        String sqlBoundaries = "INSERT IGNORE INTO boundaries (external_id, boundary_name, min_latitude, max_latitude, min_longitude, max_longitude, simple_shape_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlBoundaries = "INSERT IGNORE INTO boundaries (external_id, boundary_name, min_latitude, max_latitude, min_longitude, max_longitude, shape_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmtBoundaries = null;
         try (Connection conn = DbManager.getConn()) {
             stmtBoundaries = conn.prepareStatement(sqlBoundaries, Statement.RETURN_GENERATED_KEYS);
@@ -77,7 +77,7 @@ public class HocBoundariesCRUD {
             stmtBoundaries.setDouble(4, boundary.getMaxLatitude());
             stmtBoundaries.setDouble(5, boundary.getMinLongitude());
             stmtBoundaries.setDouble(6, boundary.getMaxLongitude());
-            stmtBoundaries.setString(7, boundary.getSimepleShapeUrl());
+            stmtBoundaries.setString(7, boundary.getShapeUrl());
             stmtBoundaries.executeUpdate();
             logKeeper.appendLog("Inserted boundary external id: " + boundary.getExternalId());
 
@@ -102,7 +102,7 @@ public class HocBoundariesCRUD {
     public List<Boundary> getHocBoundaries() {
         logKeeper.appendLog("Reading HOC members boundaries from DB");
         List<Boundary> boundaries = new ArrayList<>();
-        String sql = "SELECT external_id, boundary_name, min_latitude, max_latitude, min_longitude, max_longitude, simple_shape_url FROM boundaries";
+        String sql = "SELECT external_id, boundary_name, min_latitude, max_latitude, min_longitude, max_longitude, shape_url FROM boundaries";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -118,7 +118,7 @@ public class HocBoundariesCRUD {
                 double maxLatitude = rs.getDouble("max_latitude");
                 double minLongitude = rs.getDouble("min_longitude");
                 double maxLongitude = rs.getDouble("max_longitude");
-                String simpleShapeUrl = rs.getString("simple_shape_url");
+                String shapeUrl = rs.getString("shape_url");
                 Boundary boundary = new Boundary(
                         externalId,
                         boundaryName,
@@ -126,7 +126,7 @@ public class HocBoundariesCRUD {
                         maxLatitude,
                         minLongitude,
                         maxLongitude,
-                        simpleShapeUrl
+                        shapeUrl
                 );
 
                 boundaries.add(boundary);

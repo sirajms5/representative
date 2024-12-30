@@ -20,21 +20,22 @@ import utilities.LogKeeper;
 public class MultiPolygonalFetch {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
-
-    public GeoJsonFeatureCollection fetchHocBoundaryMultiPolygonalBySimpleShapeUrl(List<HocMemberBoundaryPair> hocMemberBoundaryPairs) {
+//todo: change simple shape to shape
+    public GeoJsonFeatureCollection fetchHocBoundaryMultiPolygonalByShapeUrl(List<HocMemberBoundaryPair> hocMemberBoundaryPairs) {
         GeoJsonFeatureCollection geoJsonFeatureCollection = null;
         List<GeoJsonFeature> geoJsonFeatures = new ArrayList<>();
         int fetchCounter = 0;
         for(HocMemberBoundaryPair hocMemberBoundaryPair : hocMemberBoundaryPairs) {
             try {
-                String apiUrl = hocMemberBoundaryPair.getSimepleShapeUrl();
+                // String apiUrl = hocMemberBoundaryPair.getSimepleShapeUrl();
+                String apiUrl = hocMemberBoundaryPair.getShapeUrl();
                 fetchCounter = fetchCounter + 1;
-                logKeeper.appendLog("Fetching simple shape number " + fetchCounter + "for boundary: " + hocMemberBoundaryPair.getBoundaryExternalId());
+                logKeeper.appendLog("Fetching shape number " + fetchCounter + " for boundary: " + hocMemberBoundaryPair.getBoundaryExternalId());
 
                 // Fetch Sime shape details
                 HttpURLConnection conn = APIHelpers.createHttpConnection(apiUrl);
                 if (conn.getResponseCode() != 200) {
-                    unavilableHocSimpleShapeBoundary(hocMemberBoundaryPair.getBoundaryExternalId(), hocMemberBoundaryPair.getSimepleShapeUrl());
+                    unavilableHocShapeBoundary(hocMemberBoundaryPair.getBoundaryExternalId(), hocMemberBoundaryPair.getShapeUrl());
                     continue;
                 }
 
@@ -49,7 +50,7 @@ public class MultiPolygonalFetch {
                     GeoJsonFeature geoJsonFeature = new GeoJsonFeature(multiPolygon, properties);
                     geoJsonFeatures.add(geoJsonFeature);
                 } else {
-                    unavilableHocSimpleShapeBoundary(hocMemberBoundaryPair.getBoundaryExternalId(), hocMemberBoundaryPair.getSimepleShapeUrl());
+                    unavilableHocShapeBoundary(hocMemberBoundaryPair.getBoundaryExternalId(), hocMemberBoundaryPair.getShapeUrl());
                 }
             } catch (Exception e) {
                 logKeeper.appendLog(e.getMessage());
@@ -63,9 +64,9 @@ public class MultiPolygonalFetch {
         return geoJsonFeatureCollection;
     }
 
-    private void unavilableHocSimpleShapeBoundary(String boundaryExternalId, String simpleShapeUrl) {
+    private void unavilableHocShapeBoundary(String boundaryExternalId, String shapeUrl) {
         HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
-        hocBoundariesCRUD.insertUnavilableSimpleShape(boundaryExternalId, simpleShapeUrl);
+        hocBoundariesCRUD.insertUnavilableShape(boundaryExternalId, shapeUrl);
     }
 
     private List<List<List<List<Double>>>> parseCoordinates(JSONArray jsonArray) {

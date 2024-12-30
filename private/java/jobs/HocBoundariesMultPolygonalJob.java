@@ -18,7 +18,7 @@ public class HocBoundariesMultPolygonalJob {
         HocBoundriesMultiPolygonalUtilities hocBoundriesMultiPolygonalUtilities = new HocBoundriesMultiPolygonalUtilities();
         List<HocMemberBoundaryPair> hocMemberBoundaryPairs = hocBoundriesMultiPolygonalUtilities.getHocMemberRepresentativesAndBoundaries();
         MultiPolygonalFetch multiPolygonalFetch = new MultiPolygonalFetch();
-        GeoJsonFeatureCollection geoJsonFeatureCollection = multiPolygonalFetch.fetchHocBoundaryMultiPolygonalBySimpleShapeUrl(hocMemberBoundaryPairs);
+        GeoJsonFeatureCollection geoJsonFeatureCollection = multiPolygonalFetch.fetchHocBoundaryMultiPolygonalByShapeUrl(hocMemberBoundaryPairs);
         JsonWriter jsonWriter = new JsonWriter();
         jsonWriter.writeHocBoundariesGeoJson(geoJsonFeatureCollection);
         logKeeper.appendLog("======================================== Finished HOC Boundaries MultiPolygonal Job ========================================");

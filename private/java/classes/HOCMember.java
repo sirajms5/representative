@@ -21,6 +21,7 @@ public class HOCMember {
     private String boundaryExternalId;
     private String level = "Federal";
     private String email;
+    private String url;
 
     public HOCMember(String firstName, String lastName) {
         this.firstName = firstName;
@@ -42,7 +43,7 @@ public class HOCMember {
 
     public HOCMember(String honorificTitle, String firstName, String lastName, String constituency,
             String provinceOrTerritory, String politicalAffiliation, String startDate, String endDate, String position,
-            String photoUrl, String languages, String boundaryExternalId, String level, String email) {
+            String photoUrl, String languages, String boundaryExternalId, String level, String email, String url) {
         this.honorificTitle = honorificTitle;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,6 +58,7 @@ public class HOCMember {
         this.boundaryExternalId = boundaryExternalId;
         this.level = level;
         this.email = email;
+        this.url = url;
     }
 
     public String getHonorificTitle() {
@@ -185,6 +187,14 @@ public class HOCMember {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String toJson() {

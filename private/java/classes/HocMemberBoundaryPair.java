@@ -7,16 +7,16 @@ public class HocMemberBoundaryPair {
     private String provinceOrTerritory;
     private String politicalAffiliation;
     private String boundaryExternalId;
-    private String simepleShapeUrl;
+    private String shapeUrl;
     
     public HocMemberBoundaryPair(String fullName, String constituency, String provinceOrTerritory,
-            String politicalAffiliation, String boundaryExternalId, String simepleShapeUrl) {
+            String politicalAffiliation, String boundaryExternalId, String shapeUrl) {
         this.fullName = fullName;
         this.constituency = constituency;
         this.provinceOrTerritory = provinceOrTerritory;
         this.politicalAffiliation = politicalAffiliation;
         this.boundaryExternalId = boundaryExternalId;
-        this.simepleShapeUrl = simepleShapeUrl;
+        this.shapeUrl = shapeUrl;
     }
 
     public String getFullName() {
@@ -59,11 +59,11 @@ public class HocMemberBoundaryPair {
         this.boundaryExternalId = boundaryExternalId;
     }  
 
-    public String getSimepleShapeUrl() {
-        return simepleShapeUrl;
+    public String getShapeUrl() {
+        return shapeUrl;
     }
 
-    public void setSimepleShapeUrl(String simepleShapeUrl) {
-        this.simepleShapeUrl = simepleShapeUrl;
+    public void setShapeUrl(String shapeUrl) {
+        this.shapeUrl = shapeUrl;
     }  
 }

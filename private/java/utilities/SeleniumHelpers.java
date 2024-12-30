@@ -17,8 +17,7 @@ public class SeleniumHelpers {
 
     public WebElement getWebElementById(WebDriver webDriver, String id) {
         Helpers.sleep(1);
-        WebElement webElement = webDriver.findElement(By.id(id));
-        return webElement;
+        return webDriver.findElement(By.id(id));
     }
 
     public void sendKeysToWebElement(WebElement webElement, String keys) {
@@ -33,26 +32,22 @@ public class SeleniumHelpers {
 
     public WebElement getWebElementByXPath(WebDriver webDriver, String xPath) {
         Helpers.sleep(1);
-        WebElement webElement = webDriver.findElement(By.xpath(xPath));
-        return webElement;
+        return webDriver.findElement(By.xpath(xPath));
     }
 
     public String getElementAttributeValue(WebElement webElement, String attribute) {
         Helpers.sleep(1);
-        String attributeValue = webElement.getDomAttribute(attribute);
-        return attributeValue;
+        return webElement.getDomAttribute(attribute);
     }
 
     public List<WebElement> getWebElementsByXPath(WebDriver webDriver, String xPath) {
         Helpers.sleep(1);
-        List<WebElement> webElements = webDriver.findElements(By.xpath(xPath));
-        return webElements;
+        return webDriver.findElements(By.xpath(xPath));
     }
 
     public List<WebElement> getWebElementsFromWebElementByTagName(WebElement webElement, String tagName) {
         Helpers.sleep(1);
-        List<WebElement> webElements = webElement.findElements(By.tagName(tagName));
-        return webElements;
+        return webElement.findElements(By.tagName(tagName));
     }
 
     public Map<String, String> mergeListsOfElementToMap(List<WebElement> labels, List<WebElement> values) {
@@ -68,14 +63,12 @@ public class SeleniumHelpers {
 
     public WebElement getWebElementFromWebElementByXPath(WebElement webElement, String xPath) {
         Helpers.sleep(1);
-        WebElement newWebElement = webElement.findElement(By.xpath(xPath));
-        return newWebElement;
+        return webElement.findElement(By.xpath(xPath));
     }
 
     public String getStringFromWebElement(WebElement webElement) {
         Helpers.sleep(1);
-        String value = webElement.getText();
-        return value;
+        return webElement.getText();
     }
 
     public void navigateTo(WebDriver webDriver, String url) {
@@ -88,5 +81,10 @@ public class SeleniumHelpers {
         Helpers.sleep(1);
         webDriver.manage().window().maximize();
         Helpers.sleep(1);        
+    }
+
+    public String getCurrentPageUrl(WebDriver webDriver) {
+        Helpers.sleep(1);
+        return webDriver.getCurrentUrl();
     }
 }

@@ -62,6 +62,7 @@ public class HOCApiFetch {
                     // Update hocMember with API data
                     hocMember.setPhotoUrl(obj.optString("photo_url", null));
                     hocMember.setEmail(obj.optString("email", null));
+                    hocMember.setUrl(obj.optString("url", null));
 
                     // Set languages
                     JSONObject extra = obj.optJSONObject("extra");

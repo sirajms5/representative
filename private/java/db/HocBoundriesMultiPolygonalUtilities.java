@@ -17,7 +17,7 @@ public class HocBoundriesMultiPolygonalUtilities {
     public List<HocMemberBoundaryPair> getHocMemberRepresentativesAndBoundaries() {
         logKeeper.appendLog("Reading HOC members and boundaries joined tables from DB");
         List<HocMemberBoundaryPair> hocMemberBoundaryPairs = new ArrayList<>();
-        String sqlQuery = "SELECT representatives.first_name, representatives.last_name, representatives.constituency, representatives.political_affiliation, representatives.province_or_territory, boundaries.external_id, boundaries.simple_shape_url FROM representatives JOIN boundaries ON representatives.boundary_external_id = boundaries.external_id;";
+        String sqlQuery = "SELECT representatives.first_name, representatives.last_name, representatives.constituency, representatives.political_affiliation, representatives.province_or_territory, boundaries.external_id, boundaries.shape_url FROM representatives JOIN boundaries ON representatives.boundary_external_id = boundaries.external_id;";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -33,9 +33,9 @@ public class HocBoundriesMultiPolygonalUtilities {
                 String politicalAffiliation = rs.getString("political_affiliation"); // HOC member political affiliation
                 String provinceOrTerritory = rs.getString("province_or_territory"); // HOC member province
                 String boundaryExternalId = rs.getString("external_id");
-                String simpleShapeUrl =  rs.getString("simple_shape_url"); // Boundary simple shape url
                 String fullName = firstName + " " + lastName;
-                HocMemberBoundaryPair hocMemberBoundaryPair = new HocMemberBoundaryPair(fullName, constituency, provinceOrTerritory, politicalAffiliation, boundaryExternalId, simpleShapeUrl);
+                String shapeUrl = rs.getString("shape_url");
+                HocMemberBoundaryPair hocMemberBoundaryPair = new HocMemberBoundaryPair(fullName, constituency, provinceOrTerritory, politicalAffiliation, boundaryExternalId, shapeUrl);
                 hocMemberBoundaryPairs.add(hocMemberBoundaryPair);
             }
         } catch (SQLException e) {

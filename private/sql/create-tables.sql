@@ -12,6 +12,7 @@ CREATE TABLE representatives (
     boundary_external_id VARCHAR(50),  
     level VARCHAR(50),
     languages VARCHAR(50),
+    url VARCHAR(255),
     UNIQUE (position, level, boundary_external_id, first_name, last_name)            
 );
 
@@ -50,7 +51,7 @@ CREATE TABLE boundaries (
     max_latitude DOUBLE NOT NULL,        
     min_longitude DOUBLE NOT NULL,   
     max_longitude DOUBLE NOT NULL,
-    simple_shape_url VARCHAR(255)
+    shape_url VARCHAR(255)
 );
 
 -- CREATE TABLE boundary_coordinates (
@@ -70,10 +71,10 @@ CREATE TABLE unavilable_hoc_boundary (
     added BOOLEAN DEFAULT 0
 );
 
-CREATE TABLE unavilable_hoc_simple_shape(
+CREATE TABLE unavilable_hoc_shape(
     id INT AUTO_INCREMENT PRIMARY KEY, 
     boundary_external_id VARCHAR(255) UNIQUE,
-    simple_shape_url VARCHAR(255),
+    shape_url VARCHAR(255),
     added BOOLEAN DEFAULT 0
 );
 

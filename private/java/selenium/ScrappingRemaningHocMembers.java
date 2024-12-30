@@ -38,6 +38,7 @@ public class ScrappingRemaningHocMembers {
                 seleniumHelpers.sendKeysToWebElement(searchField, hocMemberName);
                 WebElement searchSuggestion = seleniumHelpers.getWebElementById(webDriver, "downshift-0-item-0");
                 seleniumHelpers.clickElement(searchSuggestion);
+                String hocMemberPageUrl = seleniumHelpers.getCurrentPageUrl(webDriver); // HOC member page url
                 WebElement contactTab = seleniumHelpers.getWebElementById(webDriver, "contact-tab");
                 seleniumHelpers.clickElement(contactTab);
                 WebElement hocImgElement = seleniumHelpers.getWebElementByXPath(webDriver, "(//img)[2]");
@@ -74,6 +75,7 @@ public class ScrappingRemaningHocMembers {
                 hocMember.setProvinceOrTerritory(provinceOrTerritory);
                 hocMember.setLanguages(languages);
                 hocMember.setEmail(email);
+                hocMember.setUrl(hocMemberPageUrl);
                 List<Office> hocOffices = Arrays.asList(legislativeOfficeObj, constituencyOfficeObj);
                 hocMember.setOffices(hocOffices);
                 BoundariesApiFetch boundariesApiFetch = new BoundariesApiFetch();

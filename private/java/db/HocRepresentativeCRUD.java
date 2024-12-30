@@ -19,7 +19,7 @@ public class HocRepresentativeCRUD {
 
     public boolean insertHOCMemeber(HOCMember hocMember) {
         boolean isInserted = false;
-        String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmtRepresemtatives = null;
         PreparedStatement stmtOffices = null;
         PreparedStatement stmtRoles = null;
@@ -39,6 +39,7 @@ public class HocRepresentativeCRUD {
             stmtRepresemtatives.setString(10, hocMember.getLevel());
             stmtRepresemtatives.setString(11, hocMember.getLanguages());
             stmtRepresemtatives.setString(12, hocMember.getEmail());
+            stmtRepresemtatives.setString(13, hocMember.getUrl());
 
             int insertedHOCId = stmtRepresemtatives.executeUpdate();
             Helpers.sleep(1);
@@ -191,7 +192,7 @@ public class HocRepresentativeCRUD {
 
     public List<HOCMember> getHocMembers() {
         logKeeper.appendLog("Reading HOC members from DB");
-        String sqlRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages FROM representatives";
+        String sqlRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url FROM representatives";
         String sqlOffices = "SELECT type, postal_code, phone, fax FROM representative_offices WHERE representative_id = ?";
         String sqlRoles = "SELECT role_name FROM representative_roles WHERE representative_id = ?";
         List<HOCMember> hocMembers = new ArrayList<>();
@@ -213,8 +214,9 @@ public class HocRepresentativeCRUD {
                 String boundaryExternalId = rsRepresentatives.getString("boundary_external_id");
                 String level = rsRepresentatives.getString("level");
                 String languages = rsRepresentatives.getString("languages");
+                String url = rsRepresentatives.getString("url");
                 HOCMember hocMember = new HOCMember(null, firstName, lastName, constituency, provinceOrTerritory,
-                        politicalAffiliation, startDate, null, position, photoUrl, languages, boundaryExternalId, level, email);
+                        politicalAffiliation, startDate, null, position, photoUrl, languages, boundaryExternalId, level, email, url);
 
                 // Fetch and set offices
                 try (PreparedStatement stmtOffices = conn.prepareStatement(sqlOffices)) {

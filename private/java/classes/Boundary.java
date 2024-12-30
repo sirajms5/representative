@@ -10,17 +10,17 @@ public class Boundary {
     private double maxLatitude;
     private double minLongitude;
     private double maxLongitude;
-    private String simepleShapeUrl;
+    private String shapeUrl;
 
     public Boundary(String externalId, String boundaryName, double minLatitude, double maxLatitude, double minLongitude,
-            double maxLongitude, String simepleShapeUrl) {
+            double maxLongitude, String shapeUrl) {
         this.externalId = externalId;
         this.boundaryName = boundaryName;
         this.minLatitude = minLatitude;
         this.maxLatitude = maxLatitude;
         this.minLongitude = minLongitude;
         this.maxLongitude = maxLongitude;
-        this.simepleShapeUrl = simepleShapeUrl;
+        this.shapeUrl = shapeUrl;
     }
 
     public String getExternalId() {
@@ -71,14 +71,14 @@ public class Boundary {
         this.maxLongitude = maxLongitude;
     }
 
-    public String getSimepleShapeUrl() {
-        return simepleShapeUrl;
+    public String getShapeUrl() {
+        return shapeUrl;
     }
 
-    public void setSimepleShapeUrl(String simepleShapeUrl) {
-        this.simepleShapeUrl = simepleShapeUrl;
+    public void setShapeUrl(String shapeUrl) {
+        this.shapeUrl = shapeUrl;
     }
-    
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

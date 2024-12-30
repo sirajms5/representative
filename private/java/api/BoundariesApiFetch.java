@@ -91,11 +91,9 @@ public class BoundariesApiFetch {
                     double minLatitude = extentArray.getDouble(1); // boundary min latitude
                     double maxLongitude = extentArray.getDouble(2); // boundary max longitude
                     double maxLatitude = extentArray.getDouble(3); // boundary max latitude
-                    String simpleShapeUrl = "https://represent.opennorth.ca"
-                            + boundaryResponse.getJSONObject("related").getString("simple_shape_url");
-
+                    String shapeUrl = "https://represent.opennorth.ca" + boundaryResponse.getJSONObject("related").getString("shape_url");
                     Boundary boundary = new Boundary(externalId, name, minLatitude, maxLatitude, minLongitude,
-                            maxLongitude, simpleShapeUrl);
+                            maxLongitude, shapeUrl);
                     boundaries.add(boundary);
                 } else {
                     unavilableHocBoundary(hocMember);

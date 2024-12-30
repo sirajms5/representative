@@ -4,5 +4,6 @@ private/java/disk/files/csv
 private/java/disk/files/json/hoc/HOCMembers.json
 private/java/disk/files/json/hoc/HOCBoundaries.json
 private/java/disk/files/json/hoc/GeoJsonCollection.json
+private/java/disk/files/json/
 private/testing
 private/java/libs
