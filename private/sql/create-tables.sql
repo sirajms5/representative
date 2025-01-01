@@ -78,5 +78,21 @@ CREATE TABLE unavilable_hoc_shape(
     added BOOLEAN DEFAULT 0
 );
 
+CREATE TABLE postal_code_coordinates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    postal_code VARCHAR(10) UNIQUE,
+    latitude DOUBLE DEFAULT NULL,
+    longitude DOUBLE DEFAULT NULL,
+    isfound BOOLEAN DEFAULT false,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE nominatim_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    request_time INT NOT NULL,
+    request_time_readable TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 
