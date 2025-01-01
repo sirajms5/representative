@@ -83,6 +83,7 @@ CREATE TABLE postal_code_coordinates (
     postal_code VARCHAR(10) UNIQUE,
     latitude DOUBLE DEFAULT NULL,
     longitude DOUBLE DEFAULT NULL,
+    display_name VARCHAR(255) DEFAULT NULL,
     isfound BOOLEAN DEFAULT false,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
