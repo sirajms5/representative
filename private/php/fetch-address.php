@@ -53,11 +53,11 @@
             $latitude = floatval($latitude);
             $longitude = floatval($longitude);
 
-            echo json_encode(array(
+            $resultObj = array(
                 "success" => "Coordinates provided",
                 "latitude" => $latitude,
                 "longitude" => $longitude
-            ));
+            );
         } else {
             echo json_encode(array("error" => "No valid input provided (postal code or coordinates)"));
         }
