@@ -16,7 +16,8 @@
     padding-inline-start: 0px
 }
 
-.representative-list-item {
+.representative-list-item,
+.office-list-item {
     list-style: none;
 }
 
