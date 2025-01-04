@@ -48,6 +48,7 @@
             while ($row = $result->fetch_assoc()) {
                 $repId = $row['representative_id'];
                 if (!isset($representatives[$repId])) {
+                    $languages = str_replace("  ", " / ", $row['languages']);                    
                     $representatives[$repId] = [
                         "first_name" => $row['first_name'],
                         "last_name" => $row['last_name'],
@@ -58,30 +59,40 @@
                         "position" => $row['position'],
                         "photo_url" => $row['photo_url'],
                         "level" => $row['level'],
-                        "languages" => str_replace("  ", " / ", $row['languages']),
+                        "languages" => $languages,
                         "url" => $row['url'],
                         "offices" => []
                     ];
                 }
 
-                // Add the office information (if any) to the representative's offices
                 if (!empty($row['office_type']) || !empty($row['office_postal_code']) || !empty($row['office_phone']) || !empty($row['office_fax'])) {
+                    $phoneNumber = formatCanadianPhoneNumber($row['office_phone']);
+                    $faxNumber = formatCanadianPhoneNumber($row['office_fax']);
                     $representatives[$repId]['offices'][] = [
                         "type" => $row['office_type'],
                         "postal_code" => $row['office_postal_code'],
-                        "phone" => $row['office_phone'],
-                        "fax" => $row['office_fax']
+                        "phone" => $phoneNumber,
+                        "fax" => $faxNumber
                     ];
                 }
             }
 
             $stmt->close();
 
-            // Reindex the array to remove keys based on representative_id
             return array_values($representatives);
         } else {
             return ["error" => "no connection to database from representative-crud.php"];
         }
+    }
+
+    function formatCanadianPhoneNumber($phoneNumber) {
+        $phoneNumber = preg_replace('/\s+/', ' ', trim($phoneNumber));
+        if (preg_match('/^(?:1\s?)?(\d{3})[\s\-]?(\d{3})[\s\-]?(\d{4})$/', $phoneNumber, $matches)) {
+
+            return "({$matches[1]}) {$matches[2]}-{$matches[3]}";
+        }
+    
+        return $phoneNumber;
     }
 
     /* Sample of a single json return
