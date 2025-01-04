@@ -105,28 +105,3 @@ CREATE TABLE boundaries_polygons (
 );
 
 -- REMOVE BOUNDARIES FROM HOC AND ADD FEDUID 
--- SELECT 
---     representatives.first_name, 
---     representatives.last_name, 
---     representatives.constituency, 
---     representatives.province_or_territory, 
---     representatives.political_affiliation, 
---     representatives.email, 
---     representatives.position, 
---     representatives.photo_url, 
---     representatives.level, 
---     representatives.languages, 
---     representatives.url
--- FROM 
---     representatives
--- JOIN 
---     boundaries
--- ON 
---     representatives.boundary_external_id = boundaries.external_id
--- WHERE 
---     ST_Contains(
---         boundaries.polygon, 
---         ST_GeomFromText('POINT(-75.702959 45.42185)')
---     );
-
-

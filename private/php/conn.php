@@ -9,7 +9,7 @@
     try{
         $conn = mysqli_connect($serverName,$userName,$password,$databaseName);
     } catch (Exception $exception) {
-        error_log("Error in conn.php: " . $exception->getMessage(), 3, "../errors-log/errors-log.log");
+        error_log("Error in conn.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
     }
     
 

@@ -3,6 +3,7 @@
     include_once "conn.php";
     include_once "fetch-coordinates.php";
     include_once "postal-code-coordinates-crud.php";
+    include_once "representative-crud.php";
 
     if (isset($conn)) {
         $postalCode = getData('postal_code');
@@ -17,13 +18,13 @@
             if (!empty($postalCodeInDB)) {
                 $dbChecker = true;
                 if($postalCodeInDB['isfound'] == 1) {
-                    $resultObj = json_encode(array(
+                    $resultObj = array(
                         "success" => "Postal code converted to coordinates",
                         "postal_code" => $postalCodeInDB['postal_code'],
                         "latitude" => $postalCodeInDB['latitude'],
                         "longitude" => $postalCodeInDB['longitude'],
                         "displayName" => $postalCodeInDB['display_name'] ?? "N/A"
-                    ));
+                    );
                 } else {
                     echo json_encode(array("error" => "Postal code not found."));
                 }                
@@ -37,18 +38,18 @@
                     insertIntoPostalCodeCoordinatesNotFound($postalCode);  
                     echo json_encode(array("error" => $result['error']));
                 } else {   
-                    $resultObj = json_encode(array(
+                    $resultObj = array(
                         "success" => "Postal code converted to coordinates",
                         "postal_code" => $result['postal_code'],
                         "latitude" => $result['latitude'],
                         "longitude" => $result['longitude'],
                         "displayName" => $result['display_name']
-                    ));
+                    );
     
-                    insertIntoPostalCodeCoordinatesFound(json_decode($resultObj, true));   
+                    insertIntoPostalCodeCoordinatesFound($resultObj);   
                 }
             }            
-        } elseif (!empty($latitude) && !empty($longitude)) {
+        } elseif (!empty($latitude) && !empty($longitude)) { // user provided coordinates
             $latitude = floatval($latitude);
             $longitude = floatval($longitude);
 
@@ -61,8 +62,9 @@
             echo json_encode(array("error" => "No valid input provided (postal code or coordinates)"));
         }
 
+        $representativesByCoordinates = getRepresentativesByCoordinates($resultObj['latitude'], $resultObj['longitude']);
          
-        echo $resultObj;
+        echo json_encode($representativesByCoordinates, true);
 
     } else {
         echo json_encode(array("error" => "no connection to database from fetch-address.php"));
