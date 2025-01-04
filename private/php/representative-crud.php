@@ -58,7 +58,7 @@
                         "position" => $row['position'],
                         "photo_url" => $row['photo_url'],
                         "level" => $row['level'],
-                        "languages" => str_replace("  ", ", ", $row['languages']),
+                        "languages" => str_replace("  ", " / ", $row['languages']),
                         "url" => $row['url'],
                         "offices" => []
                     ];
