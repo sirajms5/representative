@@ -83,8 +83,10 @@ function setupRepresentativesHTML(representativesJson) {
         representativeLevelDiv.appendChild(representativeLevel);
         representativeArticle.appendChild(representativeLevelDiv);
 
-        const representativeDetailsDiv = document.createElement("div");
-        representativeDetailsDiv.className = "representative-details-container";
+        const representativeDetailsWithImageDiv = document.createElement("div");
+        representativeDetailsWithImageDiv.className = "representative-details-with-image-container";
+        const representativeMainDetailsWithImage = document.createElement("div");
+        representativeMainDetailsWithImage.className = "representative-main-details-with-image";
         const representativeImageContrainer = document.createElement("div");
         representativeImageContrainer.className = "representative-image-container";
 
@@ -94,12 +96,14 @@ function setupRepresentativesHTML(representativesJson) {
         representativeImg.src = representative["photo_url"];
         representativeImg.alt = `Photo of ${representativeName}`;
         representativeImageContrainer.appendChild(representativeImg);
-        representativeDetailsDiv.appendChild(representativeImageContrainer);
+        representativeMainDetailsWithImage.appendChild(representativeImageContrainer);
 
         const representativeMainDetails = document.createElement("div");
         representativeMainDetails.className = "representative-main-details-container";
 
         // representative name
+        const representativeNamecontrainer = document.createElement("div");
+        representativeNamecontrainer.className = "representative-name-container";
         const representativeNameElement = document.createElement("h3");
         representativeNameElement.className = "representative-name";
         const representativeAnchor = document.createElement("a");        
@@ -108,50 +112,109 @@ function setupRepresentativesHTML(representativesJson) {
         representativeAnchor.className = "representative-anchor";
         representativeAnchor.innerText = representativeName;
         representativeNameElement.appendChild(representativeAnchor);
-        representativeMainDetails.appendChild(representativeNameElement);        
+        representativeNamecontrainer.appendChild(representativeNameElement);
+        representativeMainDetails.appendChild(representativeNamecontrainer);        
+
+        const representativeMainDetailsOthers = document.createElement("div");
+        representativeMainDetailsOthers.className = "representative-main-details-others-container";
 
         // political affilitation
+        const partiesColorHex = {
+            "Conservative": "#002395",
+            "Liberal": "#D71920",
+            "Bloc Québécois": "#0088CE",
+            "NDP": "#FF5800",
+            "Independent": "silver",
+            "Green Party": "#427730"
+        };
+
+        const politicalAffiliation = representative["political_affiliation"];
+        const pAContrainer = document.createElement("div");
+        pAContrainer.className = "representative-pa-contrainer";
+        pAContrainer.style.borderBottomColor = partiesColorHex[politicalAffiliation];
+        const pALabel = document.createElement("p");
+        pALabel.className = "representative-detail-label";
+        pALabel.innerText = "Political affiliation:"
+        pAContrainer.appendChild(pALabel);
         const representativePA = document.createElement("p");
         representativePA.className = "representative-pa";
-        representativePA.innerText = representative["political_affiliation"];
-        representativeMainDetails.appendChild(representativePA);
+        representativePA.innerText = politicalAffiliation;
+        pAContrainer.appendChild(representativePA);
+        representativeMainDetailsOthers.appendChild(pAContrainer);
 
         // constituency
+        const constituencyContrainer = document.createElement("div");
+        constituencyContrainer.className = "representative-constituency-contrainer";
+        const constituencyLabel = document.createElement("p");
+        constituencyLabel.className = "representative-detail-label";
+        constituencyLabel.innerText = "Constituency:"
+        constituencyContrainer.appendChild(constituencyLabel);
         const representativeConstituency = document.createElement("p");
         representativeConstituency.className = "representative-constituency";
         representativeConstituency.innerText = representative["constituency"];
-        representativeMainDetails.appendChild(representativeConstituency);
+        constituencyContrainer.appendChild(representativeConstituency);
+        representativeMainDetailsOthers.appendChild(constituencyContrainer);
 
         // province or territory
+        const provinceContrainer = document.createElement("div");
+        provinceContrainer.className = "representative-province-contrainer";
+        const provinceLabel = document.createElement("p");
+        provinceLabel.className = "representative-detail-label";
+        provinceLabel.innerText = "Province / Territory:"
+        provinceContrainer.appendChild(provinceLabel);
         const representativeProvince = document.createElement("p");
         representativeProvince.className = "representative-province";
         representativeProvince.innerText = representative["province_or_territory"];
-        representativeMainDetails.appendChild(representativeProvince);
+        provinceContrainer.appendChild(representativeProvince);
+        representativeMainDetailsOthers.appendChild(provinceContrainer);
 
         // position
+        const positionContrainer = document.createElement("div");
+        positionContrainer.className = "representative-position-contrainer";
+        const positionLabel = document.createElement("p");
+        positionLabel.className = "representative-detail-label";
+        positionLabel.innerText = "Position:"
+        positionContrainer.appendChild(positionLabel);
         const representativePosition = document.createElement("p");
         representativePosition.className = "representative-position";
         representativePosition.innerText = representative["position"];
-        representativeMainDetails.appendChild(representativePosition);
+        positionContrainer.appendChild(representativePosition);
+        representativeMainDetailsOthers.appendChild(positionContrainer);
 
         // languages
+        const languageContrainer = document.createElement("div");
+        languageContrainer.className = "representative-language-contrainer";
+        const languageLabel = document.createElement("p");
+        languageLabel.className = "representative-detail-label";
+        languageLabel.innerText = "Language:"
+        languageContrainer.appendChild(languageLabel);
         const representativeLanguage = document.createElement("p");
         representativeLanguage.className = "representative-language";
         representativeLanguage.innerText = representative["languages"];
-        representativeMainDetails.appendChild(representativeLanguage);
+        languageContrainer.appendChild(representativeLanguage);
+        representativeMainDetailsOthers.appendChild(languageContrainer);
 
         // email
+        const emailContrainer = document.createElement("div");
+        emailContrainer.className = "representative-email-contrainer";
+        const emailLabel = document.createElement("p");
+        emailLabel.className = "representative-detail-label";
+        emailLabel.innerText = "Email:"
+        emailContrainer.appendChild(emailLabel);
         const representativeEmail = document.createElement("a");
         representativeEmail.className = "representative-email";
         representativeEmail.href = `mailto:${representative["email"]}`;
         representativeEmail.innerText = representative["email"];
-        representativeMainDetails.appendChild(representativeEmail);
+        emailContrainer.appendChild(representativeEmail);
+        representativeMainDetailsOthers.appendChild(emailContrainer);
 
-        representativeDetailsDiv.appendChild(representativeMainDetails);
-
+        representativeMainDetails.appendChild(representativeMainDetailsOthers);
+        representativeMainDetailsWithImage.appendChild(representativeMainDetails);
+        representativeDetailsWithImageDiv.appendChild(representativeMainDetailsWithImage);
+        
         // offices
-        const representativeOtherDetailsDiv = document.createElement("div");
-        representativeOtherDetailsDiv.className = "representative-offices-contrainer";
+        const representativeOfficeDetailsDiv = document.createElement("div");
+        representativeOfficeDetailsDiv.className = "representative-offices-contrainer";
 
         const officesList = document.createElement("ul");
         officesList.className = "offices-list";
@@ -196,9 +259,10 @@ function setupRepresentativesHTML(representativesJson) {
             officesList.appendChild(officeLi);
         }
 
-        representativeOtherDetailsDiv.appendChild(officesList);
-        representativeDetailsDiv.appendChild(representativeOtherDetailsDiv);
-        representativeArticle.appendChild(representativeDetailsDiv);
+        representativeOfficeDetailsDiv.appendChild(officesList);
+        // representativeMainDetailsWithOffice.appendChild(representativeOfficeDetailsDiv);
+        representativeDetailsWithImageDiv.appendChild(representativeOfficeDetailsDiv);
+        representativeArticle.appendChild(representativeDetailsWithImageDiv);
         representativeLi.appendChild(representativeArticle);
         representativesUl.appendChild(representativeLi);
     }

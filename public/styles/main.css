@@ -11,12 +11,68 @@
     padding-top: 5rem;
 }
 
-#representatives-list{
+#representatives-list,
+.offices-list {
     padding-inline-start: 0px
 }
 
 .representative-list-item {
     list-style: none;
+}
+
+.representative-level {
+    text-align: center;
+}
+
+.representative-details-with-image-container {
+    background-color: #fdfdfd;
+    color: #000000;
+    border-radius: 1rem;
+}
+
+.representative-main-details-with-image {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.representative-image {
+    border-top-left-radius: 0.8rem;
+}
+
+.representative-main-details-container {
+    padding-right: 1rem;
+}
+
+.representative-main-details-others-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto); 
+    gap: 1rem;
+}
+
+.representative-detail-label,
+.representative-pa,
+.representative-constituency,
+.representative-province,
+.representative-position,
+.representative-language,
+.representative-email {
+    margin: 0;
+}
+
+.representative-pa-contrainer {
+    border-bottom-style: solid;
+    border-bottom-width: 0.5rem;
+}
+
+.representative-detail-label {
+    font-weight: bold;
+}
+
+.offices-list {
+    display: flex;
+    flex-direction: row;
 }
 
 #footer-wrapper {
