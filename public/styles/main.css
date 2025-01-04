@@ -1,3 +1,27 @@
-body {
-    background-color: #808080;
+#body-wrapper {
+    background-color: #222222;
+    color: white;
+}
+
+#main-wrapper {    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5rem;
+}
+
+#representatives-list{
+    padding-inline-start: 0px
+}
+
+.representative-list-item {
+    list-style: none;
+}
+
+#footer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
