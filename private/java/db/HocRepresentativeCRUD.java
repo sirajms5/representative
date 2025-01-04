@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import classes.HOCMember;
 import classes.Office;
@@ -254,5 +255,31 @@ public class HocRepresentativeCRUD {
         }
 
         return hocMembers;
+    }
+
+    public void updateHocMemberFedUid(HOCMember hocMember) {
+        String hocEmail = hocMember.getEmail();
+        String hocFedUid = hocMember.getFedUid();
+        String sqlUpdate = "UPDATE representatives SET fed_uid = ?  WHERE email = ?;";
+        PreparedStatement stmtUpdate = null;
+        try (Connection conn = DbManager.getConn()) {
+            stmtUpdate = conn.prepareStatement(sqlUpdate);
+            stmtUpdate.setString(1, hocFedUid);
+            stmtUpdate.setString(2, hocEmail);
+            int rowsUpdated = stmtUpdate.executeUpdate();
+
+            logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the representatives table for "
+                    + hocMember.getFirstName() + " " + hocMember.getLastName());
+        } catch (SQLException e) {
+            logKeeper.appendLog(e.getMessage());
+        } finally {
+            if (stmtUpdate != null) {
+                try {
+                    stmtUpdate.close();
+                } catch (SQLException e) {
+                    logKeeper.appendLog(e.getMessage());
+                }
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ CREATE TABLE representatives (
     constituency VARCHAR(255),       
     province_or_territory VARCHAR(255),
     political_affiliation VARCHAR(255),
-    email VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
     start_date VARCHAR(30),                 
     position VARCHAR(255),             
     photo_url TEXT,                    
@@ -13,6 +13,7 @@ CREATE TABLE representatives (
     level VARCHAR(50),
     languages VARCHAR(50),
     url VARCHAR(255),
+    fed_uid VARCHAR(20);
     UNIQUE (position, level, boundary_external_id, first_name, last_name)            
 );
 
@@ -95,5 +96,37 @@ CREATE TABLE nominatim_requests (
     request_time_readable TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE boundaries_polygons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fedname VARCHAR(255),
+    feduid VARCHAR(50) UNIQUE,
+    polygon GEOMETRY NOT NULL,
+    SPATIAL INDEX (polygon) -- Optimize spatial queries
+);
+
+-- REMOVE BOUNDARIES FROM HOC AND ADD FEDUID 
+-- SELECT 
+--     representatives.first_name, 
+--     representatives.last_name, 
+--     representatives.constituency, 
+--     representatives.province_or_territory, 
+--     representatives.political_affiliation, 
+--     representatives.email, 
+--     representatives.position, 
+--     representatives.photo_url, 
+--     representatives.level, 
+--     representatives.languages, 
+--     representatives.url
+-- FROM 
+--     representatives
+-- JOIN 
+--     boundaries
+-- ON 
+--     representatives.boundary_external_id = boundaries.external_id
+-- WHERE 
+--     ST_Contains(
+--         boundaries.polygon, 
+--         ST_GeomFromText('POINT(-75.702959 45.42185)')
+--     );
 
 

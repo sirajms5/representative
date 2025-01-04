@@ -22,6 +22,7 @@ public class HOCMember {
     private String level = "Federal";
     private String email;
     private String url;
+    private String fedUid;
 
     public HOCMember(String firstName, String lastName) {
         this.firstName = firstName;
@@ -195,6 +196,14 @@ public class HOCMember {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getFedUid() {
+        return fedUid;
+    }
+
+    public void setFedUid(String fedUid) {
+        this.fedUid = fedUid;
     }
 
     public String toJson() {
