@@ -96,7 +96,7 @@
             "position": "MP",
             "photo_url": "https://www.ourcommons.ca/Content/Parliamentarians/Images/OfficialMPPhotos/44/NaqviYasir_Lib.jpg",
             "level": "Federal",
-            "languages": "English, French",
+            "languages": "English  French",
             "url": "https://www.ourcommons.ca/Members/en/yasir-naqvi(110572)",
             "offices": [
             {
