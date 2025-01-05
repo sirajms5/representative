@@ -194,7 +194,7 @@ public class HocRepresentativeCRUD {
 
     public List<HOCMember> getHocMembers() {
         logKeeper.appendLog("Reading HOC members from DB");
-        String sqlRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url, is_honourable FROM representatives";
+        String sqlRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url, is_honourable FROM representatives WHERE position = 'MP';";
         String sqlOffices = "SELECT type, postal_code, phone, fax FROM representative_offices WHERE representative_id = ?";
         String sqlRoles = "SELECT role_name FROM representative_roles WHERE representative_id = ?";
         List<HOCMember> hocMembers = new ArrayList<>();
