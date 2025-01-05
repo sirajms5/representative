@@ -48,11 +48,12 @@
             while ($row = $result->fetch_assoc()) {
                 $repId = $row['representative_id'];
                 if (!isset($representatives[$repId])) {
+                    $consituency = str_replace("—", " ", $row['constituency']);
                     $languages = str_replace("  ", " / ", $row['languages']);                    
                     $representatives[$repId] = [
                         "first_name" => $row['first_name'],
                         "last_name" => $row['last_name'],
-                        "constituency" => $row['constituency'],
+                        "constituency" => $consituency,
                         "province_or_territory" => $row['province_or_territory'],
                         "political_affiliation" => $row['political_affiliation'],
                         "email" => $row['email'],
@@ -122,7 +123,7 @@
         if (stripos($title, 'House of Commons') === 0) {
             return "House of Commons\nOttawa ON\nCanada\nK1A 0A6";
         }
-        
+
         $unit = isset($lines[2]) && preg_match('/^(Unit|Suite)/i', trim($lines[2])) ? trim(preg_replace('/^(Unit|Suite)\s*/i', '', $lines[2])) : "";
         $cityProv = isset($lines[2]) && !$unit ? trim($lines[2]) : (isset($lines[3]) ? trim($lines[3]) : "");
         $postalCode = isset($lines[3]) && !$unit ? trim($lines[3]) : (isset($lines[4]) ? trim($lines[4]) : "");    

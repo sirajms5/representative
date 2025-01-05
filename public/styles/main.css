@@ -61,11 +61,12 @@
     gap: 1rem;
 }
 
-.labelAndValue {
+.labelAndValue,
+.toggle-button {
     margin: 0;
 }
 
-.representative-pa-contrainer {
+.representative-pa-container {
     border-bottom-style: solid;
     border-bottom-width: 0.5rem;
 }
@@ -74,18 +75,58 @@
     font-weight: bold;
 }
 
-.representative-offices-contrainer {
+.offices-toggler {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.representative-offices-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    max-height: 0rem;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
+
+.representative-offices-container.visible {
+    max-height: 1000px;
+    transition: max-height 0.5s ease-in;
+}
+
+.representative-legislature-office-container {
+    padding-right: 3rem;
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: silver;
+}
+
+.representative-constituency-office-container {
+    margin-left: 3rem;
+}
+
+.toggle-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: silver;
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;
 }
 
 .office-list-item {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 #footer-wrapper {
