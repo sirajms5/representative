@@ -38,7 +38,7 @@
                 );
         ";
 
-        if (isset($conn)) {
+        try {
             $stmt = $conn->prepare($getRepresentativesQuery);
             $point = "POINT($latitude $longitude)";
             $stmt->bind_param("s", $point);
@@ -80,8 +80,9 @@
             $stmt->close();
 
             return array_values($representatives);
-        } else {
-            return ["error" => "no connection to database from representative-crud.php"];
+        } catch (Exception $exception) {
+            error_log("Error in representative-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            return array("error" => "Error in representative-crud.php: " . $exception->getMessage());
         }
     }
 

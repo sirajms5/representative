@@ -1,10 +1,16 @@
 <?php
 
+    require_once '../../vendor/autoload.php';    
     include_once "conn.php";
+    
+    use Dotenv\Dotenv;
+    $dotenv = Dotenv::createImmutable(dirname(__DIR__, 2));
+
+    $dotenv->load();
 
     function fetchCoordinatesFromPostalCode($postalCode) {
         global $conn;
-        if (isset($conn)) {
+        try {
             
             // Check global rate limit
             if (!canMakeGlobalRequest()) {
@@ -16,6 +22,9 @@
                 return array("error" => "User-specific rate limit exceeded. Please wait before making another request.");
             }
 
+            $appName = $_ENV['APPLICATION_NAME'];
+            $appEmail = $_ENV['APPLICATION_EMAIL'];
+
             $url = "https://nominatim.openstreetmap.org/search?postalcode=" . urlencode($postalCode) . "&format=json&limit=1";
 
             $ch = curl_init();
@@ -23,7 +32,7 @@
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Timeout after 10 seconds
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                "User-Agent: representatives/1.0 (sirajmsaleem@gmail.com)"
+                "User-Agent: {$appName}/1.0 ({$appEmail}"
             ]);
 
             $response = curl_exec($ch);
@@ -52,15 +61,15 @@
             } else {
                 return array("error" => "No results found for the provided postal code.");
             }
-        } else {
-            echo json_encode(array("error" => "no connection to database from fetch-coordinates.php"));
+        } catch (Exception $exception) {
+            error_log("Error in fetch-coordinates.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
         }
     }
 
     function canMakeGlobalRequest() {
         global $conn;
     
-        if (isset($conn)) {
+        try {
             $lastRequestTime = null;
             // Get the timestamp of the last request
             $query = "SELECT request_time FROM nominatim_requests ORDER BY request_time DESC LIMIT 1";
@@ -86,8 +95,8 @@
             $insertStmt->close();
         
             return true; // Global request allowed
-        } else {
-            return false;
+        } catch (Exception $exception) {
+            error_log("Error in fetch-coordinates.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
         }
     }  
 

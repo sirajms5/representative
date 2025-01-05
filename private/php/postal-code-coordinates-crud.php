@@ -4,7 +4,7 @@
 
     function insertIntoPostalCodeCoordinatesFound($postalCodeArray) {
         global $conn;
-        if (isset($conn)) {
+        try {
             $postalCode = $postalCodeArray['postal_code'];
             $latitude = $postalCodeArray['latitude'];
             $longitude = $postalCodeArray['longitude'];
@@ -15,49 +15,54 @@
             $insertQuery = $conn->prepare($postalCodeInsertQuery);
             $insertQuery->bind_param("sddds", $postalCode, $latitude, $longitude, $isFound, $displayName);
             $insertQuery->execute();
-        } else {
-            echo json_encode(array("error" => "no connection to database from postal-code-coordinates-crud.php"));
+        } catch (Exception $exception) {
+            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
         }
     }
 
     function insertIntoPostalCodeCoordinatesNotFound($postalCode) {
         global $conn;
-        if (isset($conn)) {
+        try {
             $postalCodeInsertQuery = "INSERT IGNORE INTO postal_code_coordinates (postal_code) VALUES (?);";
             $insertQuery = $conn->prepare($postalCodeInsertQuery);
             $insertQuery->bind_param("s", $postalCode);
             $insertQuery->execute();
-        } else {
-            echo json_encode(array("error" => "no connection to database from postal-code-coordinates-crud.php"));
+        } catch (Exception $exception) {
+            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
         }
     }
 
     function getCoordinatesByPostalCode($postalCode) {
         global $conn;
-        $getPostalCodeQuery = "SELECT postal_code, latitude, longitude, display_name, isfound FROM postal_code_coordinates WHERE postal_code = ? LIMIT 1;";
-        $postalCodeInDBQuery = $conn->prepare($getPostalCodeQuery);
-        $postalCodeInDBQuery->bind_param("s", $postalCode);
-        $postalCodeInDBQuery->execute();
-        // Bind the result to variables
-        $dbPostalCode = "";
-        $latitude = "";
-        $longitude = "";
-        $displayName = "";
-        $isFound = "";
-        $postalCodeInDBQuery->bind_result($dbPostalCode, $latitude, $longitude, $displayName, $isFound);
+        try {
+            $getPostalCodeQuery = "SELECT postal_code, latitude, longitude, display_name, isfound FROM postal_code_coordinates WHERE postal_code = ? LIMIT 1;";
+            $postalCodeInDBQuery = $conn->prepare($getPostalCodeQuery);
+            $postalCodeInDBQuery->bind_param("s", $postalCode);
+            $postalCodeInDBQuery->execute();
+            // Bind the result to variables
+            $dbPostalCode = "";
+            $latitude = "";
+            $longitude = "";
+            $displayName = "";
+            $isFound = "";
+            $postalCodeInDBQuery->bind_result($dbPostalCode, $latitude, $longitude, $displayName, $isFound);
 
-        // Fetch the result into variables
-        if ($postalCodeInDBQuery->fetch()) {
-            // Return as an associative array
-            return array(
-                "postal_code" => $dbPostalCode,
-                "latitude" => $latitude,
-                "longitude" => $longitude,
-                "display_name" => $displayName,
-                "isfound" => $isFound
-            );
-        } else {
-            return null; // No results found
+            // Fetch the result into variables
+            if ($postalCodeInDBQuery->fetch()) {
+                // Return as an associative array
+                return array(
+                    "postal_code" => $dbPostalCode,
+                    "latitude" => $latitude,
+                    "longitude" => $longitude,
+                    "display_name" => $displayName,
+                    "isfound" => $isFound
+                );
+            } else {
+                return null; // No results found
+            }
+        } catch (Exception $exception) {
+            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            return null;
         }
     }
 ?>

@@ -5,7 +5,7 @@
     include_once "postal-code-coordinates-crud.php";
     include_once "representative-crud.php";
 
-    if (isset($conn)) {
+    try {
         $postalCode = getData('postal_code');
         $latitude = getData('latitude');
         $longitude = getData('longitude');
@@ -66,7 +66,7 @@
          
         echo json_encode($representativesByCoordinates, true);
 
-    } else {
-        echo json_encode(array("error" => "no connection to database from fetch-address.php"));
+    } catch (Exception $exception) {
+        error_log("Error in fetch-address.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
     }
 ?>
