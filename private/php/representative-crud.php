@@ -61,44 +61,39 @@
                         "level" => $row['level'],
                         "languages" => $languages,
                         "url" => $row['url'],
-                        "offices" => [],
-                        "is_constituency_offices" => false,
-                        "is_legislature_offices" => false
+                        "legislature_offices" => [],
+                        "constituency_offices" => []
                     ];
                 }
 
                 if (!empty($row['office_type']) || !empty($row['office_postal_code']) || !empty($row['office_phone']) || !empty($row['office_fax'])) {
                     $phoneNumber = formatCanadianPhoneNumber($row['office_phone']);
                     $faxNumber = formatCanadianPhoneNumber($row['office_fax']);
-                    $representatives[$repId]['offices'][] = [
+                    $office = [
                         "type" => $row['office_type'],
                         "postal_code" => $row['office_postal_code'],
                         "phone" => $phoneNumber,
                         "fax" => $faxNumber
                     ];
-                }
-            }
 
-            foreach ($representatives as $repId => &$representative) {
-                $constituencyCount = 0;
-                $legislatureCount = 0;        
-                foreach ($representative['offices'] as $office) {
-                    switch (strtolower($office['type'])) {
+                    switch (strtolower($row['office_type'])) {
                         case 'constituency':
-                            $constituencyCount++;
+                            $representatives[$repId]['constituency_offices'][] = $office;
                             break;
                         case 'legislature':
-                            $legislatureCount++;
+                            $representatives[$repId]['legislature_offices'][] = $office;
                             break;
                         default:
-                            error_log("Error in representative-crud.php: representative " .  $representative['first_name'] . " " . $representative['last_name'], 3, "./logs/errors-log.log");
+                            error_log(
+                                "Error in representative-crud.php: Unknown office type for representative " . 
+                                $representatives[$repId]['first_name'] . " " . $representatives[$repId]['last_name'], 
+                                3, 
+                                "./logs/errors-log.log"
+                            );
                             break;
                     }
                 }
-            
-                $representative['is_constituency_offices'] = $constituencyCount > 1;
-                $representative['is_legislature_offices'] = $legislatureCount > 1;
-            }
+            }            
 
             $stmt->close();
 
@@ -131,26 +126,25 @@
             "position": "MP",
             "photo_url": "https://www.ourcommons.ca/Content/Parliamentarians/Images/OfficialMPPhotos/44/NaqviYasir_Lib.jpg",
             "level": "Federal",
-            "languages": "English  French",
+            "languages": "English / French",
             "url": "https://www.ourcommons.ca/Members/en/yasir-naqvi(110572)",
-            "offices": [
-            {
-                "type": "constituency",
-                "postal_code": "Main office - Ottawa\n404-1066 Somerset St W\nOttawa ON  K1Y 4T3",
-                "phone": "1 613 946-8682",
-                "fax": "1 613 946-8680"
-            },
-            {
-                "type": "legislature",
-                "postal_code": "House of Commons\nOttawa ON  K1A 0A6",
-                "phone": "1 613 996-5322",
-                "fax": "1 613 996-5322"
-            }
+            "legislature_offices": [
+                {
+                    "type": "legislature",
+                    "postal_code": "House of Commons\nOttawa ON  K1A 0A6",
+                    "phone": "(613) 996-5322",
+                    "fax": "(613) 996-5322"
+                }
             ],
-            "is_constituency_offices":true,
-            "is_legislature_offices":false
+            "constituency_offices": [
+                {
+                    "type": "constituency",
+                    "postal_code": "Main office - Ottawa\n404-1066 Somerset St W\nOttawa ON  K1Y 4T3",
+                    "phone": "(613) 946-8682",
+                    "fax": "(613) 946-8680"
+                }
+            ]
         }
     ]
-
     */
 ?>
