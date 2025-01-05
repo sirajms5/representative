@@ -9,3 +9,7 @@ private/testing
 private/java/libs
 private/php/logs
 private/java/converters
+.env
+vendor/
+composer.json
+composer.lock

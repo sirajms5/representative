@@ -12,8 +12,16 @@
 }
 
 #representatives-list,
-.offices-list {
+.legilature-offices-list,
+.constituency-offices-list {
     padding-inline-start: 0px
+}
+
+.legislature-offices-list,
+.constituency-offices-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
 }
 
 .representative-list-item,
@@ -29,6 +37,7 @@
     background-color: #fdfdfd;
     color: #000000;
     border-radius: 1rem;
+    min-width: 42.707rem;
 }
 
 .representative-main-details-with-image {
@@ -52,13 +61,7 @@
     gap: 1rem;
 }
 
-.representative-detail-label,
-.representative-pa,
-.representative-constituency,
-.representative-province,
-.representative-position,
-.representative-language,
-.representative-email {
+.labelAndValue {
     margin: 0;
 }
 
@@ -71,9 +74,18 @@
     font-weight: bold;
 }
 
-.offices-list {
+.representative-offices-contrainer {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.office-list-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 #footer-wrapper {
