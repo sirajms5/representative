@@ -257,15 +257,26 @@ function setupRepresentativesHTML(representativesJson) {
         officesToggler.appendChild(representativeOfficeDetailsDiv);
 
         // toggler button
+        const toggleButtonContainer = document.createElement("div");
+        toggleButtonContainer.className = "toggle-button-container";
         const togglebutton = document.createElement("p");
         togglebutton.className = "toggle-button";
-        togglebutton.addEventListener('click', function () {
+        togglebutton.innerText = "Offices";
+        const toggleButtonIcon = document.createElement("i");
+        toggleButtonIcon.className = "fas fa-chevron-down";
+        toggleButtonContainer.addEventListener('click', function () {
             const container = document.querySelector('.representative-offices-container');
             container.classList.toggle('visible');
+            if (container.classList.contains('visible')) {
+                toggleButtonIcon.className = "fas fa-chevron-up";
+            } else {
+                toggleButtonIcon.className = "fas fa-chevron-down";
+            }
         });
         
-        officesToggler.appendChild(togglebutton);
-
+        toggleButtonContainer.appendChild(togglebutton);
+        toggleButtonContainer.appendChild(toggleButtonIcon);
+        officesToggler.appendChild(toggleButtonContainer);        
         representativeDetailsWithImageDiv.appendChild(officesToggler);
         representativeArticle.appendChild(representativeDetailsWithImageDiv);
         representativeLi.appendChild(representativeArticle);

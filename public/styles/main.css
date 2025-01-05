@@ -54,6 +54,10 @@
     padding-right: 1rem;
 }
 
+.representative-image-container {
+    display: flex;
+}
+
 .representative-main-details-others-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -106,21 +110,20 @@
     margin-left: 3rem;
 }
 
-.toggle-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+.toggle-button-container {
+    width: 100%;
     border-top-style: solid;
     border-top-width: 2px;
     border-top-color: silver;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
-.toggle-button:hover {
-    background-color: #0056b3;
+.toggle-button-container:hover {
+    background-color: #808080;
 }
 
 .office-list-item {
