@@ -17,6 +17,7 @@
                 representatives.level, 
                 representatives.languages, 
                 representatives.url,
+                representatives.is_honourable,
                 representative_offices.type AS office_type,
                 representative_offices.postal_code AS office_postal_code,
                 representative_offices.phone AS office_phone,
@@ -49,7 +50,8 @@
                 $repId = $row['representative_id'];
                 if (!isset($representatives[$repId])) {
                     $consituency = str_replace("—", " ", $row['constituency']);
-                    $languages = str_replace("  ", " / ", $row['languages']);                    
+                    $languages = str_replace("  ", " / ", $row['languages']);      
+                    $isHonourable = $row["is_honourable"] == 1 ? true : false;  
                     $representatives[$repId] = [
                         "first_name" => $row['first_name'],
                         "last_name" => $row['last_name'],
@@ -63,7 +65,8 @@
                         "languages" => $languages,
                         "url" => $row['url'],
                         "legislature_offices" => [],
-                        "constituency_offices" => []
+                        "constituency_offices" => [],
+                        "is_honourable" => $isHonourable
                     ];
                 }
 
@@ -144,33 +147,34 @@
     /* Sample of a single json return
     [
         {
-            "first_name": "Yasir",
-            "last_name": "Naqvi",
-            "constituency": "Ottawa Centre",
+            "first_name": "Omar",
+            "last_name": "Alghabra",
+            "constituency": "Mississauga Centre",
             "province_or_territory": "Ontario",
             "political_affiliation": "Liberal",
-            "email": "yasir.naqvi@parl.gc.ca",
+            "email": "omar.alghabra@parl.gc.ca",
             "position": "MP",
-            "photo_url": "https://www.ourcommons.ca/Content/Parliamentarians/Images/OfficialMPPhotos/44/NaqviYasir_Lib.jpg",
+            "photo_url": "https://www.ourcommons.ca/Content/Parliamentarians/Images/OfficialMPPhotos/44/AlghabraOmar_Lib.jpg",
             "level": "Federal",
             "languages": "English / French",
-            "url": "https://www.ourcommons.ca/Members/en/yasir-naqvi(110572)",
+            "url": "https://www.ourcommons.ca/Members/en/omar-alghabra(89535)",
             "legislature_offices": [
-                {
-                    "type": "legislature",
-                    "postal_code": "House of Commons\nOttawa ON  K1A 0A6",
-                    "phone": "(613) 996-5322",
-                    "fax": "(613) 996-5322"
-                }
+            {
+                "type": "legislature",
+                "postal_code": "House of Commons\nOttawa ON\nCanada\nK1A 0A6",
+                "phone": "(613) 992-1301",
+                "fax": "(613) 992-1301"
+            }
             ],
             "constituency_offices": [
-                {
-                    "type": "constituency",
-                    "postal_code": "Main office - Ottawa\n404-1066 Somerset St W\nOttawa ON  K1Y 4T3",
-                    "phone": "(613) 946-8682",
-                    "fax": "(613) 946-8680"
-                }
-            ]
+            {
+                "type": "constituency",
+                "postal_code": "Main office - Mississauga\n506-10 Kingsbridge Garden Circle\nMississauga, ON\nL5R 3K6",
+                "phone": "(905) 848-8595",
+                "fax": "(905) 848-2712"
+            }
+            ],
+            "is_honourable": true
         }
     ]
     */

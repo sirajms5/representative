@@ -68,7 +68,13 @@ function setupRepresentativesHTML(representativesJson) {
     console.log(representativesJson.length);
     for(let index = 0; index < representativesJson.length; index++) {
         const representative = representativesJson[index];
-        const representativeName = `${representative["first_name"]} ${representative["last_name"]}`;
+        let representativeName;
+        if(representative["is_honourable"]) {
+            representativeName = `The Honourable ${representative["first_name"]} ${representative["last_name"]}`;
+        } else {
+            representativeName = `${representative["first_name"]} ${representative["last_name"]}`;
+        }
+        
         const representativeLi = document.createElement("li");
         representativeLi.className = "representative-list-item";
         const representativeArticle = document.createElement("article");

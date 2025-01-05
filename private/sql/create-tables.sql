@@ -13,7 +13,8 @@ CREATE TABLE representatives (
     level VARCHAR(50),
     languages VARCHAR(50),
     url VARCHAR(255),
-    fed_uid VARCHAR(20);
+    fed_uid VARCHAR(20),
+    is_honourable BOOLEAN DEFAULT false,
     UNIQUE (position, level, boundary_external_id, first_name, last_name)            
 );
 
@@ -85,7 +86,7 @@ CREATE TABLE postal_code_coordinates (
     latitude DOUBLE DEFAULT NULL,
     longitude DOUBLE DEFAULT NULL,
     display_name VARCHAR(255) DEFAULT NULL,
-    isfound BOOLEAN DEFAULT false,
+    is_found BOOLEAN DEFAULT false,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 

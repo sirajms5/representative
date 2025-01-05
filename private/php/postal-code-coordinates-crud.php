@@ -11,7 +11,7 @@
             $displayName = $postalCodeArray['displayName'];
             $isFound = 1;
 
-            $postalCodeInsertQuery = "INSERT IGNORE INTO postal_code_coordinates (postal_code, latitude, longitude, isfound, display_name) VALUES (?, ?, ?, ?, ?);";
+            $postalCodeInsertQuery = "INSERT IGNORE INTO postal_code_coordinates (postal_code, latitude, longitude, is_found, display_name) VALUES (?, ?, ?, ?, ?);";
             $insertQuery = $conn->prepare($postalCodeInsertQuery);
             $insertQuery->bind_param("sddds", $postalCode, $latitude, $longitude, $isFound, $displayName);
             $insertQuery->execute();
@@ -35,7 +35,7 @@
     function getCoordinatesByPostalCode($postalCode) {
         global $conn;
         try {
-            $getPostalCodeQuery = "SELECT postal_code, latitude, longitude, display_name, isfound FROM postal_code_coordinates WHERE postal_code = ? LIMIT 1;";
+            $getPostalCodeQuery = "SELECT postal_code, latitude, longitude, display_name, is_found FROM postal_code_coordinates WHERE postal_code = ? LIMIT 1;";
             $postalCodeInDBQuery = $conn->prepare($getPostalCodeQuery);
             $postalCodeInDBQuery->bind_param("s", $postalCode);
             $postalCodeInDBQuery->execute();

@@ -26,7 +26,7 @@ public class CSVReader {
                 String[] values = line.split(csvSplitBy);
 
                 // Handle cases where some columns might be empty
-                String honorificTitle = values.length > 0 ? values[0] : "";
+                boolean honorificTitle = values.length > 0 && !values[0].trim().isEmpty();
                 String firstName = values.length > 1 ? values[1] : "";
                 String lastName = values.length > 2 ? values[2] : "";
                 String constituency = values.length > 3 ? values[3] : "";

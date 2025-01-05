@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 public class HOCMember {
-    private String honorificTitle;
+    private boolean isHonourable;
     private String firstName;
     private String lastName;
     private String constituency;
@@ -29,10 +29,10 @@ public class HOCMember {
         this.lastName = lastName;
     }
 
-    public HOCMember(String honorificTitle, String firstName, String lastName,
+    public HOCMember(boolean isHonourable, String firstName, String lastName,
                     String constituency, String provinceOrTerritory,
                     String politicalAffiliation, String startDate, String endDate) {
-        this.honorificTitle = honorificTitle;
+        this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
         this.constituency = constituency;
@@ -44,8 +44,8 @@ public class HOCMember {
 
     public HOCMember(String honorificTitle, String firstName, String lastName, String constituency,
             String provinceOrTerritory, String politicalAffiliation, String startDate, String endDate, String position,
-            String photoUrl, String languages, String boundaryExternalId, String level, String email, String url) {
-        this.honorificTitle = honorificTitle;
+            String photoUrl, String languages, String boundaryExternalId, String level, String email, String url, boolean isHonourable) {
+        this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
         this.constituency = constituency;
@@ -59,15 +59,15 @@ public class HOCMember {
         this.boundaryExternalId = boundaryExternalId;
         this.level = level;
         this.email = email;
-        this.url = url;
+        this.url = url;        
     }
 
-    public String getHonorificTitle() {
-        return honorificTitle;
+    public boolean isHonorificTitle() {
+        return isHonourable;
     }
 
-    public void setHonorificTitle(String honorificTitle) {
-        this.honorificTitle = honorificTitle;
+    public void setHonorificTitle(boolean isHonourable) {
+        this.isHonourable = isHonourable;
     }
 
     public String getFirstName() {
