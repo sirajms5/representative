@@ -69,9 +69,10 @@
                 if (!empty($row['office_type']) || !empty($row['office_postal_code']) || !empty($row['office_phone']) || !empty($row['office_fax'])) {
                     $phoneNumber = formatCanadianPhoneNumber($row['office_phone']);
                     $faxNumber = formatCanadianPhoneNumber($row['office_fax']);
+                    $address = formatAddress($row['office_postal_code']);
                     $office = [
                         "type" => $row['office_type'],
-                        "postal_code" => $row['office_postal_code'],
+                        "postal_code" => $address,
                         "phone" => $phoneNumber,
                         "fax" => $faxNumber
                     ];
@@ -112,6 +113,31 @@
         }
     
         return $phoneNumber;
+    }
+
+    function formatAddress($address) {
+        $lines = explode("\n", $address);    
+        $title = $lines[0] ?? "";
+        $street = $lines[1] ?? "";
+        if (stripos($title, 'House of Commons') === 0) {
+            return "House of Commons\nOttawa ON\nCanada\nK1A 0A6";
+        }
+        
+        $unit = isset($lines[2]) && preg_match('/^(Unit|Suite)/i', trim($lines[2])) ? trim(preg_replace('/^(Unit|Suite)\s*/i', '', $lines[2])) : "";
+        $cityProv = isset($lines[2]) && !$unit ? trim($lines[2]) : (isset($lines[3]) ? trim($lines[3]) : "");
+        $postalCode = isset($lines[3]) && !$unit ? trim($lines[3]) : (isset($lines[4]) ? trim($lines[4]) : "");    
+        if ($unit) {
+            $street = preg_replace('/^(.*?)([0-9])/', trim($unit) . '-$1$2', $street);
+        }
+
+        if (preg_match('/^(.*?)([A-Z]{2})\s+([A-Z0-9]{3}\s*[A-Z0-9]{3})$/', $cityProv, $matches)) {
+            $cityProv = trim($matches[1]) . ', ' . $matches[2];
+            $postalCode = $matches[3];
+        }
+    
+        $formattedAddress = $title . "\n" . $street . "\n" . $cityProv . "\n" . $postalCode;
+    
+        return $formattedAddress;
     }
 
     /* Sample of a single json return
