@@ -61,7 +61,9 @@
                         "level" => $row['level'],
                         "languages" => $languages,
                         "url" => $row['url'],
-                        "offices" => []
+                        "offices" => [],
+                        "is_constituency_offices" => false,
+                        "is_legislature_offices" => false
                     ];
                 }
 
@@ -75,6 +77,27 @@
                         "fax" => $faxNumber
                     ];
                 }
+            }
+
+            foreach ($representatives as $repId => &$representative) {
+                $constituencyCount = 0;
+                $legislatureCount = 0;        
+                foreach ($representative['offices'] as $office) {
+                    switch (strtolower($office['type'])) {
+                        case 'constituency':
+                            $constituencyCount++;
+                            break;
+                        case 'legislature':
+                            $legislatureCount++;
+                            break;
+                        default:
+                            error_log("Error in representative-crud.php: representative " .  $representative['first_name'] . " " . $representative['last_name'], 3, "./logs/errors-log.log");
+                            break;
+                    }
+                }
+            
+                $representative['is_constituency_offices'] = $constituencyCount > 1;
+                $representative['is_legislature_offices'] = $legislatureCount > 1;
             }
 
             $stmt->close();
@@ -123,7 +146,9 @@
                 "phone": "1 613 996-5322",
                 "fax": "1 613 996-5322"
             }
-            ]
+            ],
+            "is_constituency_offices":true,
+            "is_legislature_offices":false
         }
     ]
 
