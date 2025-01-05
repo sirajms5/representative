@@ -17,7 +17,7 @@
             // Check if postal code is in the database
             if (!empty($postalCodeInDB)) {
                 $dbChecker = true;
-                if($postalCodeInDB['isfound'] == 1) {
+                if($postalCodeInDB['is_found'] == 1) {
                     $resultObj = array(
                         "success" => "Postal code converted to coordinates",
                         "postal_code" => $postalCodeInDB['postal_code'],

@@ -39,27 +39,19 @@
             $postalCodeInDBQuery = $conn->prepare($getPostalCodeQuery);
             $postalCodeInDBQuery->bind_param("s", $postalCode);
             $postalCodeInDBQuery->execute();
-            // Bind the result to variables
-            $dbPostalCode = "";
-            $latitude = "";
-            $longitude = "";
-            $displayName = "";
-            $isFound = "";
-            $postalCodeInDBQuery->bind_result($dbPostalCode, $latitude, $longitude, $displayName, $isFound);
+            $result = $postalCodeInDBQuery->get_result();
+            if ($row = $result->fetch_assoc()) {
 
-            // Fetch the result into variables
-            if ($postalCodeInDBQuery->fetch()) {
-                // Return as an associative array
                 return array(
-                    "postal_code" => $dbPostalCode,
-                    "latitude" => $latitude,
-                    "longitude" => $longitude,
-                    "display_name" => $displayName,
-                    "isfound" => $isFound
+                    "postal_code" => $row['postal_code'],
+                    "latitude" => $row['latitude'],
+                    "longitude" => $row['longitude'],
+                    "display_name" => $row['display_name'],
+                    "is_found" => $row['is_found']
                 );
             } else {
                 return null; // No results found
-            }
+            }            
         } catch (Exception $exception) {
             error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
             return null;
