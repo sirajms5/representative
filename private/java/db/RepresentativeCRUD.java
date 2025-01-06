@@ -14,11 +14,11 @@ import utilities.Helpers;
 import utilities.LogKeeper;
 import utilities.RepresentativeLevelEnum;
 
-public class HocRepresentativeCRUD {
+public class RepresentativeCRUD {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public boolean insertHOCMemeber(Representative representative) {
+    public boolean insertRepresentative(Representative representative) {
         boolean isInserted = false;
         String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email, url, is_honourable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmtRepresemtatives = null;
@@ -76,7 +76,7 @@ public class HocRepresentativeCRUD {
                             }
                         }
 
-                        logKeeper.appendLog("Inserted representative " + representativeId + ": "
+                        logKeeper.appendLog("Inserted " + representative.getPosition() + " representative " + representativeId + ": "
                                 + representative.getFirstName() + " " + representative.getLastName());
                     }
                 }

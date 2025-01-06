@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import classes.Representative;
 import classes.Office;
-import db.HocRepresentativeCRUD;
+import db.RepresentativeCRUD;
 import utilities.APIHelpers;
 import utilities.Constants;
 import utilities.Helpers;
@@ -126,7 +126,7 @@ public class HOCApiFetch {
     }
 
     private void unavilableHocMember(Representative hocRepresentative) {
-        HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
+        RepresentativeCRUD hocRepresentativeCRUD = new RepresentativeCRUD();
         hocRepresentativeCRUD.insertUnavailableRepresentative(hocRepresentative);  
     }
 }

@@ -6,7 +6,7 @@ import classes.Boundary;
 import classes.GeoJsonFeatureCollection;
 import classes.Representative;
 import db.HocBoundariesCRUD;
-import db.HocRepresentativeCRUD;
+import db.RepresentativeCRUD;
 import utilities.LogKeeper;
 
 public class JsonWriter {
@@ -14,8 +14,8 @@ public class JsonWriter {
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
     public void writeHocMembersJson() {
-        HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
-        List<Representative> hocRepresentatives = hocRepresentativeCRUD.getHocMembers();
+        RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
+        List<Representative> hocRepresentatives = representativeCRUD.getHocMembers();
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[");
         for (int index = 0; index < hocRepresentatives.size(); index++) {
