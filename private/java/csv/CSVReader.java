@@ -6,15 +6,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.HOCMember;
+import classes.Representative;
 import utilities.LogKeeper;
 
 public class CSVReader {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public List<HOCMember> readCSV(String filePath) {
-        List<HOCMember> members = new ArrayList<>();
+    public List<Representative> readCSV(String filePath) {
+        List<Representative> members = new ArrayList<>();
         String line;
         String csvSplitBy = ",";
 
@@ -35,8 +35,8 @@ public class CSVReader {
                 String startDate = values.length > 6 ? values[6] : "";
                 String endDate = values.length > 7 ? values[7] : "";
 
-                members.add(new HOCMember(honorificTitle, firstName, lastName, constituency,
-                        provinceOrTerritory, politicalAffiliation, startDate, endDate));
+                members.add(new Representative(honorificTitle, firstName, lastName, constituency,
+                        provinceOrTerritory, politicalAffiliation, startDate, endDate, "MP"));
             }
         } catch (IOException e) {
             logKeeper.appendLog(e.getMessage());

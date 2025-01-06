@@ -7,9 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import classes.HOCMember;
+import classes.Representative;
 import classes.Office;
 import utilities.Helpers;
 import utilities.LogKeeper;
@@ -18,7 +17,7 @@ public class HocRepresentativeCRUD {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public boolean insertHOCMemeber(HOCMember hocMember) {
+    public boolean insertHOCMemeber(Representative representative) {
         boolean isInserted = false;
         String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email, url, is_honourable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmtRepresemtatives = null;
@@ -28,20 +27,20 @@ public class HocRepresentativeCRUD {
 
         try (Connection conn = DbManager.getConn()) {
             stmtRepresemtatives = conn.prepareStatement(sqlRepresentative, Statement.RETURN_GENERATED_KEYS);
-            stmtRepresemtatives.setString(1, hocMember.getFirstName());
-            stmtRepresemtatives.setString(2, hocMember.getLastName());
-            stmtRepresemtatives.setString(3, hocMember.getConstituency());
-            stmtRepresemtatives.setString(4, hocMember.getProvinceOrTerritory());
-            stmtRepresemtatives.setString(5, hocMember.getPoliticalAffiliation());
-            stmtRepresemtatives.setString(6, hocMember.getStartDate());
-            stmtRepresemtatives.setString(7, hocMember.getPosition());
-            stmtRepresemtatives.setString(8, hocMember.getPhotoUrl());
-            stmtRepresemtatives.setString(9, hocMember.getBoundaryExternalId());
-            stmtRepresemtatives.setString(10, hocMember.getLevel());
-            stmtRepresemtatives.setString(11, hocMember.getLanguages());
-            stmtRepresemtatives.setString(12, hocMember.getEmail());
-            stmtRepresemtatives.setString(13, hocMember.getUrl());
-            stmtRepresemtatives.setBoolean(14, hocMember.isHonorificTitle());
+            stmtRepresemtatives.setString(1, representative.getFirstName());
+            stmtRepresemtatives.setString(2, representative.getLastName());
+            stmtRepresemtatives.setString(3, representative.getConstituency());
+            stmtRepresemtatives.setString(4, representative.getProvinceOrTerritory());
+            stmtRepresemtatives.setString(5, representative.getPoliticalAffiliation());
+            stmtRepresemtatives.setString(6, representative.getStartDate());
+            stmtRepresemtatives.setString(7, representative.getPosition());
+            stmtRepresemtatives.setString(8, representative.getPhotoUrl());
+            stmtRepresemtatives.setString(9, representative.getBoundaryExternalId());
+            stmtRepresemtatives.setString(10, representative.getLevel());
+            stmtRepresemtatives.setString(11, representative.getLanguages());
+            stmtRepresemtatives.setString(12, representative.getEmail());
+            stmtRepresemtatives.setString(13, representative.getUrl());
+            stmtRepresemtatives.setBoolean(14, representative.isHonorificTitle());
 
             int insertedHOCId = stmtRepresemtatives.executeUpdate();
             Helpers.sleep(1);
@@ -52,32 +51,32 @@ public class HocRepresentativeCRUD {
                     if (generatedKeys.next()) {
                         representativeId = generatedKeys.getInt(1);
                         String sqlOffice = "INSERT IGNORE INTO representative_offices (representative_id, type, postal_code, phone, fax) VALUES (?, ?, ?, ?, ?);";
-                        if (hocMember.getOffices() != null) {
+                        if (representative.getOffices() != null) {
                             stmtOffices = conn.prepareStatement(sqlOffice);
-                            for (int index = 0; index < hocMember.getOffices().size(); index++) {
+                            for (int index = 0; index < representative.getOffices().size(); index++) {
                                 stmtOffices.setInt(1, representativeId);
-                                stmtOffices.setString(2, hocMember.getOffices().get(index).getType());
-                                stmtOffices.setString(3, hocMember.getOffices().get(index).getPostal());
-                                stmtOffices.setString(4, hocMember.getOffices().get(index).getTel());
-                                stmtOffices.setString(5, hocMember.getOffices().get(index).getFax());
+                                stmtOffices.setString(2, representative.getOffices().get(index).getType());
+                                stmtOffices.setString(3, representative.getOffices().get(index).getPostal());
+                                stmtOffices.setString(4, representative.getOffices().get(index).getTel());
+                                stmtOffices.setString(5, representative.getOffices().get(index).getFax());
                                 stmtOffices.executeUpdate();
                                 Helpers.sleep(1);
                             }
                         }
 
-                        if (hocMember.getRoles() != null) {
+                        if (representative.getRoles() != null) {
                             String sqlRoles = "INSERT IGNORE INTO representative_roles (representative_id, role_name) VALUES (?, ?);";
                             stmtRoles = conn.prepareStatement(sqlRoles);
-                            for (int index = 0; index < hocMember.getRoles().size(); index++) {
+                            for (int index = 0; index < representative.getRoles().size(); index++) {
                                 stmtRoles.setInt(1, representativeId);
-                                stmtRoles.setString(2, hocMember.getRoles().get(index));
+                                stmtRoles.setString(2, representative.getRoles().get(index));
                                 stmtRoles.executeUpdate();
                                 Helpers.sleep(1);
                             }
                         }
 
                         logKeeper.appendLog("Inserted representative " + representativeId + ": "
-                                + hocMember.getFirstName() + " " + hocMember.getLastName());
+                                + representative.getFirstName() + " " + representative.getLastName());
                     }
                 }
             }
@@ -112,18 +111,18 @@ public class HocRepresentativeCRUD {
         return isInserted;
     }
 
-    public void insertUnavailableRepresentative(HOCMember hocMember) {
+    public void insertUnavailableRepresentative(Representative representative) {
         String sqlUnavilableRepresentative = "INSERT INTO unavilable_representative (first_name, last_name, position) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE first_name = first_name, last_name = last_name";
         PreparedStatement stmtUnavilableRepresentative = null;
 
         try (Connection conn = DbManager.getConn()) {
             stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableRepresentative);
-            stmtUnavilableRepresentative.setString(1, hocMember.getFirstName());
-            stmtUnavilableRepresentative.setString(2, hocMember.getLastName());
-            stmtUnavilableRepresentative.setString(3, hocMember.getPosition());
+            stmtUnavilableRepresentative.setString(1, representative.getFirstName());
+            stmtUnavilableRepresentative.setString(2, representative.getLastName());
+            stmtUnavilableRepresentative.setString(3, representative.getPosition());
             stmtUnavilableRepresentative.executeUpdate();
-            logKeeper.appendLog("Inserted unavilable representative: " + hocMember.getFirstName() + " "
-                    + hocMember.getLastName());
+            logKeeper.appendLog("Inserted unavilable representative: " + representative.getFirstName() + " "
+                    + representative.getLastName());
             Helpers.sleep(1);
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
@@ -138,9 +137,9 @@ public class HocRepresentativeCRUD {
         }
     }
 
-    public List<HOCMember> getUnavilableHOCMembers() {
-        String sql = "SELECT first_name, last_name FROM unavilable_representative WHERE added = 0 AND position = 'MP'";
-        List<HOCMember> unavailableMembers = new ArrayList<>();
+    public List<Representative> getUnavilableHOCMembers(String position) {
+        String sql = "SELECT first_name, last_name FROM unavilable_representative WHERE added = 0 AND position = ?";
+        List<Representative> unavailableMembers = new ArrayList<>();
 
         try (Connection conn = DbManager.getConn();
                 PreparedStatement stmt = conn.prepareStatement(sql);
@@ -150,8 +149,8 @@ public class HocRepresentativeCRUD {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
 
-                HOCMember hocMember = new HOCMember(firstName, lastName);
-                unavailableMembers.add(hocMember);
+                Representative representative = new Representative(firstName, lastName, position);
+                unavailableMembers.add(representative);
             }
 
         } catch (SQLException e) {
@@ -161,11 +160,11 @@ public class HocRepresentativeCRUD {
         return unavailableMembers;
     }
 
-    public void updateUnavilableHOCMember(HOCMember hocMember, boolean added) {
+    public void updateUnavilableHOCMember(Representative representative, boolean added) {
         String sqlUpdate;
-        String firstName = hocMember.getFirstName();
-        String lastName = hocMember.getLastName();
-        String position = hocMember.getPosition();
+        String firstName = representative.getFirstName();
+        String lastName = representative.getLastName();
+        String position = representative.getPosition();
         if (added) {
             sqlUpdate = "UPDATE unavilable_representative SET added = 1 WHERE first_name = ? AND last_name = ? AND position = ?;";
         } else {
@@ -195,38 +194,38 @@ public class HocRepresentativeCRUD {
         }
     }
 
-    public List<HOCMember> getHocMembers() {
+    public List<Representative> getHocMembers() {
         logKeeper.appendLog("Reading HOC members from DB");
-        String sqlRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url, is_honourable FROM representatives WHERE position = 'MP';";
+        String sqlHocRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url, is_honourable FROM representatives WHERE position = 'MP';";
         String sqlOffices = "SELECT type, postal_code, phone, fax FROM representative_offices WHERE representative_id = ?";
         String sqlRoles = "SELECT role_name FROM representative_roles WHERE representative_id = ?";
-        List<HOCMember> hocMembers = new ArrayList<>();
+        List<Representative> hocRepresentatives = new ArrayList<>();
 
         try (Connection conn = DbManager.getConn();
-                PreparedStatement stmtRepresentatives = conn.prepareStatement(sqlRepresentatives);
-                ResultSet rsRepresentatives = stmtRepresentatives.executeQuery()) {
+                PreparedStatement stmtHocRepresentatives = conn.prepareStatement(sqlHocRepresentatives);
+                ResultSet rsHocRepresentatives = stmtHocRepresentatives.executeQuery()) {
 
-            while (rsRepresentatives.next()) {
-                String firstName = rsRepresentatives.getString("first_name");
-                String lastName = rsRepresentatives.getString("last_name");
-                String constituency = rsRepresentatives.getString("constituency");
-                String provinceOrTerritory = rsRepresentatives.getString("province_or_territory");
-                String politicalAffiliation = rsRepresentatives.getString("political_affiliation");
-                String email = rsRepresentatives.getString("email");
-                String startDate = rsRepresentatives.getString("start_date");
-                String position = rsRepresentatives.getString("position");
-                String photoUrl = rsRepresentatives.getString("photo_url");
-                String boundaryExternalId = rsRepresentatives.getString("boundary_external_id");
-                String level = rsRepresentatives.getString("level");
-                String languages = rsRepresentatives.getString("languages");
-                String url = rsRepresentatives.getString("url");
-                boolean isHonourable = rsRepresentatives.getBoolean("is_honourable");
-                HOCMember hocMember = new HOCMember(null, firstName, lastName, constituency, provinceOrTerritory,
+            while (rsHocRepresentatives.next()) {
+                String firstName = rsHocRepresentatives.getString("first_name");
+                String lastName = rsHocRepresentatives.getString("last_name");
+                String constituency = rsHocRepresentatives.getString("constituency");
+                String provinceOrTerritory = rsHocRepresentatives.getString("province_or_territory");
+                String politicalAffiliation = rsHocRepresentatives.getString("political_affiliation");
+                String email = rsHocRepresentatives.getString("email");
+                String startDate = rsHocRepresentatives.getString("start_date");
+                String position = rsHocRepresentatives.getString("position");
+                String photoUrl = rsHocRepresentatives.getString("photo_url");
+                String boundaryExternalId = rsHocRepresentatives.getString("boundary_external_id");
+                String level = rsHocRepresentatives.getString("level");
+                String languages = rsHocRepresentatives.getString("languages");
+                String url = rsHocRepresentatives.getString("url");
+                boolean isHonourable = rsHocRepresentatives.getBoolean("is_honourable");
+                Representative hocRepresentative = new Representative(null, firstName, lastName, constituency, provinceOrTerritory,
                         politicalAffiliation, startDate, null, position, photoUrl, languages, boundaryExternalId, level, email, url, isHonourable);
 
                 // Fetch and set offices
                 try (PreparedStatement stmtOffices = conn.prepareStatement(sqlOffices)) {
-                    stmtOffices.setInt(1, rsRepresentatives.getInt("id"));
+                    stmtOffices.setInt(1, rsHocRepresentatives.getInt("id"));
                     try (ResultSet rsOffices = stmtOffices.executeQuery()) {
                         List<Office> offices = new ArrayList<>();
                         while (rsOffices.next()) {
@@ -236,35 +235,35 @@ public class HocRepresentativeCRUD {
                             String fax = rsOffices.getString("fax");
                             offices.add(new Office(fax, phone, type, postalCode));
                         }
-                        hocMember.setOffices(offices);
+                        hocRepresentative.setOffices(offices);
                     }
                 }
 
                 // Fetch and set roles
                 try (PreparedStatement stmtRoles = conn.prepareStatement(sqlRoles)) {
-                    stmtRoles.setInt(1, rsRepresentatives.getInt("id"));
+                    stmtRoles.setInt(1, rsHocRepresentatives.getInt("id"));
                     try (ResultSet rsRoles = stmtRoles.executeQuery()) {
                         List<String> roles = new ArrayList<>();
                         while (rsRoles.next()) {
                             roles.add(rsRoles.getString("role_name"));
                         }
-                        hocMember.setRoles(roles);
+                        hocRepresentative.setRoles(roles);
                     }
                 }
 
-                hocMembers.add(hocMember);
+                hocRepresentatives.add(hocRepresentative);
             }
 
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
         }
 
-        return hocMembers;
+        return hocRepresentatives;
     }
 
-    public void updateHocMemberFedUid(HOCMember hocMember) {
-        String hocEmail = hocMember.getEmail();
-        String hocFedUid = hocMember.getFedUid();
+    public void updateHocMemberFedUid(Representative hocRepresentative) {
+        String hocEmail = hocRepresentative.getEmail();
+        String hocFedUid = hocRepresentative.getFedUid();
         String sqlUpdate = "UPDATE representatives SET fed_uid = ?  WHERE email = ?;";
         PreparedStatement stmtUpdate = null;
         try (Connection conn = DbManager.getConn()) {
@@ -274,7 +273,7 @@ public class HocRepresentativeCRUD {
             int rowsUpdated = stmtUpdate.executeUpdate();
 
             logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the representatives table for "
-                    + hocMember.getFirstName() + " " + hocMember.getLastName());
+                    + hocRepresentative.getFirstName() + " " + hocRepresentative.getLastName());
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
         } finally {

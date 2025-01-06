@@ -4,7 +4,7 @@ import java.util.List;
 
 import api.BoundariesApiFetch;
 import classes.Boundary;
-import classes.HOCMember;
+import classes.Representative;
 import db.HocBoundariesCRUD;
 import db.HocRepresentativeCRUD;
 import disk.JsonWriter;
@@ -17,7 +17,7 @@ public class HocBoundariesJob {
     public void executeHocBoundariesJob() {
         logKeeper.appendLog("======================================== Executing HOC Boundaries Job ========================================");
         HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
-        List<HOCMember> hocMembers = hocRepresentativeCRUD.getHocMembers();
+        List<Representative> hocMembers = hocRepresentativeCRUD.getHocMembers();
         BoundariesApiFetch boundariesApiFetch = new BoundariesApiFetch();
         List<Boundary> boundaries = boundariesApiFetch.fetchHocBoundaryByExternalId(hocMembers);
         HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();

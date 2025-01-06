@@ -4,7 +4,7 @@ import java.util.List;
 
 import classes.Boundary;
 import classes.GeoJsonFeatureCollection;
-import classes.HOCMember;
+import classes.Representative;
 import db.HocBoundariesCRUD;
 import db.HocRepresentativeCRUD;
 import utilities.LogKeeper;
@@ -15,13 +15,13 @@ public class JsonWriter {
 
     public void writeHocMembersJson() {
         HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
-        List<HOCMember> hocMembers = hocRepresentativeCRUD.getHocMembers();
+        List<Representative> hocRepresentatives = hocRepresentativeCRUD.getHocMembers();
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[");
-        for (int index = 0; index < hocMembers.size(); index++) {
-            HOCMember member = hocMembers.get(index);
-            jsonBuilder.append(member.toJson());
-            if (index < hocMembers.size() - 1) {
+        for (int index = 0; index < hocRepresentatives.size(); index++) {
+            Representative hocMember = hocRepresentatives.get(index);
+            jsonBuilder.append(hocMember.toJson());
+            if (index < hocRepresentatives.size() - 1) {
                 jsonBuilder.append(",");
             }
         }

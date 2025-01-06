@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Boundary;
-import classes.HOCMember;
+import classes.Representative;
 import utilities.Helpers;
 import utilities.LogKeeper;
 
@@ -17,15 +17,15 @@ public class HocBoundariesCRUD {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public void insertUnavilableBoundary(HOCMember hocMember) {
+    public void insertUnavilableBoundary(Representative representative) {
         String sqlUnavilableBoundary = "INSERT IGNORE INTO unavilable_hoc_boundary (boundary_external_id) VALUES (?);";
         PreparedStatement stmtUnavilableRepresentative = null;
 
         try (Connection conn = DbManager.getConn()) {
             stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableBoundary);
-            stmtUnavilableRepresentative.setString(1, hocMember.getBoundaryExternalId());
+            stmtUnavilableRepresentative.setString(1, representative.getBoundaryExternalId());
             stmtUnavilableRepresentative.executeUpdate();
-            logKeeper.appendLog("Inserted unavilable HOC boundary number: " + hocMember.getBoundaryExternalId());
+            logKeeper.appendLog("Inserted unavilable HOC boundary number: " + representative.getBoundaryExternalId());
             Helpers.sleep(1);
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());

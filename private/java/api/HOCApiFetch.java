@@ -12,7 +12,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import classes.HOCMember;
+import classes.Representative;
 import classes.Office;
 import db.HocRepresentativeCRUD;
 import utilities.APIHelpers;
@@ -23,16 +23,16 @@ public class HOCApiFetch {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public List<HOCMember> fetchHOCMembersFromApi(List<HOCMember> hocMembers) {
-        List<HOCMember> updatedMembers = new ArrayList<>();
+    public List<Representative> fetchHOCMembersFromApi(List<Representative> hocRepresentatives) {
+        List<Representative> updatedHocRepresentatives = new ArrayList<>();
         int fetchCounter = 0;
-        for (HOCMember hocMember : hocMembers) {
+        for (Representative hocRepresentative : hocRepresentatives) {
             try {
-                String encodedFirstName = URLEncoder.encode(hocMember.getFirstName(),
+                String encodedFirstName = URLEncoder.encode(hocRepresentative.getFirstName(),
                         StandardCharsets.UTF_8.toString());
-                String encodedLastName = URLEncoder.encode(hocMember.getLastName(), StandardCharsets.UTF_8.toString());
-                String encodedPosition = URLEncoder.encode(hocMember.getPosition(), StandardCharsets.UTF_8.toString());
-                // Build API URL with parameters from hocMember
+                String encodedLastName = URLEncoder.encode(hocRepresentative.getLastName(), StandardCharsets.UTF_8.toString());
+                String encodedPosition = URLEncoder.encode(hocRepresentative.getPosition(), StandardCharsets.UTF_8.toString());
+                // Build API URL with parameters from representative
                 String apiUrl = String.format(
                         "https://represent.opennorth.ca/representatives/house-of-commons/?first_name=%s&last_name=%s&elected_office=%s",
                         encodedFirstName,
@@ -40,12 +40,12 @@ public class HOCApiFetch {
                         encodedPosition);
 
                 fetchCounter = fetchCounter + 1;
-                logKeeper.appendLog("Fetching data for " + fetchCounter + ": " + hocMember.getFirstName() + " " + hocMember.getLastName());
+                logKeeper.appendLog("Fetching data for " + fetchCounter + ": " + hocRepresentative.getFirstName() + " " + hocRepresentative.getLastName());
                 HttpURLConnection conn = APIHelpers.createHttpConnection(apiUrl);
 
                 // Check response code
                 if (conn.getResponseCode() != 200) {
-                    unavilableHocMember(hocMember);
+                    unavilableHocMember(hocRepresentative);
                     continue;
                 }
 
@@ -59,16 +59,16 @@ public class HOCApiFetch {
                 if (objectsArray.length() > 0) {
                     JSONObject obj = objectsArray.getJSONObject(0); // Assume the first result is correct
 
-                    // Update hocMember with API data
-                    hocMember.setPhotoUrl(obj.optString("photo_url", null));
-                    hocMember.setEmail(obj.optString("email", null));
-                    hocMember.setUrl(obj.optString("url", null));
+                    // Update representative with API data
+                    hocRepresentative.setPhotoUrl(obj.optString("photo_url", null));
+                    hocRepresentative.setEmail(obj.optString("email", null));
+                    hocRepresentative.setUrl(obj.optString("url", null));
 
                     // Set languages
                     JSONObject extra = obj.optJSONObject("extra");
                     if (extra != null && extra.has("preferred_languages")) {
                         JSONArray languagesArray = extra.getJSONArray("preferred_languages");
-                        hocMember.setLanguages(languagesArray.getString(0));
+                        hocRepresentative.setLanguages(languagesArray.getString(0));
                     }
 
                     // Set offices
@@ -84,7 +84,7 @@ public class HOCApiFetch {
                                     officeObj.optString("postal", null));
                             offices.add(office);
                         }
-                        hocMember.setOffices(offices);
+                        hocRepresentative.setOffices(offices);
                     }
 
                     // Set roles
@@ -94,7 +94,7 @@ public class HOCApiFetch {
                         for (int j = 0; j < rolesArray.length(); j++) {
                             roles.add(rolesArray.getString(j));
                         }
-                        hocMember.setRoles(roles);
+                        hocRepresentative.setRoles(roles);
                     }
 
                     // Set boundaryExternalId
@@ -103,16 +103,16 @@ public class HOCApiFetch {
                         String boundaryUrl = related.optString("boundary_url", null);
                         if (boundaryUrl != null && boundaryUrl.matches(".*/(\\d+)/?$")) {
                             String boundaryId = boundaryUrl.replaceAll(".*/(\\d+)/?$", "$1");
-                            hocMember.setBoundaryExternalId(boundaryId);
+                            hocRepresentative.setBoundaryExternalId(boundaryId);
                         } else {
-                            hocMember.setBoundaryExternalId(null);
+                            hocRepresentative.setBoundaryExternalId(null);
                         }
                     }
 
                     // Add updated member to the list
-                    updatedMembers.add(hocMember);
+                    updatedHocRepresentatives.add(hocRepresentative);
                 } else {
-                    unavilableHocMember(hocMember);                   
+                    unavilableHocMember(hocRepresentative);                   
                     continue;
                 }
 
@@ -123,11 +123,11 @@ public class HOCApiFetch {
             Helpers.sleep(1);
         }
 
-        return updatedMembers;
+        return updatedHocRepresentatives;
     }
 
-    private void unavilableHocMember(HOCMember hocMember) {
+    private void unavilableHocMember(Representative hocRepresentative) {
         HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
-        hocRepresentativeCRUD.insertUnavailableRepresentative(hocMember);  
+        hocRepresentativeCRUD.insertUnavailableRepresentative(hocRepresentative);  
     }
 }
