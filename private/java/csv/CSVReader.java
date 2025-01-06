@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Representative;
+import utilities.Constants;
 import utilities.LogKeeper;
 
 public class CSVReader {
@@ -36,7 +37,7 @@ public class CSVReader {
                 String endDate = values.length > 7 ? values[7] : "";
 
                 members.add(new Representative(honorificTitle, firstName, lastName, constituency,
-                        provinceOrTerritory, politicalAffiliation, startDate, endDate, "MP"));
+                        provinceOrTerritory, politicalAffiliation, startDate, endDate, Constants.MP));
             }
         } catch (IOException e) {
             logKeeper.appendLog(e.getMessage());

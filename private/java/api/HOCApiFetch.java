@@ -1,9 +1,6 @@
 package api;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import classes.Representative;
 import classes.Office;
 import db.HocRepresentativeCRUD;
 import utilities.APIHelpers;
+import utilities.Constants;
 import utilities.Helpers;
 import utilities.LogKeeper;
 
@@ -34,7 +32,7 @@ public class HOCApiFetch {
                 String encodedPosition = URLEncoder.encode(hocRepresentative.getPosition(), StandardCharsets.UTF_8.toString());
                 // Build API URL with parameters from representative
                 String apiUrl = String.format(
-                        "https://represent.opennorth.ca/representatives/house-of-commons/?first_name=%s&last_name=%s&elected_office=%s",
+                        Constants.hocUrl,
                         encodedFirstName,
                         encodedLastName,
                         encodedPosition);

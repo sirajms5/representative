@@ -9,6 +9,7 @@ import db.HocBoundaryPolygonsCRUD;
 import db.HocRepresentativeCRUD;
 import disk.JsonWriter;
 import selenium.ScrappingRemaningHocMembers;
+import utilities.Constants;
 import utilities.LogKeeper;
 
 public class HocRepresentativesJob {
@@ -27,7 +28,7 @@ public class HocRepresentativesJob {
             hocRepresentativeCRUD.insertHOCMemeber(representative);
         }
 
-        List<Representative> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers("MP");
+        List<Representative> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers(Constants.MP);
         ScrappingRemaningHocMembers scrappingRemaningHocMembers = new ScrappingRemaningHocMembers();
         List<Representative> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
         for (Representative hocRepresentative : scrappedHOCMembers) {

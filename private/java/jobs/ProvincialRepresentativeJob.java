@@ -2,7 +2,7 @@ package jobs;
 
 import utilities.LogKeeper;
 
-public class MppMlaMnaRepresentativeJob {
+public class ProvincialRepresentativeJob {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
