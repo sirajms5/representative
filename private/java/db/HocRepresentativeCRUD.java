@@ -113,13 +113,14 @@ public class HocRepresentativeCRUD {
     }
 
     public void insertUnavailableRepresentative(HOCMember hocMember) {
-        String sqlUnavilableRepresentative = "INSERT INTO unavilable_representative (first_name, last_name) VALUES (?, ?) ON DUPLICATE KEY UPDATE first_name = first_name, last_name = last_name";
+        String sqlUnavilableRepresentative = "INSERT INTO unavilable_representative (first_name, last_name, position) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE first_name = first_name, last_name = last_name";
         PreparedStatement stmtUnavilableRepresentative = null;
 
         try (Connection conn = DbManager.getConn()) {
             stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableRepresentative);
             stmtUnavilableRepresentative.setString(1, hocMember.getFirstName());
             stmtUnavilableRepresentative.setString(2, hocMember.getLastName());
+            stmtUnavilableRepresentative.setString(3, hocMember.getPosition());
             stmtUnavilableRepresentative.executeUpdate();
             logKeeper.appendLog("Inserted unavilable representative: " + hocMember.getFirstName() + " "
                     + hocMember.getLastName());
@@ -138,7 +139,7 @@ public class HocRepresentativeCRUD {
     }
 
     public List<HOCMember> getUnavilableHOCMembers() {
-        String sql = "SELECT first_name, last_name FROM unavilable_representative WHERE added = 0";
+        String sql = "SELECT first_name, last_name FROM unavilable_representative WHERE added = 0 AND position = 'MP'";
         List<HOCMember> unavailableMembers = new ArrayList<>();
 
         try (Connection conn = DbManager.getConn();
@@ -164,10 +165,11 @@ public class HocRepresentativeCRUD {
         String sqlUpdate;
         String firstName = hocMember.getFirstName();
         String lastName = hocMember.getLastName();
+        String position = hocMember.getPosition();
         if (added) {
-            sqlUpdate = "UPDATE unavilable_representative SET added = 1 WHERE first_name = ? AND last_name = ?;";
+            sqlUpdate = "UPDATE unavilable_representative SET added = 1 WHERE first_name = ? AND last_name = ? AND position = ?;";
         } else {
-            sqlUpdate = "UPDATE unavilable_representative SET added = 1 WHERE first_name = ? AND last_name = ?;";
+            sqlUpdate = "UPDATE unavilable_representative SET added = 0 WHERE first_name = ? AND last_name = ? AND position = ?;";
         }
 
         PreparedStatement stmtUpdate = null;
@@ -175,6 +177,7 @@ public class HocRepresentativeCRUD {
             stmtUpdate = conn.prepareStatement(sqlUpdate);
             stmtUpdate.setString(1, firstName);
             stmtUpdate.setString(2, lastName);
+            stmtUpdate.setString(3, position);
             int rowsUpdated = stmtUpdate.executeUpdate();
 
             logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the unavilable_representative table for "
