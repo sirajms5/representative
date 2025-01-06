@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import api.BoundariesApiFetch;
-import classes.HOCMember;
+import classes.Representative;
 import classes.Office;
 import utilities.LogKeeper;
 import utilities.SeleniumHelpers;
@@ -22,8 +22,8 @@ public class ScrappingRemaningHocMembers {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public List<HOCMember> scrapHocMembers(List<HOCMember> hocMembers) {
-        List<HOCMember> hocMembersUpdated = new ArrayList<>();
+    public List<Representative> scrapHocMembers(List<Representative> hocMembers) {
+        List<Representative> hocMembersUpdated = new ArrayList<>();
         WebDriver webDriver = null;        
         try {    
             webDriver = new ChromeDriver();
@@ -31,7 +31,7 @@ public class ScrappingRemaningHocMembers {
             SeleniumHelpers seleniumHelpers = new SeleniumHelpers();
             seleniumHelpers.startBrowser(webDriver, hocUrl);
             seleniumHelpers.makeScreenFullSize(webDriver);        
-            for(HOCMember hocMember : hocMembers) {
+            for(Representative hocMember : hocMembers) {
                 logKeeper.appendLog("Web scrapping for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 WebElement searchField = seleniumHelpers.getWebElementByXPath(webDriver, "(//div/input)[2]");
                 String hocMemberName = hocMember.getFirstName() + " " + hocMember.getLastName();

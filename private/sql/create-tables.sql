@@ -42,6 +42,7 @@ CREATE TABLE unavilable_representative (
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     added BOOLEAN DEFAULT 0,
+    position VARCHAR (30),
     UNIQUE (first_name, last_name)
 );
 

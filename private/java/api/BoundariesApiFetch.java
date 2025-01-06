@@ -13,7 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import classes.Boundary;
-import classes.HOCMember;
+import classes.Representative;
 import db.HocBoundariesCRUD;
 import utilities.APIHelpers;
 import utilities.Helpers;
@@ -58,24 +58,24 @@ public class BoundariesApiFetch {
         return boundaryExternalId;
     }
 
-    public List<Boundary> fetchHocBoundaryByExternalId(List<HOCMember> hocMembers) {
+    public List<Boundary> fetchHocBoundaryByExternalId(List<Representative> hocRepresentatives) {
         List<Boundary> boundaries = new ArrayList<>();
         int fetchCounter = 0;
-        for (HOCMember hocMember : hocMembers) {
+        for (Representative hocRepresentative : hocRepresentatives) {
             try {
-                String encodedBoundaryExternalId = URLEncoder.encode(hocMember.getBoundaryExternalId(),
+                String encodedBoundaryExternalId = URLEncoder.encode(hocRepresentative.getBoundaryExternalId(),
                         StandardCharsets.UTF_8.toString());
                 String apiUrl = String.format(
                         "https://represent.opennorth.ca/boundaries/federal-electoral-districts/%s/",
                         encodedBoundaryExternalId);
                 fetchCounter = fetchCounter + 1;
                 logKeeper.appendLog("Fetching data for " + fetchCounter + " with Boundary id of: "
-                        + hocMember.getBoundaryExternalId());
+                        + hocRepresentative.getBoundaryExternalId());
 
                 // Fetch boundary details
                 HttpURLConnection conn = APIHelpers.createHttpConnection(apiUrl);
                 if (conn.getResponseCode() != 200) {
-                    unavilableHocBoundary(hocMember);
+                    unavilableHocBoundary(hocRepresentative);
                     continue;
                 }
 
@@ -96,7 +96,7 @@ public class BoundariesApiFetch {
                             maxLongitude, shapeUrl);
                     boundaries.add(boundary);
                 } else {
-                    unavilableHocBoundary(hocMember);
+                    unavilableHocBoundary(hocRepresentative);
                 }
 
             } catch (Exception e) {
@@ -108,8 +108,8 @@ public class BoundariesApiFetch {
         return boundaries;
     }
 
-    private void unavilableHocBoundary(HOCMember hocMember) {
+    private void unavilableHocBoundary(Representative hocRepresentative) {
         HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
-        hocBoundariesCRUD.insertUnavilableBoundary(hocMember);
+        hocBoundariesCRUD.insertUnavilableBoundary(hocRepresentative);
     }
 }

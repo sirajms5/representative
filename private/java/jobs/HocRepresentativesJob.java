@@ -3,7 +3,7 @@ package jobs;
 import java.util.List;
 
 import api.HOCApiFetch;
-import classes.HOCMember;
+import classes.Representative;
 import csv.CSVReader;
 import db.HocBoundaryPolygonsCRUD;
 import db.HocRepresentativeCRUD;
@@ -19,31 +19,31 @@ public class HocRepresentativesJob {
         logKeeper.appendLog("======================================== Executing HOC Representatives Job ========================================");
         // https://www.ourcommons.ca/Members/en/search
         CSVReader csvReader = new CSVReader();
-        List<HOCMember> members = csvReader.readCSV("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\csv\\export.csv");
+        List<Representative> members = csvReader.readCSV("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\csv\\export.csv");
         HOCApiFetch hocApiFetch = new HOCApiFetch();
-        List<HOCMember> updatedMembers = hocApiFetch.fetchHOCMembersFromApi(members);        
+        List<Representative> updatedMembers = hocApiFetch.fetchHOCMembersFromApi(members);        
         HocRepresentativeCRUD hocRepresentativeCRUD = new HocRepresentativeCRUD();
-        for (HOCMember hocMember : updatedMembers) {
-            hocRepresentativeCRUD.insertHOCMemeber(hocMember);
+        for (Representative representative : updatedMembers) {
+            hocRepresentativeCRUD.insertHOCMemeber(representative);
         }
 
-        List<HOCMember> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers();
+        List<Representative> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers("MP");
         ScrappingRemaningHocMembers scrappingRemaningHocMembers = new ScrappingRemaningHocMembers();
-        List<HOCMember> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
-        for (HOCMember hocMember : scrappedHOCMembers) {
-            boolean isInserted = hocRepresentativeCRUD.insertHOCMemeber(hocMember);
+        List<Representative> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
+        for (Representative hocRepresentative : scrappedHOCMembers) {
+            boolean isInserted = hocRepresentativeCRUD.insertHOCMemeber(hocRepresentative);
             if(isInserted) {
-                hocRepresentativeCRUD.updateUnavilableHOCMember(hocMember, isInserted);
+                hocRepresentativeCRUD.updateUnavilableHOCMember(hocRepresentative, isInserted);
             }
         }
 
         // Assign boundary polygon ID to HOC
-        List<HOCMember> fullList = hocRepresentativeCRUD.getHocMembers();
+        List<Representative> fullList = hocRepresentativeCRUD.getHocMembers();
         HocBoundaryPolygonsCRUD hocBoundaryPolygonsCRUD = new HocBoundaryPolygonsCRUD();
-        for(HOCMember hocMember : fullList) {
-            String fedUid = hocBoundaryPolygonsCRUD.getFedUidByConstituency(hocMember);
-            hocMember.setFedUid(fedUid);
-            hocRepresentativeCRUD.updateHocMemberFedUid(hocMember);
+        for(Representative hocRepresentative : fullList) {
+            String fedUid = hocBoundaryPolygonsCRUD.getFedUidByConstituency(hocRepresentative);
+            hocRepresentative.setFedUid(fedUid);
+            hocRepresentativeCRUD.updateHocMemberFedUid(hocRepresentative);
         }
 
         JsonWriter jsonWriter = new JsonWriter();

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-public class HOCMember {
+public class Representative {
     private boolean isHonourable;
     private String firstName;
     private String lastName;
@@ -13,7 +13,7 @@ public class HOCMember {
     private String politicalAffiliation; // con, lib ..
     private String startDate;
     private String endDate;
-    private String position = "MP";
+    private String position;
     private String photoUrl;// photo
     private String languages;
     private List<Office> offices;
@@ -24,14 +24,15 @@ public class HOCMember {
     private String url;
     private String fedUid;
 
-    public HOCMember(String firstName, String lastName) {
+    public Representative(String firstName, String lastName, String position) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.position = position;
     }
 
-    public HOCMember(boolean isHonourable, String firstName, String lastName,
+    public Representative(boolean isHonourable, String firstName, String lastName,
                     String constituency, String provinceOrTerritory,
-                    String politicalAffiliation, String startDate, String endDate) {
+                    String politicalAffiliation, String startDate, String endDate, String position) {
         this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -40,9 +41,10 @@ public class HOCMember {
         this.politicalAffiliation = politicalAffiliation;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.position = position;
     }        
 
-    public HOCMember(String honorificTitle, String firstName, String lastName, String constituency,
+    public Representative(String honorificTitle, String firstName, String lastName, String constituency,
             String provinceOrTerritory, String politicalAffiliation, String startDate, String endDate, String position,
             String photoUrl, String languages, String boundaryExternalId, String level, String email, String url, boolean isHonourable) {
         this.isHonourable = isHonourable;
@@ -59,7 +61,7 @@ public class HOCMember {
         this.boundaryExternalId = boundaryExternalId;
         this.level = level;
         this.email = email;
-        this.url = url;        
+        this.url = url;    
     }
 
     public boolean isHonorificTitle() {
