@@ -9,6 +9,8 @@ import java.util.List;
 import classes.Representative;
 import utilities.Constants;
 import utilities.LogKeeper;
+import utilities.RepresentativeLevelEnum;
+import utilities.RepresentativePositionEnum;
 
 public class CSVReader {
 
@@ -37,7 +39,7 @@ public class CSVReader {
                 String endDate = values.length > 7 ? values[7] : "";
 
                 members.add(new Representative(honorificTitle, firstName, lastName, constituency,
-                        provinceOrTerritory, politicalAffiliation, startDate, endDate, Constants.MP));
+                        provinceOrTerritory, politicalAffiliation, startDate, endDate, RepresentativePositionEnum.MP.getValue(), RepresentativeLevelEnum.FEDERAL.getValue()));
             }
         } catch (IOException e) {
             logKeeper.appendLog(e.getMessage());

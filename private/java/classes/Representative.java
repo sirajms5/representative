@@ -19,20 +19,25 @@ public class Representative {
     private List<Office> offices;
     private List<String> roles;
     private String boundaryExternalId;
-    private String level = "Federal";
+    private String level;
     private String email;
     private String url;
     private String fedUid;
 
-    public Representative(String firstName, String lastName, String position) {
+    public Representative(String level) {
+        this.level = level;
+    }
+
+    public Representative(String firstName, String lastName, String position, String level) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
+        this.level = level;
     }
 
     public Representative(boolean isHonourable, String firstName, String lastName,
                     String constituency, String provinceOrTerritory,
-                    String politicalAffiliation, String startDate, String endDate, String position) {
+                    String politicalAffiliation, String startDate, String endDate, String position, String level) {
         this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,6 +47,7 @@ public class Representative {
         this.startDate = startDate;
         this.endDate = endDate;
         this.position = position;
+        this.level = level;
     }        
 
     public Representative(String honorificTitle, String firstName, String lastName, String constituency,
@@ -62,6 +68,7 @@ public class Representative {
         this.level = level;
         this.email = email;
         this.url = url;    
+        this.level = level;
     }
 
     public boolean isHonorificTitle() {

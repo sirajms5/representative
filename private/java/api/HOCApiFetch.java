@@ -31,8 +31,9 @@ public class HOCApiFetch {
                 String encodedLastName = URLEncoder.encode(hocRepresentative.getLastName(), StandardCharsets.UTF_8.toString());
                 String encodedPosition = URLEncoder.encode(hocRepresentative.getPosition(), StandardCharsets.UTF_8.toString());
                 // Build API URL with parameters from representative
+                String url = Constants.REPRESENTATIVE_API_BASE_URL + Constants.HOC_REPRESENTATIVE_API_URL;
                 String apiUrl = String.format(
-                        Constants.hocUrl,
+                        url,
                         encodedFirstName,
                         encodedLastName,
                         encodedPosition);

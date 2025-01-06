@@ -9,8 +9,8 @@ public class Main{
 
         LogKeeper logKeeper = LogKeeper.getInstance();
         logKeeper.appendLog("======================================== Starting Backend Jobs ========================================");
-        HocRepresentativesJob hocRepresentativesJob = new HocRepresentativesJob();
-        hocRepresentativesJob.executeHocRepresentativesJob();
+        // HocRepresentativesJob hocRepresentativesJob = new HocRepresentativesJob();
+        // hocRepresentativesJob.executeHocRepresentativesJob();
         // HocBoundariesJob hocBoundariesJob = new HocBoundariesJob();
         // hocBoundariesJob.executeHocBoundariesJob();
         // HocBoundariesMultPolygonalJob hocBoundariesMultPolygonal = new HocBoundariesMultPolygonalJob();

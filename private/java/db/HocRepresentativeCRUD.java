@@ -12,6 +12,7 @@ import classes.Representative;
 import classes.Office;
 import utilities.Helpers;
 import utilities.LogKeeper;
+import utilities.RepresentativeLevelEnum;
 
 public class HocRepresentativeCRUD {
 
@@ -149,7 +150,7 @@ public class HocRepresentativeCRUD {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
 
-                Representative representative = new Representative(firstName, lastName, position);
+                Representative representative = new Representative(firstName, lastName, position, RepresentativeLevelEnum.FEDERAL.getValue());
                 unavailableMembers.add(representative);
             }
 

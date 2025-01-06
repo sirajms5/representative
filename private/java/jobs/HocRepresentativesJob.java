@@ -11,6 +11,7 @@ import disk.JsonWriter;
 import selenium.ScrappingRemaningHocMembers;
 import utilities.Constants;
 import utilities.LogKeeper;
+import utilities.RepresentativePositionEnum;
 
 public class HocRepresentativesJob {
 
@@ -28,7 +29,7 @@ public class HocRepresentativesJob {
             hocRepresentativeCRUD.insertHOCMemeber(representative);
         }
 
-        List<Representative> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers(Constants.MP);
+        List<Representative> unavilableHocMembers = hocRepresentativeCRUD.getUnavilableHOCMembers(RepresentativePositionEnum.MP.getValue());
         ScrappingRemaningHocMembers scrappingRemaningHocMembers = new ScrappingRemaningHocMembers();
         List<Representative> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
         for (Representative hocRepresentative : scrappedHOCMembers) {
