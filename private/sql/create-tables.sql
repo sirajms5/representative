@@ -9,7 +9,7 @@ CREATE TABLE representatives (
     start_date VARCHAR(30),                 
     position VARCHAR(255),             
     photo_url TEXT,                    
-    boundary_external_id VARCHAR(50),  
+    boundary_external_id VARCHAR(50) UNIQUE,  
     level VARCHAR(50),
     languages VARCHAR(50),
     url VARCHAR(255),
@@ -116,4 +116,9 @@ CREATE TABLE boundaries_polygons_provinces (
     SPATIAL INDEX (polygon) -- Optimize spatial queries
 );
 
--- REMOVE BOUNDARIES FROM HOC AND ADD FEDUID 
+CREATE TABLE boundary_id_tracker (
+    latest_boundary_id VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- initialize boundary_id_tracker with starting value
+INSERT INTO boundary_id_tracker (latest_boundary_id) VALUES ('10000000000000');

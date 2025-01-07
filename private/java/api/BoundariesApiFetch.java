@@ -103,7 +103,7 @@ public class BoundariesApiFetch {
                     String externalId = boundaryResponse.optString("external_id"); // Boundary external id
                     hocRepresentative.setBoundaryExternalId(externalId);
                     RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
-                    representativeCRUD.updateHocMemberBoundaryId(hocRepresentative);
+                    externalId = representativeCRUD.updateHocMemberBoundaryId(hocRepresentative); // reassigning incase the id was duplicate (API Representative issue)
                     JSONArray extentArray = boundaryResponse.optJSONArray("extent");
                     double minLongitude = extentArray.getDouble(0); // boundary min longitude
                     double minLatitude = extentArray.getDouble(1); // boundary min latitude

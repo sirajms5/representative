@@ -21,6 +21,8 @@ public enum ProvincialRepresentativeKeysEnum {
         switch (key) {
             case "OLA":
                 return OLA.getValue();
+            case "ASSNAT":
+                return ASSNAT.getValue();
 
             default:
                 return null;

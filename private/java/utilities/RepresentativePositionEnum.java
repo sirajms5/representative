@@ -2,7 +2,8 @@ package utilities;
 
 public enum RepresentativePositionEnum {
     MP("MP"),
-    MPP("MPP")
+    MPP("MPP"),
+    MNA("MNA"),
     ;
 
     private final String value;

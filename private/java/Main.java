@@ -3,6 +3,7 @@ import jobs.HocBoundariesMultPolygonalJob;
 import jobs.HocRepresentativesJob;
 import jobs.ProvincialRepresentativeJob;
 import utilities.LogKeeper;
+import utilities.RepresentativePositionEnum;
 
 public class Main{
     public static void main(String[] args) {
@@ -16,7 +17,8 @@ public class Main{
         // HocBoundariesMultPolygonalJob hocBoundariesMultPolygonal = new HocBoundariesMultPolygonalJob();
         // hocBoundariesMultPolygonal.executeHocBoundariesMultiPolygonalJob();
         ProvincialRepresentativeJob provincialRepresentativeJob = new ProvincialRepresentativeJob();
-        provincialRepresentativeJob.executeMppMlaMnaRepresentativeJob();
+        // provincialRepresentativeJob.executeMppRepresentativeJob();
+        provincialRepresentativeJob.executeMnaRepresentativeJob(RepresentativePositionEnum.MNA.getValue());
         
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
         logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");
