@@ -102,16 +102,16 @@ CREATE TABLE nominatim_requests (
 
 CREATE TABLE boundaries_polygons (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    fedname VARCHAR(255),
-    feduid VARCHAR(50) UNIQUE,
+    boundary_name VARCHAR(255),
+    boundary_external_id VARCHAR(50) UNIQUE,
     polygon GEOMETRY NOT NULL,
     SPATIAL INDEX (polygon) -- Optimize spatial queries
 );
 
 CREATE TABLE boundaries_polygons_provinces (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    riding_name VARCHAR(255),
-    external_id VARCHAR(50) UNIQUE,
+    boundary_name VARCHAR(255),
+    boundary_external_id VARCHAR(50) UNIQUE,
     polygon GEOMETRY NOT NULL,
     SPATIAL INDEX (polygon) -- Optimize spatial queries
 );

@@ -27,7 +27,7 @@
             JOIN 
                 boundaries_polygons
             ON 
-                representatives.fed_uid = boundaries_polygons.feduid
+                representatives.boundary_external_id = boundaries_polygons.boundary_external_id
             LEFT JOIN 
                 representative_offices
             ON 
