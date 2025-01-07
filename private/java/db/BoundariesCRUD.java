@@ -13,7 +13,7 @@ import classes.Representative;
 import utilities.Helpers;
 import utilities.LogKeeper;
 
-public class HocBoundariesCRUD {
+public class BoundariesCRUD {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 

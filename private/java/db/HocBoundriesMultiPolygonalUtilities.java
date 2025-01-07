@@ -14,16 +14,17 @@ public class HocBoundriesMultiPolygonalUtilities {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
-    public List<HocMemberBoundaryPair> getHocMemberRepresentativesAndBoundaries() {
+    public List<HocMemberBoundaryPair> getHocMemberRepresentativesAndBoundaries(String position) {
         logKeeper.appendLog("Reading HOC members and boundaries joined tables from DB");
         List<HocMemberBoundaryPair> hocMemberBoundaryPairs = new ArrayList<>();
-        String sqlQuery = "SELECT representatives.first_name, representatives.last_name, representatives.constituency, representatives.political_affiliation, representatives.province_or_territory, boundaries.external_id, boundaries.shape_url FROM representatives JOIN boundaries ON representatives.boundary_external_id = boundaries.external_id;";
+        String sqlQuery = "SELECT representatives.first_name, representatives.last_name, representatives.constituency, representatives.political_affiliation, representatives.province_or_territory, boundaries.external_id, boundaries.shape_url FROM representatives JOIN boundaries ON representatives.boundary_external_id = boundaries.external_id WHERE representatives.position = ?;";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try (Connection conn = DbManager.getConn()) {
             stmt = conn.prepareStatement(sqlQuery);
+            stmt.setString(1, position);
             rs = stmt.executeQuery();
 
             while(rs.next()) {

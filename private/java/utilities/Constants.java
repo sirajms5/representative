@@ -10,4 +10,6 @@ public class Constants {
     public static final String AVAILABLE = "avilable";
     public static final String UNAVILABLE = "unavilable";
     public static final String ONTARIO = "Ontario";
+    public static final String URL = "url";
+    public static final String ID = "id";
 }

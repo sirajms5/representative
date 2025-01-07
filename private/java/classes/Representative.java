@@ -24,6 +24,7 @@ public class Representative {
     private String url;
     private String fedUid;
     private String fullName;
+    private String boundaryUrl;
 
     public Representative(String level) {
         this.level = level;
@@ -62,7 +63,7 @@ public class Representative {
     public Representative(String honorificTitle, String firstName, String lastName, String constituency,
             String provinceOrTerritory, String politicalAffiliation, String startDate, String endDate, String position,
             String photoUrl, String languages, String boundaryExternalId, String level, String email, String url,
-            boolean isHonourable) {
+            boolean isHonourable, String boundaryUrl) {
         this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -80,6 +81,7 @@ public class Representative {
         this.url = url;
         this.level = level;
         this.fullName = firstName + " " + lastName;
+        this.boundaryUrl = boundaryUrl;
     }
 
     public boolean isHonourable() {
@@ -236,6 +238,14 @@ public class Representative {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getBoundaryUrl() {
+        return boundaryUrl;
+    }
+
+    public void setBoundaryUrl(String boundaryUrl) {
+        this.boundaryUrl = boundaryUrl;
     }
 
     public String toJson() {

@@ -5,9 +5,10 @@ import java.util.List;
 import classes.Boundary;
 import classes.GeoJsonFeatureCollection;
 import classes.Representative;
-import db.HocBoundariesCRUD;
+import db.BoundariesCRUD;
 import db.RepresentativeCRUD;
 import utilities.LogKeeper;
+import utilities.RepresentativePositionEnum;
 
 public class JsonWriter {
 
@@ -15,7 +16,7 @@ public class JsonWriter {
 
     public void writeHocMembersJson() {
         RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
-        List<Representative> hocRepresentatives = representativeCRUD.getHocMembers();
+        List<Representative> hocRepresentatives = representativeCRUD.getHocMembers(RepresentativePositionEnum.MP.getValue());
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[");
         for (int index = 0; index < hocRepresentatives.size(); index++) {
@@ -33,7 +34,7 @@ public class JsonWriter {
     }   
     
     public void writeHocBoundariesJson () {
-        HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
+        BoundariesCRUD hocBoundariesCRUD = new BoundariesCRUD();
         List<Boundary> boundaries = hocBoundariesCRUD.getHocBoundaries();
         StringBuilder jsonBuilder = new StringBuilder();
         jsonBuilder.append("[");
@@ -51,10 +52,11 @@ public class JsonWriter {
         logKeeper.appendLog("Created JSON file for HOC boundaries");
     }
 
-    public void writeHocBoundariesGeoJson (GeoJsonFeatureCollection geoJsonFeatureCollection) {
+    public void writeHocBoundariesGeoJson (GeoJsonFeatureCollection geoJsonFeatureCollection, String jsonFileName) {
         String geoCollectionJson =  geoJsonFeatureCollection.toJson();
         DiskUtilities diskUtilities = new DiskUtilities();
-        diskUtilities.txtWriter(geoCollectionJson, "C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\hoc\\GeoJsonCollection.json");
+        String path = String.format("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\json\\hoc\\%s.json", jsonFileName);
+        diskUtilities.txtWriter(geoCollectionJson, path);
         logKeeper.appendLog("Created JSON file for HOC boundaries geo json");
     }
 }

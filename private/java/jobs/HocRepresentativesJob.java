@@ -39,7 +39,7 @@ public class HocRepresentativesJob {
         }
 
         // Assign boundary polygon ID to HOC
-        List<Representative> fullList = representativeCRUD.getHocMembers();
+        List<Representative> fullList = representativeCRUD.getHocMembers(RepresentativePositionEnum.MP.getValue());
         HocBoundaryPolygonsCRUD hocBoundaryPolygonsCRUD = new HocBoundaryPolygonsCRUD();
         for(Representative hocRepresentative : fullList) {
             String fedUid = hocBoundaryPolygonsCRUD.getFedUidByConstituency(hocRepresentative);

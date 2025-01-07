@@ -6,12 +6,14 @@ public class Properties {
     private String constituency;
     private String politicalAffiliation;
     private String provinceOrTerritory;
+    private String boundaryExternalId;
 
-    public Properties(String representative, String constituency, String politicalAffiliation, String provinceOrTerritory) {
+    public Properties(String representative, String constituency, String politicalAffiliation, String provinceOrTerritory, String boundaryExternalId) {
         this.representative = representative;
         this.constituency = constituency;
         this.politicalAffiliation = politicalAffiliation;
         this.provinceOrTerritory = provinceOrTerritory;
+        this.boundaryExternalId = boundaryExternalId;
     }
 
     public String getRepresentative() {
@@ -44,6 +46,14 @@ public class Properties {
 
     public void setProvinceOrTerritory(String provinceOrTerritory) {
         this.provinceOrTerritory = provinceOrTerritory;
+    }
+
+    public String getBoundaryExternalId() {
+        return boundaryExternalId;
+    }
+
+    public void setBoundaryExternalId(String boundaryExternalId) {
+        this.boundaryExternalId = boundaryExternalId;
     }
 }
 

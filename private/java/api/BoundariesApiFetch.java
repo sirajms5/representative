@@ -1,6 +1,5 @@
 package api;
 
-
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -14,8 +13,10 @@ import org.json.JSONObject;
 
 import classes.Boundary;
 import classes.Representative;
-import db.HocBoundariesCRUD;
+import db.BoundariesCRUD;
+import db.RepresentativeCRUD;
 import utilities.APIHelpers;
+import utilities.Constants;
 import utilities.Helpers;
 import utilities.LogKeeper;
 
@@ -58,19 +59,33 @@ public class BoundariesApiFetch {
         return boundaryExternalId;
     }
 
-    public List<Boundary> fetchHocBoundaryByExternalId(List<Representative> hocRepresentatives) {
+    public List<Boundary> fetchHocBoundaryByExternalId(List<Representative> hocRepresentatives,
+            String boundaryIdOrUrl) {
         List<Boundary> boundaries = new ArrayList<>();
         int fetchCounter = 0;
         for (Representative hocRepresentative : hocRepresentatives) {
             try {
-                String encodedBoundaryExternalId = URLEncoder.encode(hocRepresentative.getBoundaryExternalId(),
-                        StandardCharsets.UTF_8.toString());
-                String apiUrl = String.format(
-                        "https://represent.opennorth.ca/boundaries/federal-electoral-districts/%s/",
-                        encodedBoundaryExternalId);
                 fetchCounter = fetchCounter + 1;
-                logKeeper.appendLog("Fetching data for " + fetchCounter + " with Boundary id of: "
-                        + hocRepresentative.getBoundaryExternalId());
+                String apiUrl = "";
+                switch (boundaryIdOrUrl) {
+                    case "url":
+                        apiUrl = Constants.REPRESENTATIVE_API_BASE_URL + hocRepresentative.getBoundaryUrl();
+                        logKeeper.appendLog("Fetching boundaries " + fetchCounter + " for constituency: " 
+                                + hocRepresentative.getConstituency());
+                        break;
+                    case "id":
+                        String encodedBoundaryExternalId = URLEncoder.encode(hocRepresentative.getBoundaryExternalId(),
+                                StandardCharsets.UTF_8.toString());
+                        apiUrl = String.format(
+                                "https://represent.opennorth.ca/boundaries/federal-electoral-districts/%s/",
+                                encodedBoundaryExternalId);
+                        logKeeper.appendLog("Fetching data for " + fetchCounter + " with Boundary id of: "
+                                + hocRepresentative.getBoundaryExternalId());
+                        break;
+                    default:
+                        // do nothing
+                        break;
+                }
 
                 // Fetch boundary details
                 HttpURLConnection conn = APIHelpers.createHttpConnection(apiUrl);
@@ -86,12 +101,16 @@ public class BoundariesApiFetch {
                     // Extract details from the response
                     String name = boundaryResponse.optString("name"); // Boundary name
                     String externalId = boundaryResponse.optString("external_id"); // Boundary external id
+                    hocRepresentative.setBoundaryExternalId(externalId);
+                    RepresentativeCRUD representativeCRUD = new RepresentativeCRUD();
+                    representativeCRUD.updateHocMemberBoundaryId(hocRepresentative);
                     JSONArray extentArray = boundaryResponse.optJSONArray("extent");
                     double minLongitude = extentArray.getDouble(0); // boundary min longitude
                     double minLatitude = extentArray.getDouble(1); // boundary min latitude
                     double maxLongitude = extentArray.getDouble(2); // boundary max longitude
                     double maxLatitude = extentArray.getDouble(3); // boundary max latitude
-                    String shapeUrl = "https://represent.opennorth.ca" + boundaryResponse.getJSONObject("related").getString("shape_url");
+                    String shapeUrl = Constants.REPRESENTATIVE_API_BASE_URL
+                            + boundaryResponse.getJSONObject("related").getString("shape_url");
                     Boundary boundary = new Boundary(externalId, name, minLatitude, maxLatitude, minLongitude,
                             maxLongitude, shapeUrl);
                     boundaries.add(boundary);
@@ -109,7 +128,7 @@ public class BoundariesApiFetch {
     }
 
     private void unavilableHocBoundary(Representative hocRepresentative) {
-        HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
+        BoundariesCRUD hocBoundariesCRUD = new BoundariesCRUD();
         hocBoundariesCRUD.insertUnavilableBoundary(hocRepresentative);
     }
 }

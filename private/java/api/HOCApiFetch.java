@@ -100,6 +100,7 @@ public class HOCApiFetch {
                     JSONObject related = obj.optJSONObject("related");
                     if (related != null) {
                         String boundaryUrl = related.optString("boundary_url", null);
+                        // hocRepresentative.setBoundaryExternalId(boundaryUrl); // TODO: to update
                         if (boundaryUrl != null && boundaryUrl.matches(".*/(\\d+)/?$")) {
                             String boundaryId = boundaryUrl.replaceAll(".*/(\\d+)/?$", "$1");
                             hocRepresentative.setBoundaryExternalId(boundaryId);

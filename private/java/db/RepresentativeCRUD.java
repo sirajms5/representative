@@ -20,7 +20,7 @@ public class RepresentativeCRUD {
 
     public boolean insertRepresentative(Representative representative) {
         boolean isInserted = false;
-        String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email, url, is_honourable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email, url, is_honourable, boundary_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement stmtRepresemtatives = null;
         PreparedStatement stmtOffices = null;
         PreparedStatement stmtRoles = null;
@@ -42,6 +42,7 @@ public class RepresentativeCRUD {
             stmtRepresemtatives.setString(12, representative.getEmail());
             stmtRepresemtatives.setString(13, representative.getUrl());
             stmtRepresemtatives.setBoolean(14, representative.isHonourable());
+            stmtRepresemtatives.setString(15, representative.getBoundaryUrl());
 
             int insertedHOCId = stmtRepresemtatives.executeUpdate();
             Helpers.sleep(1);
@@ -221,16 +222,19 @@ public class RepresentativeCRUD {
         }
     }
 
-    public List<Representative> getHocMembers() {
+    public List<Representative> getHocMembers(String positionOfMembers) {
         logKeeper.appendLog("Reading HOC members from DB");
-        String sqlHocRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url, is_honourable FROM representatives WHERE position = 'MP';";
+        String sqlHocRepresentatives = "SELECT id, first_name, last_name, constituency, province_or_territory, political_affiliation, email, start_date, position, photo_url, boundary_external_id, level, languages, url, is_honourable, boundary_url FROM representatives WHERE position = ?;";
         String sqlOffices = "SELECT type, postal_code, phone, fax FROM representative_offices WHERE representative_id = ?";
         String sqlRoles = "SELECT role_name FROM representative_roles WHERE representative_id = ?";
         List<Representative> hocRepresentatives = new ArrayList<>();
+        ResultSet rsHocRepresentatives = null;
 
         try (Connection conn = DbManager.getConn();
-                PreparedStatement stmtHocRepresentatives = conn.prepareStatement(sqlHocRepresentatives);
-                ResultSet rsHocRepresentatives = stmtHocRepresentatives.executeQuery()) {
+                PreparedStatement stmtHocRepresentatives = conn.prepareStatement(sqlHocRepresentatives);) {
+                    
+            stmtHocRepresentatives.setString(1, positionOfMembers);
+            rsHocRepresentatives = stmtHocRepresentatives.executeQuery();
 
             while (rsHocRepresentatives.next()) {
                 String firstName = rsHocRepresentatives.getString("first_name");
@@ -247,10 +251,11 @@ public class RepresentativeCRUD {
                 String languages = rsHocRepresentatives.getString("languages");
                 String url = rsHocRepresentatives.getString("url");
                 boolean isHonourable = rsHocRepresentatives.getBoolean("is_honourable");
+                String boundaryUrl = rsHocRepresentatives.getString("boundary_url");
                 Representative hocRepresentative = new Representative(null, firstName, lastName, constituency,
                         provinceOrTerritory,
                         politicalAffiliation, startDate, null, position, photoUrl, languages, boundaryExternalId, level,
-                        email, url, isHonourable);
+                        email, url, isHonourable, boundaryUrl);
 
                 // Fetch and set offices
                 try (PreparedStatement stmtOffices = conn.prepareStatement(sqlOffices)) {
@@ -285,6 +290,14 @@ public class RepresentativeCRUD {
 
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
+        } finally {
+            if(rsHocRepresentatives != null) {
+                try {
+                    rsHocRepresentatives.close();
+                } catch (SQLException e) {
+                    logKeeper.appendLog(e.getMessage());
+                }
+            }
         }
 
         return hocRepresentatives;
@@ -298,6 +311,32 @@ public class RepresentativeCRUD {
         try (Connection conn = DbManager.getConn()) {
             stmtUpdate = conn.prepareStatement(sqlUpdate);
             stmtUpdate.setString(1, hocFedUid);
+            stmtUpdate.setString(2, hocEmail);
+            int rowsUpdated = stmtUpdate.executeUpdate();
+
+            logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the representatives table for "
+                    + hocRepresentative.getFirstName() + " " + hocRepresentative.getLastName());
+        } catch (SQLException e) {
+            logKeeper.appendLog(e.getMessage());
+        } finally {
+            if (stmtUpdate != null) {
+                try {
+                    stmtUpdate.close();
+                } catch (SQLException e) {
+                    logKeeper.appendLog(e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void updateHocMemberBoundaryId(Representative hocRepresentative) {
+        String hocEmail = hocRepresentative.getEmail();
+        String hocBoundaryExternalId = hocRepresentative.getBoundaryExternalId();
+        String sqlUpdate = "UPDATE representatives SET boundary_external_id = ?  WHERE email = ?;";
+        PreparedStatement stmtUpdate = null;
+        try (Connection conn = DbManager.getConn()) {
+            stmtUpdate = conn.prepareStatement(sqlUpdate);
+            stmtUpdate.setString(1, hocBoundaryExternalId);
             stmtUpdate.setString(2, hocEmail);
             int rowsUpdated = stmtUpdate.executeUpdate();
 

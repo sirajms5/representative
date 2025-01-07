@@ -15,6 +15,7 @@ CREATE TABLE representatives (
     url VARCHAR(255),
     fed_uid VARCHAR(20),
     is_honourable BOOLEAN DEFAULT false,
+    boundary_url VARCHAR(255),
     UNIQUE (position, level, boundary_external_id, first_name, last_name)            
 );
 
@@ -103,6 +104,14 @@ CREATE TABLE boundaries_polygons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fedname VARCHAR(255),
     feduid VARCHAR(50) UNIQUE,
+    polygon GEOMETRY NOT NULL,
+    SPATIAL INDEX (polygon) -- Optimize spatial queries
+);
+
+CREATE TABLE boundaries_polygons_provinces (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    riding_name VARCHAR(255),
+    external_id VARCHAR(50) UNIQUE,
     polygon GEOMETRY NOT NULL,
     SPATIAL INDEX (polygon) -- Optimize spatial queries
 );

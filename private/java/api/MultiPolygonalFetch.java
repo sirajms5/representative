@@ -12,7 +12,7 @@ import classes.GeoJsonFeatureCollection;
 import classes.HocMemberBoundaryPair;
 import classes.MultiPolygon;
 import classes.Properties;
-import db.HocBoundariesCRUD;
+import db.BoundariesCRUD;
 import utilities.APIHelpers;
 import utilities.Helpers;
 import utilities.LogKeeper;
@@ -46,7 +46,7 @@ public class MultiPolygonalFetch {
                     JSONArray coordinatesArray = smallShapeResponse.optJSONArray("coordinates");
                     List<List<List<List<Double>>>> coordinates = parseCoordinates(coordinatesArray);
                     MultiPolygon multiPolygon = new MultiPolygon(coordinates, hocMemberBoundaryPair.getBoundaryExternalId());
-                    Properties properties = new Properties(hocMemberBoundaryPair.getFullName(), hocMemberBoundaryPair.getConstituency(), hocMemberBoundaryPair.getPoliticalAffiliation(), hocMemberBoundaryPair.getProvinceOrTerritory());                    
+                    Properties properties = new Properties(hocMemberBoundaryPair.getFullName(), hocMemberBoundaryPair.getConstituency(), hocMemberBoundaryPair.getPoliticalAffiliation(), hocMemberBoundaryPair.getProvinceOrTerritory(), hocMemberBoundaryPair.getBoundaryExternalId());                    
                     GeoJsonFeature geoJsonFeature = new GeoJsonFeature(multiPolygon, properties);
                     geoJsonFeatures.add(geoJsonFeature);
                 } else {
@@ -65,7 +65,7 @@ public class MultiPolygonalFetch {
     }
 
     private void unavilableHocShapeBoundary(String boundaryExternalId, String shapeUrl) {
-        HocBoundariesCRUD hocBoundariesCRUD = new HocBoundariesCRUD();
+        BoundariesCRUD hocBoundariesCRUD = new BoundariesCRUD();
         hocBoundariesCRUD.insertUnavilableShape(boundaryExternalId, shapeUrl);
     }
 
