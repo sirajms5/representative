@@ -23,14 +23,15 @@ import utilities.RepresentativeLevelEnum;
 
 public class MppMlaMnaApiFetch {
 
-        private LogKeeper logKeeper = LogKeeper.getInstance();    
-        int representativecounter = 0;
+    private LogKeeper logKeeper = LogKeeper.getInstance();
+    int representativecounter = 0;
 
     public List<Representative> fetchRepresentativesFromApi(String position) {
         List<Representative> representatives = new ArrayList<>();
         int offset = 0; // Start with the first page
         String firstUrl = "/representatives/?elected_office=";
-        String nextUrl = Constants.REPRESENTATIVE_API_BASE_URL + firstUrl + position + "&limit=" + Constants.REPRESENTATIVE_API_LIMIT + "&offset=" + offset;
+        String nextUrl = Constants.REPRESENTATIVE_API_BASE_URL + firstUrl + position + "&limit="
+                + Constants.REPRESENTATIVE_API_LIMIT + "&offset=" + offset;
 
         try {
             while (nextUrl != null) {
@@ -43,11 +44,11 @@ public class MppMlaMnaApiFetch {
                     JSONObject jsonResponse = APIHelpers.parseJsonResponse(conn);
                     JSONArray objects = jsonResponse.getJSONArray("objects");
                     String nextOffset = jsonResponse.getJSONObject("meta").optString("next", null);
-                    if(nextOffset != null) {
+                    if (nextOffset != null) {
                         nextUrl = Constants.REPRESENTATIVE_API_BASE_URL + nextOffset;
                     } else {
                         nextUrl = null;
-                    }                    
+                    }
 
                     // Extract representatives and add them to the list
                     for (int i = 0; i < objects.length(); i++) {
@@ -76,8 +77,10 @@ public class MppMlaMnaApiFetch {
     private Representative parseRepresentative(JSONObject obj, int representativeCounter) {
         String sourceUrl = obj.optString("source_url");
         String provincialSourceUrlKey = extractProvinceLinkKey(sourceUrl).toUpperCase();
-        String provinceOrTerritory = ProvincialRepresentativeKeysEnum.getProvincialOrTerritorialByKey(provincialSourceUrlKey);
-        Representative representative = new Representative(RepresentativeLevelEnum.getProvincialOrTerritorial(provinceOrTerritory));
+        String provinceOrTerritory = ProvincialRepresentativeKeysEnum
+                .getProvincialOrTerritorialByKey(provincialSourceUrlKey);
+        Representative representative = new Representative(
+                RepresentativeLevelEnum.getProvincialOrTerritorial(provinceOrTerritory));
         representative.setFirstName(obj.optString("first_name"));
         representative.setLastName(obj.optString("last_name"));
         representative.setConstituency(obj.optString("district_name"));
@@ -115,7 +118,9 @@ public class MppMlaMnaApiFetch {
             representative.setRoles(roleList);
         }
 
-        logKeeper.appendLog("Fetched number " + representativeCounter + ": " + representative.getProvinceOrTerritory() + " " + representative.getPosition() + ": " + representative.getFirstName() + " " + representative.getLastName());
+        logKeeper.appendLog("Fetched number " + representativeCounter + ": " + representative.getProvinceOrTerritory()
+                + " " + representative.getPosition() + ": " + representative.getFirstName() + " "
+                + representative.getLastName());
 
         return representative;
     }

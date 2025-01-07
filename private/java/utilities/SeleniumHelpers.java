@@ -28,6 +28,7 @@ public class SeleniumHelpers {
     public void clickElement(WebElement webElement) {
         Helpers.sleep(1);
         webElement.click();
+        Helpers.sleep(3);
     }
 
     public WebElement getWebElementByXPath(WebDriver webDriver, String xPath) {

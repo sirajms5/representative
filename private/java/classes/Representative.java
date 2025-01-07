@@ -23,8 +23,15 @@ public class Representative {
     private String email;
     private String url;
     private String fedUid;
+    private String fullName;
 
     public Representative(String level) {
+        this.level = level;
+    }
+
+    public Representative(String fullName, String position, String level) {
+        this.fullName = fullName;
+        this.position = position;
         this.level = level;
     }
 
@@ -33,11 +40,12 @@ public class Representative {
         this.lastName = lastName;
         this.position = position;
         this.level = level;
+        this.fullName = firstName + " " + lastName;
     }
 
     public Representative(boolean isHonourable, String firstName, String lastName,
-                    String constituency, String provinceOrTerritory,
-                    String politicalAffiliation, String startDate, String endDate, String position, String level) {
+            String constituency, String provinceOrTerritory,
+            String politicalAffiliation, String startDate, String endDate, String position, String level) {
         this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -48,11 +56,13 @@ public class Representative {
         this.endDate = endDate;
         this.position = position;
         this.level = level;
-    }        
+        this.fullName = firstName + " " + lastName;
+    }
 
     public Representative(String honorificTitle, String firstName, String lastName, String constituency,
             String provinceOrTerritory, String politicalAffiliation, String startDate, String endDate, String position,
-            String photoUrl, String languages, String boundaryExternalId, String level, String email, String url, boolean isHonourable) {
+            String photoUrl, String languages, String boundaryExternalId, String level, String email, String url,
+            boolean isHonourable) {
         this.isHonourable = isHonourable;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,15 +77,16 @@ public class Representative {
         this.boundaryExternalId = boundaryExternalId;
         this.level = level;
         this.email = email;
-        this.url = url;    
+        this.url = url;
         this.level = level;
+        this.fullName = firstName + " " + lastName;
     }
 
-    public boolean isHonorificTitle() {
+    public boolean isHonourable() {
         return isHonourable;
     }
 
-    public void setHonorificTitle(boolean isHonourable) {
+    public void setHonourable(boolean isHonourable) {
         this.isHonourable = isHonourable;
     }
 
@@ -141,7 +152,7 @@ public class Representative {
 
     public void setPosition(String position) {
         this.position = position;
-    }    
+    }
 
     public String getPhotoUrl() {
         return photoUrl;
@@ -189,8 +200,8 @@ public class Representative {
 
     public void setLevel(String level) {
         this.level = level;
-    }   
-    
+    }
+
     public String getEmail() {
         return email;
     }
@@ -213,6 +224,18 @@ public class Representative {
 
     public void setFedUid(String fedUid) {
         this.fedUid = fedUid;
+    }
+
+    public String getFullName() {
+        if (this.fullName == null) {
+            return getFirstName() + " " + getLastName();
+        }
+
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String toJson() {

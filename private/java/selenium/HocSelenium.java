@@ -15,23 +15,24 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import api.BoundariesApiFetch;
 import classes.Representative;
 import classes.Office;
+import utilities.Constants;
 import utilities.LogKeeper;
 import utilities.SeleniumHelpers;
 
-public class ScrappingRemaningHocMembers {
+public class HocSelenium {
 
     private LogKeeper logKeeper = LogKeeper.getInstance();
 
     public List<Representative> scrapHocMembers(List<Representative> hocMembers) {
         List<Representative> hocMembersUpdated = new ArrayList<>();
-        WebDriver webDriver = null;        
-        try {    
+        WebDriver webDriver = null;
+        try {
             webDriver = new ChromeDriver();
-            String hocUrl = "https://www.ourcommons.ca/Members/en";
+            String hocUrl = Constants.HOC_MEMBERS_URL;
             SeleniumHelpers seleniumHelpers = new SeleniumHelpers();
             seleniumHelpers.startBrowser(webDriver, hocUrl);
-            seleniumHelpers.makeScreenFullSize(webDriver);        
-            for(Representative hocMember : hocMembers) {
+            seleniumHelpers.makeScreenFullSize(webDriver);
+            for (Representative hocMember : hocMembers) {
                 logKeeper.appendLog("Web scrapping for: " + hocMember.getFirstName() + " " + hocMember.getLastName());
                 WebElement searchField = seleniumHelpers.getWebElementByXPath(webDriver, "(//div/input)[2]");
                 String hocMemberName = hocMember.getFirstName() + " " + hocMember.getLastName();
@@ -42,33 +43,48 @@ public class ScrappingRemaningHocMembers {
                 WebElement contactTab = seleniumHelpers.getWebElementById(webDriver, "contact-tab");
                 seleniumHelpers.clickElement(contactTab);
                 WebElement hocImgElement = seleniumHelpers.getWebElementByXPath(webDriver, "(//img)[2]");
-                String hocImgUrl = seleniumHelpers.getElementAttributeValue(hocImgElement, "src"); // HOC member photo url
+                String hocImgUrl = seleniumHelpers.getElementAttributeValue(hocImgElement, "src"); // HOC member photo
+                                                                                                   // url
                 WebElement hocDetailsOverview = seleniumHelpers.getWebElementByXPath(webDriver, "//dl");
-                List<WebElement> detailsLabels = seleniumHelpers.getWebElementsFromWebElementByTagName(hocDetailsOverview, "dt");
-                List<WebElement> detailsValues = seleniumHelpers.getWebElementsFromWebElementByTagName(hocDetailsOverview, "dd");
-                Map<String, String> hocOverview = seleniumHelpers.mergeListsOfElementToMap(detailsLabels, detailsValues);
+                List<WebElement> detailsLabels = seleniumHelpers
+                        .getWebElementsFromWebElementByTagName(hocDetailsOverview, "dt");
+                List<WebElement> detailsValues = seleniumHelpers
+                        .getWebElementsFromWebElementByTagName(hocDetailsOverview, "dd");
+                Map<String, String> hocOverview = seleniumHelpers.mergeListsOfElementToMap(detailsLabels,
+                        detailsValues);
                 String politicalAffiliation = hocOverview.get("Political-Affiliation"); // HOC political affiliation
                 String constituency = hocOverview.get("Constituency"); // HOC constituency
                 String provinceOrTerritory = hocOverview.get("Province-Territory"); // HOC provinceOrTerritory
                 String languages = hocOverview.get("Preferred Language"); // HOC languages
-                WebElement emailWebElement = seleniumHelpers.getWebElementByXPath(webDriver, "(//*[@id = 'contact']//div//p[1])[1]");
+                WebElement emailWebElement = seleniumHelpers.getWebElementByXPath(webDriver,
+                        "(//*[@id = 'contact']//div//p[1])[1]");
                 String email = seleniumHelpers.getStringFromWebElement(emailWebElement); // HOC email
-                WebElement legislativeOffice = seleniumHelpers.getWebElementByXPath(webDriver, "(//*[@id = 'contact']//div//p[1])[2]");
-                String legislativeAddress = seleniumHelpers.getStringFromWebElement(legislativeOffice); // legislative office postal code
-                WebElement legislativeTelAndFaxElement = seleniumHelpers.getWebElementByXPath(webDriver, "//*[@id = 'contact']/div/div/div[1]/p[2]");
+                WebElement legislativeOffice = seleniumHelpers.getWebElementByXPath(webDriver,
+                        "(//*[@id = 'contact']//div//p[1])[2]");
+                String legislativeAddress = seleniumHelpers.getStringFromWebElement(legislativeOffice); // legislative
+                                                                                                        // office postal
+                                                                                                        // code
+                WebElement legislativeTelAndFaxElement = seleniumHelpers.getWebElementByXPath(webDriver,
+                        "//*[@id = 'contact']/div/div/div[1]/p[2]");
                 String legislativeTelAndFax = seleniumHelpers.getStringFromWebElement(legislativeTelAndFaxElement);
                 Map<String, String> legislativeTelAndFaxMap = ExtractTelAndFax(legislativeTelAndFax);
                 String legislativeTel = legislativeTelAndFaxMap.get("telephone"); // legislative tel
                 String legislativeFax = legislativeTelAndFaxMap.get("fax"); // legislative fax
-                Office legislativeOfficeObj = new Office(legislativeFax, legislativeTel, "legislature", legislativeAddress);
-                WebElement constituencyOffice = seleniumHelpers.getWebElementByXPath(webDriver, "(//*[@id = 'contact']//div//p[1])[3]");
-                String constituencyAddress = seleniumHelpers.getStringFromWebElement(constituencyOffice); // constituency office postal code
-                WebElement constituencyTelAndFaxElement = seleniumHelpers.getWebElementByXPath(webDriver, "//*[@id = 'contact']/div/div/div[2]/div/div/p[2]");
+                Office legislativeOfficeObj = new Office(legislativeFax, legislativeTel, "legislature",
+                        legislativeAddress);
+                WebElement constituencyOffice = seleniumHelpers.getWebElementByXPath(webDriver,
+                        "(//*[@id = 'contact']//div//p[1])[3]");
+                String constituencyAddress = seleniumHelpers.getStringFromWebElement(constituencyOffice); // constituency
+                                                                                                          // office
+                                                                                                          // postal code
+                WebElement constituencyTelAndFaxElement = seleniumHelpers.getWebElementByXPath(webDriver,
+                        "//*[@id = 'contact']/div/div/div[2]/div/div/p[2]");
                 String constituencyTelAndFax = seleniumHelpers.getStringFromWebElement(constituencyTelAndFaxElement);
                 Map<String, String> constituencyTelAndFaxMap = ExtractTelAndFax(constituencyTelAndFax);
                 String constituencyTel = constituencyTelAndFaxMap.get("telephone"); // constituency tel
                 String constituencyFax = constituencyTelAndFaxMap.get("fax"); // constituency fax
-                Office constituencyOfficeObj = new Office(constituencyFax, constituencyTel, "constituency", constituencyAddress);
+                Office constituencyOfficeObj = new Office(constituencyFax, constituencyTel, "constituency",
+                        constituencyAddress);
                 hocMember.setPhotoUrl(hocImgUrl);
                 hocMember.setPoliticalAffiliation(politicalAffiliation);
                 hocMember.setConstituency(constituency);
@@ -80,10 +96,10 @@ public class ScrappingRemaningHocMembers {
                 hocMember.setOffices(hocOffices);
                 BoundariesApiFetch boundariesApiFetch = new BoundariesApiFetch();
                 String boundaryExternalId = boundariesApiFetch.fetchBoundaryExternalIdByConstituency(constituency);
-                hocMember.setBoundaryExternalId(boundaryExternalId);   
+                hocMember.setBoundaryExternalId(boundaryExternalId);
                 seleniumHelpers.navigateTo(webDriver, hocUrl);
                 hocMembersUpdated.add(hocMember);
-            }           
+            }
         } catch (Exception e) {
             logKeeper.appendLog(e.getMessage());
         } finally {
@@ -97,12 +113,13 @@ public class ScrappingRemaningHocMembers {
     private Map<String, String> ExtractTelAndFax(String telAndFax) {
         Map<String, String> telAndFaxMap = new HashMap<String, String>();
         // Regular expressions to capture telephone and fax
-        Pattern pattern = Pattern.compile("Telephone:\\s*(\\d{3}-\\d{3}-\\d{4}).*?Fax:\\s*(\\d{3}-\\d{3}-\\d{4})", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile("Telephone:\\s*(\\d{3}-\\d{3}-\\d{4}).*?Fax:\\s*(\\d{3}-\\d{3}-\\d{4})",
+                Pattern.DOTALL);
         Matcher matcher = pattern.matcher(telAndFax);
         if (matcher.find()) {
-            String telephone = matcher.group(1); 
+            String telephone = matcher.group(1);
             telAndFaxMap.put("telephone", telephone);
-            String fax = matcher.group(2);  
+            String fax = matcher.group(2);
             telAndFaxMap.put("fax", fax);
         } else {
             logKeeper.appendLog("No matches found for telephone and fax!");

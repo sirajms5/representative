@@ -8,7 +8,7 @@ import csv.CSVReader;
 import db.HocBoundaryPolygonsCRUD;
 import db.RepresentativeCRUD;
 import disk.JsonWriter;
-import selenium.ScrappingRemaningHocMembers;
+import selenium.HocSelenium;
 import utilities.LogKeeper;
 import utilities.RepresentativePositionEnum;
 
@@ -29,8 +29,8 @@ public class HocRepresentativesJob {
         }
 
         List<Representative> unavilableHocMembers = representativeCRUD.getUnavilableHOCMembers(RepresentativePositionEnum.MP.getValue());
-        ScrappingRemaningHocMembers scrappingRemaningHocMembers = new ScrappingRemaningHocMembers();
-        List<Representative> scrappedHOCMembers = scrappingRemaningHocMembers.scrapHocMembers(unavilableHocMembers);
+        HocSelenium hocSelenium = new HocSelenium();
+        List<Representative> scrappedHOCMembers = hocSelenium.scrapHocMembers(unavilableHocMembers);
         for (Representative hocRepresentative : scrappedHOCMembers) {
             boolean isInserted = representativeCRUD.insertRepresentative(hocRepresentative);
             if(isInserted) {

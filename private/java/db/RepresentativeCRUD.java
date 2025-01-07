@@ -41,7 +41,7 @@ public class RepresentativeCRUD {
             stmtRepresemtatives.setString(11, representative.getLanguages());
             stmtRepresemtatives.setString(12, representative.getEmail());
             stmtRepresemtatives.setString(13, representative.getUrl());
-            stmtRepresemtatives.setBoolean(14, representative.isHonorificTitle());
+            stmtRepresemtatives.setBoolean(14, representative.isHonourable());
 
             int insertedHOCId = stmtRepresemtatives.executeUpdate();
             Helpers.sleep(1);
@@ -76,7 +76,8 @@ public class RepresentativeCRUD {
                             }
                         }
 
-                        logKeeper.appendLog("Inserted " + representative.getPosition() + " representative " + representativeId + ": "
+                        logKeeper.appendLog("Inserted " + representative.getPosition() + " representative "
+                                + representativeId + ": "
                                 + representative.getFirstName() + " " + representative.getLastName());
                     }
                 }
@@ -112,7 +113,7 @@ public class RepresentativeCRUD {
         return isInserted;
     }
 
-    public void insertUnavailableRepresentative(Representative representative) {
+    public void insertUnavailableRepresentativeByFirstAndLastName(Representative representative) {
         String sqlUnavilableRepresentative = "INSERT INTO unavilable_representative (first_name, last_name, position) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE first_name = first_name, last_name = last_name";
         PreparedStatement stmtUnavilableRepresentative = null;
 
@@ -124,6 +125,30 @@ public class RepresentativeCRUD {
             stmtUnavilableRepresentative.executeUpdate();
             logKeeper.appendLog("Inserted unavilable representative: " + representative.getFirstName() + " "
                     + representative.getLastName());
+            Helpers.sleep(1);
+        } catch (SQLException e) {
+            logKeeper.appendLog(e.getMessage());
+        } finally {
+            if (stmtUnavilableRepresentative != null) {
+                try {
+                    stmtUnavilableRepresentative.close();
+                } catch (SQLException e) {
+                    logKeeper.appendLog(e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void insertUnavailableRepresentativeByFullName(Representative representative) {
+        String sqlUnavilableRepresentative = "INSERT IGNORE INTO unavilable_representative (full_name, position) VALUES (?, ?)";
+        PreparedStatement stmtUnavilableRepresentative = null;
+
+        try (Connection conn = DbManager.getConn()) {
+            stmtUnavilableRepresentative = conn.prepareStatement(sqlUnavilableRepresentative);
+            stmtUnavilableRepresentative.setString(1, representative.getFullName());
+            stmtUnavilableRepresentative.setString(2, representative.getPosition());
+            stmtUnavilableRepresentative.executeUpdate();
+            logKeeper.appendLog("Inserted unavilable representative: " + representative.getFullName());
             Helpers.sleep(1);
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
@@ -150,7 +175,8 @@ public class RepresentativeCRUD {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
 
-                Representative representative = new Representative(firstName, lastName, position, RepresentativeLevelEnum.FEDERAL.getValue());
+                Representative representative = new Representative(firstName, lastName, position,
+                        RepresentativeLevelEnum.FEDERAL.getValue());
                 unavailableMembers.add(representative);
             }
 
@@ -221,8 +247,10 @@ public class RepresentativeCRUD {
                 String languages = rsHocRepresentatives.getString("languages");
                 String url = rsHocRepresentatives.getString("url");
                 boolean isHonourable = rsHocRepresentatives.getBoolean("is_honourable");
-                Representative hocRepresentative = new Representative(null, firstName, lastName, constituency, provinceOrTerritory,
-                        politicalAffiliation, startDate, null, position, photoUrl, languages, boundaryExternalId, level, email, url, isHonourable);
+                Representative hocRepresentative = new Representative(null, firstName, lastName, constituency,
+                        provinceOrTerritory,
+                        politicalAffiliation, startDate, null, position, photoUrl, languages, boundaryExternalId, level,
+                        email, url, isHonourable);
 
                 // Fetch and set offices
                 try (PreparedStatement stmtOffices = conn.prepareStatement(sqlOffices)) {

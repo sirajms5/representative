@@ -127,6 +127,6 @@ public class HOCApiFetch {
 
     private void unavilableHocMember(Representative hocRepresentative) {
         RepresentativeCRUD hocRepresentativeCRUD = new RepresentativeCRUD();
-        hocRepresentativeCRUD.insertUnavailableRepresentative(hocRepresentative);  
+        hocRepresentativeCRUD.insertUnavailableRepresentativeByFirstAndLastName(hocRepresentative);  
     }
 }
