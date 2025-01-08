@@ -19,7 +19,8 @@ public class Main{
         ProvincialRepresentativeJob provincialRepresentativeJob = new ProvincialRepresentativeJob();
         // provincialRepresentativeJob.executeMppRepresentativeJob();
         // provincialRepresentativeJob.executeMnaRepresentativeJob(RepresentativePositionEnum.MNA.getValue());
-        provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MLA.getValue());
+        // provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MLA.getValue());
+        provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MHA.getValue());
         
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
         logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");
