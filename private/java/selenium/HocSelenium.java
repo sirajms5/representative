@@ -43,7 +43,7 @@ public class HocSelenium {
                 WebElement contactTab = seleniumHelpers.getWebElementById(webDriver, "contact-tab");
                 seleniumHelpers.clickElement(contactTab);
                 WebElement hocImgElement = seleniumHelpers.getWebElementByXPath(webDriver, "(//img)[2]");
-                String hocImgUrl = seleniumHelpers.getElementAttributeValue(hocImgElement, "src"); // HOC member photo
+                String hocImgUrl = "https://www.ourcommons.ca" + seleniumHelpers.getElementAttributeValue(hocImgElement, "src"); // HOC member photo
                                                                                                    // url
                 WebElement hocDetailsOverview = seleniumHelpers.getWebElementByXPath(webDriver, "//dl");
                 List<WebElement> detailsLabels = seleniumHelpers
