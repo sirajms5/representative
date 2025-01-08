@@ -18,7 +18,8 @@ public class Main{
         // hocBoundariesMultPolygonal.executeHocBoundariesMultiPolygonalJob();
         ProvincialRepresentativeJob provincialRepresentativeJob = new ProvincialRepresentativeJob();
         // provincialRepresentativeJob.executeMppRepresentativeJob();
-        provincialRepresentativeJob.executeMnaRepresentativeJob(RepresentativePositionEnum.MNA.getValue());
+        // provincialRepresentativeJob.executeMnaRepresentativeJob(RepresentativePositionEnum.MNA.getValue());
+        provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MLA.getValue());
         
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
         logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");

@@ -20,13 +20,23 @@ public class RepresentativeCRUD {
 
     public boolean insertRepresentative(Representative representative) {
         boolean isInserted = false;
+        String sqlCheckEmail = "SELECT COUNT(*) FROM representatives WHERE email = ?";
         String sqlRepresentative = "INSERT IGNORE INTO representatives (first_name, last_name, constituency, province_or_territory, political_affiliation, start_date, position, photo_url, boundary_external_id, level, languages, email, url, is_honourable, boundary_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement stmtCheckEmail = null;
         PreparedStatement stmtRepresemtatives = null;
         PreparedStatement stmtOffices = null;
         PreparedStatement stmtRoles = null;
         int representativeId = 0;
 
-        try (Connection conn = DbManager.getConn()) {
+        try (Connection conn = DbManager.getConn()) {          
+            // Check for duplicate email
+            stmtCheckEmail = conn.prepareStatement(sqlCheckEmail);
+            stmtCheckEmail.setString(1, representative.getEmail());
+            ResultSet rsCheckEmail = stmtCheckEmail.executeQuery();
+            if((rsCheckEmail.next() && rsCheckEmail.getInt(1) > 0) || representative.getEmail().equals("")) {
+                String newEmailPlaceHolder = generateNewBoundaryId(conn, "Email " + representative.getEmail());
+                representative.setEmail(newEmailPlaceHolder);
+            }  
             stmtRepresemtatives = conn.prepareStatement(sqlRepresentative, Statement.RETURN_GENERATED_KEYS);
             stmtRepresemtatives.setString(1, representative.getFirstName());
             stmtRepresemtatives.setString(2, representative.getLastName());
@@ -38,7 +48,7 @@ public class RepresentativeCRUD {
             stmtRepresemtatives.setString(8, representative.getPhotoUrl());
             stmtRepresemtatives.setString(9, representative.getBoundaryExternalId());
             stmtRepresemtatives.setString(10, representative.getLevel());
-            stmtRepresemtatives.setString(11, representative.getLanguages());
+            stmtRepresemtatives.setString(11, representative.getLanguages());            
             stmtRepresemtatives.setString(12, representative.getEmail());
             stmtRepresemtatives.setString(13, representative.getUrl());
             stmtRepresemtatives.setBoolean(14, representative.isHonourable());
@@ -82,10 +92,20 @@ public class RepresentativeCRUD {
                                 + representative.getFirstName() + " " + representative.getLastName());
                     }
                 }
+            } else {
+                logKeeper.appendLog("Failed to insert: " + representative.getFirstName() + " " + representative.getLastName() + " -- Email: " + representative.getEmail());
             }
         } catch (SQLException e) {
             logKeeper.appendLog(e.getMessage());
         } finally {
+            if (stmtCheckEmail != null) {
+                try {
+                    stmtCheckEmail.close();
+                } catch (SQLException e) {
+                    logKeeper.appendLog(e.getMessage());
+                }
+            }
+
             if (stmtRepresemtatives != null) {
                 try {
                     stmtRepresemtatives.close();
@@ -334,30 +354,32 @@ public class RepresentativeCRUD {
         String hocBoundaryExternalId = hocRepresentative.getBoundaryExternalId();
         String sqlUpdate = "UPDATE representatives SET boundary_external_id = ?  WHERE email = ?;";
         String sqlCheck = "SELECT COUNT(*) FROM representatives WHERE boundary_external_id = ?;";
-        String sqlGetLatest = "SELECT latest_boundary_id FROM boundary_id_tracker;";
-        String sqlUpdateTracker = "UPDATE boundary_id_tracker SET latest_boundary_id = ?;";
+        // String sqlGetLatest = "SELECT latest_boundary_id FROM boundary_id_tracker;";
+        // String sqlUpdateTracker = "UPDATE boundary_id_tracker SET latest_boundary_id = ?;";
         PreparedStatement stmtUpdate = null;
         PreparedStatement stmtCheck = null;
-        PreparedStatement stmtGetLatest = null;
-        PreparedStatement stmtUpdateTracker = null;
+        // PreparedStatement stmtGetLatest = null;
+        // PreparedStatement stmtUpdateTracker = null;
         try (Connection conn = DbManager.getConn()) {
             conn.setAutoCommit(false);
             stmtCheck = conn.prepareStatement(sqlCheck);
             stmtCheck.setString(1, hocBoundaryExternalId);
             ResultSet rsCheck = stmtCheck.executeQuery();
-            if (rsCheck.next() && rsCheck.getInt(1) > 0) {     
-                stmtGetLatest = conn.prepareStatement(sqlGetLatest);
-                ResultSet rsGetLatest = stmtGetLatest.executeQuery();
-                if (rsGetLatest.next()) {
-                    String latestBoundaryId = rsGetLatest.getString(1);
-                    long newBoundaryId = Long.parseLong(latestBoundaryId) - 1;                    
-                    logKeeper.appendLog("Conflict in boundary_external_id " + hocBoundaryExternalId + " found, generating a new boundary_external_id: " + newBoundaryId);
-                    hocBoundaryExternalId = String.valueOf(newBoundaryId);
-                    hocRepresentative.setBoundaryExternalId(hocBoundaryExternalId);
-                    stmtUpdateTracker = conn.prepareStatement(sqlUpdateTracker);
-                    stmtUpdateTracker.setString(1, hocBoundaryExternalId);
-                    stmtUpdateTracker.executeUpdate();
-                }
+            if ((rsCheck.next() && rsCheck.getInt(1) > 0) || hocBoundaryExternalId.equals("")) {     
+                // stmtGetLatest = conn.prepareStatement(sqlGetLatest);
+                // ResultSet rsGetLatest = stmtGetLatest.executeQuery();
+                // if (rsGetLatest.next()) {
+                //     String latestBoundaryId = rsGetLatest.getString(1);
+                //     long newBoundaryId = Long.parseLong(latestBoundaryId) - 1;                    
+                //     logKeeper.appendLog("Conflict in boundary_external_id " + hocBoundaryExternalId + " found, generating a new boundary_external_id: " + newBoundaryId);
+                //     hocBoundaryExternalId = String.valueOf(newBoundaryId);
+                //     hocRepresentative.setBoundaryExternalId(hocBoundaryExternalId);
+                //     stmtUpdateTracker = conn.prepareStatement(sqlUpdateTracker);
+                //     stmtUpdateTracker.setString(1, hocBoundaryExternalId);
+                //     stmtUpdateTracker.executeUpdate();
+                // }
+                hocBoundaryExternalId = generateNewBoundaryId(conn, hocBoundaryExternalId);
+                hocRepresentative.setBoundaryExternalId(hocBoundaryExternalId);
             }
 
             stmtUpdate = conn.prepareStatement(sqlUpdate);
@@ -379,6 +401,59 @@ public class RepresentativeCRUD {
                 }
             }
 
+            // if (stmtGetLatest  != null) {
+            //     try {
+            //         stmtGetLatest .close();
+            //     } catch (SQLException e) {
+            //         logKeeper.appendLog(e.getMessage());
+            //     }
+            // }
+
+            // if (stmtUpdateTracker  != null) {
+            //     try {
+            //         stmtUpdateTracker .close();
+            //     } catch (SQLException e) {
+            //         logKeeper.appendLog(e.getMessage());
+            //     }
+            // }
+
+            if (stmtUpdate  != null) {
+                try {
+                    stmtUpdate .close();
+                } catch (SQLException e) {
+                    logKeeper.appendLog(e.getMessage());
+                }
+            }
+        }
+
+        return hocRepresentative.getBoundaryExternalId();
+    }
+
+    private String generateNewBoundaryId(Connection conn, String currentBoundaryExternalId) {
+        String sqlGetLatest = "SELECT latest_boundary_id FROM boundary_id_tracker;";
+        String sqlUpdateTracker = "UPDATE boundary_id_tracker SET latest_boundary_id = ?;";
+        PreparedStatement stmtGetLatest = null;
+        PreparedStatement stmtUpdateTracker = null;
+        String newBoundaryId = null;
+    
+        try {
+            stmtGetLatest = conn.prepareStatement(sqlGetLatest);
+            ResultSet rsGetLatest = stmtGetLatest.executeQuery();
+    
+            if (rsGetLatest.next()) {
+                String latestBoundaryId = rsGetLatest.getString(1);
+                long newId = Long.parseLong(latestBoundaryId) + 1;
+                newBoundaryId = String.valueOf(newId);
+                logKeeper.appendLog("Conflict in a unique field " + currentBoundaryExternalId
+                        + " found, generating a new boundary_external_id: " + newBoundaryId);
+    
+                stmtUpdateTracker = conn.prepareStatement(sqlUpdateTracker);
+                stmtUpdateTracker.setString(1, newBoundaryId);
+                stmtUpdateTracker.executeUpdate();
+            }
+        } catch (SQLException e) {
+            logKeeper.appendLog(e.getMessage());
+        } finally {    
             if (stmtGetLatest  != null) {
                 try {
                     stmtGetLatest .close();
@@ -394,16 +469,8 @@ public class RepresentativeCRUD {
                     logKeeper.appendLog(e.getMessage());
                 }
             }
-
-            if (stmtUpdate  != null) {
-                try {
-                    stmtUpdate .close();
-                } catch (SQLException e) {
-                    logKeeper.appendLog(e.getMessage());
-                }
-            }
         }
-
-        return hocRepresentative.getBoundaryExternalId();
+    
+        return newBoundaryId;
     }
 }

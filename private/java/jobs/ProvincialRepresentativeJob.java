@@ -64,7 +64,7 @@ public class ProvincialRepresentativeJob {
                 "======================================== Finished Ontario MPP Representatives Job ========================================");
     }
 
-    public void executeMnaRepresentativeJob(String position) {
+    public void executeMnaMlaMhaRepresentativeJob(String position) {
         logKeeper.appendLog(
                 "======================================== Executing Quebec MNA Representatives Job ========================================");
         MppMlaMnaApiFetch mppApiFetch = new MppMlaMnaApiFetch();

@@ -25,19 +25,17 @@ public class MppMlaMnaApiFetch {
 
     public List<Representative> fetchRepresentativesFromApi(String position) {
         List<Representative> representatives = new ArrayList<>();
-        int offset = 0; // Start with the first page
+        int offset = 0;
         String firstUrl = "/representatives/?elected_office=";
         String nextUrl = Constants.REPRESENTATIVE_API_BASE_URL + firstUrl + position + "&limit="
                 + Constants.REPRESENTATIVE_API_LIMIT + "&offset=" + offset;
 
         try {
             while (nextUrl != null) {
-                // Make the HTTP request
                 HttpURLConnection conn = APIHelpers.createHttpConnection(nextUrl);
 
                 int responseCode = conn.getResponseCode();
-                if (responseCode == 200) { // HTTP OK
-                    // Parse the JSON response
+                if (responseCode == 200) {
                     JSONObject jsonResponse = APIHelpers.parseJsonResponse(conn);
                     JSONArray objects = jsonResponse.getJSONArray("objects");
                     String nextOffset = jsonResponse.getJSONObject("meta").optString("next", null);
@@ -73,7 +71,7 @@ public class MppMlaMnaApiFetch {
 
     private Representative parseRepresentative(JSONObject obj, int representativeCounter) {
         String sourceUrl = obj.optString("source_url");
-        String provincialSourceUrlKey = extractProvinceLinkKey(sourceUrl).toUpperCase();
+        String provincialSourceUrlKey = extractProvinceLinkKey(sourceUrl).toLowerCase();
         String provinceOrTerritory = ProvincialRepresentativeKeysEnum
                 .getProvincialOrTerritorialByKey(provincialSourceUrlKey);
         Representative representative = new Representative(
@@ -130,10 +128,10 @@ public class MppMlaMnaApiFetch {
     }
 
     public String extractProvinceLinkKey(String url) {
-        String regex = "http[s]?://[^.]+\\.([^\\.]+)\\.";
-        Pattern pattern = java.util.regex.Pattern.compile(regex);
+        String regex = "http[s]?://(?:www\\.)?([^/]+)(?:/([^/]+))?";
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(url);
-
+    
         if (matcher.find()) {
             return matcher.group(1);
         }
