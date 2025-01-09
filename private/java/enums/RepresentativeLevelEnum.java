@@ -1,4 +1,4 @@
-package utilities;
+package enums;
 
 public enum RepresentativeLevelEnum {
     FEDERAL("Federal"),
@@ -36,7 +36,7 @@ public enum RepresentativeLevelEnum {
                 return TERRITORIAL.getValue();
 
             default:
-                return null;
+                return MUNICIPAL.getValue();
         }
     }
 }

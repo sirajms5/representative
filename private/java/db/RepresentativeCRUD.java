@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Representative;
+import enums.RepresentativeLevelEnum;
 import classes.Office;
 import utilities.Helpers;
 import utilities.LogKeeper;
-import utilities.RepresentativeLevelEnum;
 
 public class RepresentativeCRUD {
 
@@ -387,7 +387,7 @@ public class RepresentativeCRUD {
             stmtUpdate.setString(2, hocEmail);
             int rowsUpdated = stmtUpdate.executeUpdate();
 
-            logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the representatives table for "
+            logKeeper.appendLog("Updated " + rowsUpdated + " row(s) in the representatives table external_boundary_id for "
                     + hocRepresentative.getFirstName() + " " + hocRepresentative.getLastName());
             conn.commit();
         } catch (SQLException e) {

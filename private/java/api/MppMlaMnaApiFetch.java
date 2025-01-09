@@ -11,12 +11,12 @@ import org.json.JSONObject;
 
 import classes.Office;
 import classes.Representative;
+import enums.ProvincialRepresentativeKeysEnum;
+import enums.RepresentativeLevelEnum;
 import utilities.APIHelpers;
 import utilities.Constants;
 import utilities.Helpers;
 import utilities.LogKeeper;
-import utilities.ProvincialRepresentativeKeysEnum;
-import utilities.RepresentativeLevelEnum;
 
 public class MppMlaMnaApiFetch {
 
@@ -74,8 +74,8 @@ public class MppMlaMnaApiFetch {
         String provincialSourceUrlKey = extractProvinceLinkKey(sourceUrl).toLowerCase();
         String provinceOrTerritory = ProvincialRepresentativeKeysEnum
                 .getProvincialOrTerritorialByKey(provincialSourceUrlKey);
-        Representative representative = new Representative(
-                RepresentativeLevelEnum.getProvincialOrTerritorial(provinceOrTerritory));
+        String level = RepresentativeLevelEnum.getProvincialOrTerritorial(provinceOrTerritory);
+        Representative representative = new Representative(level);
         representative.setFirstName(obj.optString("first_name"));
         representative.setLastName(obj.optString("last_name"));
         representative.setConstituency(obj.optString("district_name"));

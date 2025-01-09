@@ -12,10 +12,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import classes.Representative;
+import enums.RepresentativeLevelEnum;
+import enums.RepresentativePositionEnum;
 import utilities.Constants;
 import utilities.LogKeeper;
-import utilities.RepresentativeLevelEnum;
-import utilities.RepresentativePositionEnum;
 import utilities.SeleniumHelpers;
 
 public class MppOntarioSelenium {

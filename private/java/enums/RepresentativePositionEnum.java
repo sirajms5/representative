@@ -1,4 +1,4 @@
-package utilities;
+package enums;
 
 public enum RepresentativePositionEnum {
     MP("MP"),
@@ -6,6 +6,8 @@ public enum RepresentativePositionEnum {
     MNA("MNA"),
     MLA("MLA"),
     MHA("MHA"),
+    COUNCILLOR("Councillor"),
+    COMMISSIONER("Commissioner"),
     ;
 
     private final String value;

@@ -14,10 +14,10 @@ import db.BoundariesCRUD;
 import db.HocBoundriesMultiPolygonalUtilities;
 import db.RepresentativeCRUD;
 import disk.JsonWriter;
+import enums.RepresentativePositionEnum;
 import selenium.MppOntarioSelenium;
 import utilities.Constants;
 import utilities.LogKeeper;
-import utilities.RepresentativePositionEnum;
 
 public class ProvincialRepresentativeJob {
 
@@ -25,7 +25,7 @@ public class ProvincialRepresentativeJob {
 
     public void executeMppRepresentativeJob() {
         logKeeper.appendLog(
-                "======================================== Executing Ontario MPP Representatives Job ========================================");
+                "======================================== Executing MPP Representatives Job ========================================");
         MppMlaMnaApiFetch mppApiFetch = new MppMlaMnaApiFetch();
         List<Representative> ontarioRepresentatives = mppApiFetch
                 .fetchRepresentativesFromApi(RepresentativePositionEnum.MPP.getValue());
@@ -61,12 +61,12 @@ public class ProvincialRepresentativeJob {
         jsonWriter.writeHocBoundariesGeoJson(geoJsonFeatureCollection, RepresentativePositionEnum.MPP.getValue());
 
         logKeeper.appendLog(
-                "======================================== Finished Ontario MPP Representatives Job ========================================");
+                "======================================== Finished MPP Representatives Job ========================================");
     }
 
     public void executeMnaMlaMhaRepresentativeJob(String position) {
         logKeeper.appendLog(
-                "======================================== Executing Quebec MNA Representatives Job ========================================");
+                "======================================== Executing " + position + " Representatives Job ========================================");
         MppMlaMnaApiFetch mppApiFetch = new MppMlaMnaApiFetch();
         List<Representative> quebecRepresentatives = mppApiFetch
                 .fetchRepresentativesFromApi(position);
@@ -95,6 +95,6 @@ public class ProvincialRepresentativeJob {
         jsonWriter.writeHocBoundariesGeoJson(geoJsonFeatureCollection, position);
 
         logKeeper.appendLog(
-                "======================================== Finished Quebec MNA Representatives Job ========================================");
+                "======================================== Finished " + position + " Representatives Job ========================================");
     }
 }

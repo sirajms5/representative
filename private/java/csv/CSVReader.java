@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Representative;
+import enums.RepresentativeLevelEnum;
+import enums.RepresentativePositionEnum;
 import utilities.Constants;
 import utilities.LogKeeper;
-import utilities.RepresentativeLevelEnum;
-import utilities.RepresentativePositionEnum;
 
 public class CSVReader {
 

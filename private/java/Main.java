@@ -1,9 +1,9 @@
+import enums.RepresentativePositionEnum;
 import jobs.HocBoundariesJob;
 import jobs.HocBoundariesMultPolygonalJob;
 import jobs.HocRepresentativesJob;
 import jobs.ProvincialRepresentativeJob;
 import utilities.LogKeeper;
-import utilities.RepresentativePositionEnum;
 
 public class Main{
     public static void main(String[] args) {
@@ -20,7 +20,8 @@ public class Main{
         // provincialRepresentativeJob.executeMppRepresentativeJob();
         // provincialRepresentativeJob.executeMnaRepresentativeJob(RepresentativePositionEnum.MNA.getValue());
         // provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MLA.getValue());
-        provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MHA.getValue());
+        // provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.MHA.getValue());
+        provincialRepresentativeJob.executeMnaMlaMhaRepresentativeJob(RepresentativePositionEnum.COMMISSIONER.getValue());
         
         logKeeper.appendLog("======================================== Finished Backend Jobs ========================================");
         logKeeper.writeLogToFile("C:\\xampp\\htdocs\\representative\\private\\java\\disk\\files\\logs\\backend-log.txt");

@@ -1,4 +1,4 @@
-package utilities;
+package enums;
 
 public enum ProvincialRepresentativeKeysEnum {
     ON("Ontario"),
@@ -50,7 +50,7 @@ public enum ProvincialRepresentativeKeysEnum {
             case "assembly.nl.ca":
                 return NL.getValue();
             default:
-                return null;
+                return "";
         }
     }
 }

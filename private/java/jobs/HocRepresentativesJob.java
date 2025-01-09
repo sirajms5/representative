@@ -8,9 +8,9 @@ import csv.CSVReader;
 import db.HocBoundaryPolygonsCRUD;
 import db.RepresentativeCRUD;
 import disk.JsonWriter;
+import enums.RepresentativePositionEnum;
 import selenium.HocSelenium;
 import utilities.LogKeeper;
-import utilities.RepresentativePositionEnum;
 
 public class HocRepresentativesJob {
 

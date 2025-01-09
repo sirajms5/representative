@@ -7,8 +7,8 @@ import classes.GeoJsonFeatureCollection;
 import classes.Representative;
 import db.BoundariesCRUD;
 import db.RepresentativeCRUD;
+import enums.RepresentativePositionEnum;
 import utilities.LogKeeper;
-import utilities.RepresentativePositionEnum;
 
 public class JsonWriter {
 

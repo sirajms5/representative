@@ -7,8 +7,8 @@ import classes.GeoJsonFeatureCollection;
 import classes.HocMemberBoundaryPair;
 import db.HocBoundriesMultiPolygonalUtilities;
 import disk.JsonWriter;
+import enums.RepresentativePositionEnum;
 import utilities.LogKeeper;
-import utilities.RepresentativePositionEnum;
 
 public class HocBoundariesMultPolygonalJob {
 
