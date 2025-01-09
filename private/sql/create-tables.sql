@@ -116,6 +116,14 @@ CREATE TABLE boundaries_polygons_provinces (
     SPATIAL INDEX (polygon) -- Optimize spatial queries
 );
 
+CREATE TABLE boundaries_polygons_municipals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    boundary_name VARCHAR(255),
+    boundary_external_id VARCHAR(50) UNIQUE,
+    polygon GEOMETRY NOT NULL,
+    SPATIAL INDEX (polygon) -- Optimize spatial queries
+);
+
 CREATE TABLE boundary_id_tracker (
     latest_boundary_id VARCHAR(50) NOT NULL UNIQUE
 );

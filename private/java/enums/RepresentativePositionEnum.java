@@ -7,7 +7,6 @@ public enum RepresentativePositionEnum {
     MLA("MLA"),
     MHA("MHA"),
     COUNCILLOR("Councillor"),
-    COMMISSIONER("Commissioner"),
     ;
 
     private final String value;
