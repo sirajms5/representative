@@ -45,14 +45,25 @@
             $stmt->bind_param("s", $point);
             $stmt->execute();
             $result = $stmt->get_result();
-            $representatives = [];
+            $representatives = [
+                'federal' => [],
+                'provincial' => [],
+                'municipal' => []
+            ];
+
             while ($row = $result->fetch_assoc()) {
                 $repId = $row['representative_id'];
+                $level = strtolower($row['level']);
+                if (!in_array($level, ['federal', 'provincial', 'municipal'])) {
+                    error_log("Unknown level for representative ID $repId: " . $row['level'], 3, "./logs/errors-log.log");
+                    continue;
+                }
+
                 if (!isset($representatives[$repId])) {
                     $consituency = str_replace("—", " ", $row['constituency']);
                     $languages = str_replace("  ", " / ", $row['languages']);      
                     $isHonourable = $row["is_honourable"] == 1 ? true : false;  
-                    $representatives[$repId] = [
+                    $representatives[$level][$repId] = [
                         "first_name" => $row['first_name'],
                         "last_name" => $row['last_name'],
                         "constituency" => $consituency,
@@ -83,15 +94,15 @@
 
                     switch (strtolower($row['office_type'])) {
                         case 'constituency':
-                            $representatives[$repId]['constituency_offices'][] = $office;
+                            $representatives[$level][$repId]['constituency_offices'][] = $office;
                             break;
                         case 'legislature':
-                            $representatives[$repId]['legislature_offices'][] = $office;
+                            $representatives[$level][$repId]['legislature_offices'][] = $office;
                             break;
                         default:
                             error_log(
                                 "Error in representative-crud.php: Unknown office type for representative " . 
-                                $representatives[$repId]['first_name'] . " " . $representatives[$repId]['last_name'], 
+                                $representatives[$level][$repId]['first_name'] . " " . $representatives[$level][$repId]['last_name'], 
                                 3, 
                                 "./logs/errors-log.log"
                             );
@@ -101,8 +112,21 @@
             }            
 
             $stmt->close();
+            $representatives['federal'] = array_values($representatives['federal']);
+            $representatives['provincial'] = array_values($representatives['provincial']);
+            $representatives['municipal'] = array_values($representatives['municipal']);
 
-            return array_values($representatives);
+            if (isset($representatives['federal'][0]['province_or_territory'])) {
+                $representatives['municipal'][0]['province_or_territory'] = $representatives['federal'][0]['province_or_territory'];
+            } else {
+                error_log("Federal data or province_or_territory is missing: " . $representatives['federal'], 3, "./logs/errors-log.log");
+            }
+
+            return [
+                'federal' => $representatives['federal'],
+                'provincial' => $representatives['provincial'],
+                'municipal' => $representatives['municipal']
+            ];            
         } catch (Exception $exception) {
             error_log("Error in representative-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
             return array("error" => "Error in representative-crud.php: " . $exception->getMessage());

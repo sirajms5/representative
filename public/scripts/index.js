@@ -1,6 +1,54 @@
 const submitAddressButton = document.getElementById("address-submit-button");
 const addressInputField = document.getElementById("address-input-field");
 const representativesSection = document.getElementById("representatives-section");
+const levels = [
+    "federal",
+    "provincial",
+    "municipal"
+];
+const partiesColorHex = {
+    "Alberta New Democratic Party": "#FF5800",
+    "BC Green Party": "#427730", 
+    "BC United": "aqua",
+    "Bloc Québécois": "#0088CE",
+    "Coalition avenir Québec": "blue",
+    "Conservative": "#002395",
+    "Conservative Party of British Columbia": "#002395",
+    "Government Caucus": "#FFD700",
+    "Green Party": "#427730",
+    "Green Party of Ontario": "#427730",
+    "Green Party of Prince Edward Island": "#427730",
+    "Indépendant": "silver",
+    "Independent": "silver",
+    "Independent Liberal": "silver",
+    "Liberal": "#D71920",
+    "Liberal Party": "#D71920",
+    "Liberal Party of Newfoundland and Labrador": "#D71920",
+    "Liberal Party of Prince Edward Island": "#D71920",
+    "NDP": "#FF5800",
+    "New Democratic Party": "#FF5800",
+    "New Democratic Party of British Columbia": "#FF5800",
+    "New Democratic Party of Manitoba": "#FF5800",
+    "New Democratic Party of Newfoundland and Labrador": "#FF5800",
+    "New Democratic Party of Ontario": "#FF5800",
+    "Nova Scotia Liberal Party": "#D71920",
+    "Nova Scotia New Democratic Party": "#FF5800",
+    "Ontario Liberal Party": "#D71920",
+    "Opposition Caucus": "#FFD700",
+    "Parti libéral du Québec": "#D71920",
+    "Parti québécois": "#0088CE",
+    "Progressive Conservative Association of Nova Scotia": "#002395",
+    "Progressive Conservative Party": "#002395",
+    "Progressive Conservative Party of Manitoba": "#002395",
+    "Progressive Conservative Party of Newfoundland and Labrador": "#002395",
+    "Progressive Conservative Party of Ontario": "#002395",
+    "Progressive Conservative Party of Prince Edward Island": "#002395",
+    "Québec solidaire": "#ff5505",
+    "United Conservative Party": "#002395",
+    "Yukon Liberal Party": "#D71920",
+    "Yukon Party": "#002395"
+};
+
 
 submitAddressButton.addEventListener("click", (event) => {
     event.preventDefault();
@@ -66,8 +114,9 @@ function setupRepresentativesHTML(representativesJson) {
     const representativesUl = document.createElement("ul");
     representativesUl.id = "representatives-list";
     console.log(representativesJson.length);
-    for(let index = 0; index < representativesJson.length; index++) {
-        const representative = representativesJson[index];
+    // for(let index = 0; index < representativesJson.length; index++) {
+    levels.forEach(level => {
+        const representative = representativesJson[level][0];
         let representativeName;
         if(representative["is_honourable"]) {
             representativeName = `The Honourable ${representative["first_name"]} ${representative["last_name"]}`;
@@ -124,27 +173,23 @@ function setupRepresentativesHTML(representativesJson) {
         const representativeMainDetailsOthers = document.createElement("div");
         representativeMainDetailsOthers.className = "representative-main-details-others-container";
 
-        // political affilitation
-        const partiesColorHex = {
-            "Conservative": "#002395",
-            "Liberal": "#D71920",
-            "Bloc Québécois": "#0088CE",
-            "NDP": "#FF5800",
-            "Independent": "silver",
-            "Green Party": "#427730"
-        };
-
         const politicalAffiliation = representative["political_affiliation"];
         const pAcontainer = document.createElement("div");
         pAcontainer.className = "representative-pa-container";
-        pAcontainer.style.borderBottomColor = partiesColorHex[politicalAffiliation];
         const pALabel = document.createElement("p");
         pALabel.className = "representative-detail-label labelAndValue";
         pALabel.innerText = "Political affiliation:"
         pAcontainer.appendChild(pALabel);
         const representativePA = document.createElement("p");
         representativePA.className = "representative-pa labelAndValue";
-        representativePA.innerText = politicalAffiliation;
+        if(politicalAffiliation !== "") {
+            representativePA.innerText = politicalAffiliation;
+            pAcontainer.style.borderBottomColor = partiesColorHex[politicalAffiliation];
+        } else {
+            representativePA.innerText = "N/A";
+            pAcontainer.style.borderBottomColor = "transparent";
+        }
+        
         pAcontainer.appendChild(representativePA);
         representativeMainDetailsOthers.appendChild(pAcontainer);
 
@@ -196,7 +241,13 @@ function setupRepresentativesHTML(representativesJson) {
         languagecontainer.appendChild(languageLabel);
         const representativeLanguage = document.createElement("p");
         representativeLanguage.className = "representative-language labelAndValue";
-        representativeLanguage.innerText = representative["languages"];
+        const languages = representative["languages"];
+        if(languages !== "") {
+            representativeLanguage.innerText = representative["languages"];
+        } else {
+            representativeLanguage.innerText = "N/A"
+        }
+
         languagecontainer.appendChild(representativeLanguage);
         representativeMainDetailsOthers.appendChild(languagecontainer);
 
@@ -287,7 +338,7 @@ function setupRepresentativesHTML(representativesJson) {
         representativeArticle.appendChild(representativeDetailsWithImageDiv);
         representativeLi.appendChild(representativeArticle);
         representativesUl.appendChild(representativeLi);
-    }
+    });
 
     representativesSection.appendChild(representativesUl);
 }
