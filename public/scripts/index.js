@@ -55,8 +55,8 @@ submitAddressButton.addEventListener("click", (event) => {
     event.preventDefault();
     representativesSection.replaceChildren();    
     const addressValue = addressInputField.value.trim();
-    const { isPostalCode, isLongitudeLatitude, latitude, longitude } = validateAddress(addressValue);
-    if (isPostalCode || isLongitudeLatitude) {
+    const isPostalCode = validateAddress(addressValue);
+    if (isPostalCode) {
         const xmlHttpRequestFetchAddress = new XMLHttpRequest();
         xmlHttpRequestFetchAddress.open("POST", "./private/php/fetch-address.php", true);
         xmlHttpRequestFetchAddress.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -66,7 +66,7 @@ submitAddressButton.addEventListener("click", (event) => {
                 // console.log("Address submitted successfully");
                 // console.log(xmlHttpRequestFetchAddress.responseText);
                 const response = JSON.parse(xmlHttpRequestFetchAddress.responseText);
-                // console.log(response);
+                console.log(response);
                 setupRepresentativesHTML(response);
             } else {
                 console.error("Failed to connect to fetch-address.php");
@@ -74,12 +74,9 @@ submitAddressButton.addEventListener("click", (event) => {
         };
 
         let params = "";
-        if (isPostalCode) {
-            const sanitizedPostalCode = addressValue.toUpperCase().replace(/\s+/g, "").replace(/(.{3})(.{3})/, "$1 $2");
-            params = `postal_code=${encodeURIComponent(sanitizedPostalCode)}&latitude=&longitude=`;
-        } else if (isLongitudeLatitude) {
-            params = `postal_code=&latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`;
-        }
+        const sanitizedPostalCode = addressValue.toUpperCase().replace(/\s+/g, "").replace(/(.{3})(.{3})/, "$1 $2");
+        params = `postal_code=${encodeURIComponent(sanitizedPostalCode)}&latitude=&longitude=`;
+        
 
         xmlHttpRequestFetchAddress.send(params);
     } else {
@@ -90,34 +87,34 @@ submitAddressButton.addEventListener("click", (event) => {
 
 function validateAddress(addressValue) {
     const postalCodeRegex = /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/;
-    const coordinateRegex = /^-?\d+(\.\d+)?,\s?-?\d+(\.\d+)?$/;
+    // const coordinateRegex = /^-?\d+(\.\d+)?,\s?-?\d+(\.\d+)?$/;
 
     if (postalCodeRegex.test(addressValue)) {
         console.log("Valid postal code");
-        return { isPostalCode: true, isLongitudeLatitude: false, latitude: null, longitude: null };
+        return true;
     } else if (coordinateRegex.test(addressValue)) {
-        const [latitude, longitude] = addressValue.split(',').map(coord => parseFloat(coord.trim()));
+        // const [latitude, longitude] = addressValue.split(',').map(coord => parseFloat(coord.trim()));
 
-        if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
-            console.log("Valid coordinates");
-            return { isPostalCode: false, isLongitudeLatitude: true, latitude, longitude };
-        } else {
-            console.log("Invalid coordinates range");
-            return { isPostalCode: false, isLongitudeLatitude: false, latitude: null, longitude: null };
-        }
+        // if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
+        //     console.log("Valid coordinates");
+        //     return { isPostalCode: false, isLongitudeLatitude: true, latitude, longitude };
+        // } else {
+        //     console.log("Invalid coordinates range");
+        //     return { isPostalCode: false, isLongitudeLatitude: false, latitude: null, longitude: null };
+        // }
     } else {
         console.log("Invalid address");
-        return { isPostalCode: false, isLongitudeLatitude: false, latitude: null, longitude: null };
+        return false;
     }
 }
 
 function setupRepresentativesHTML(representativesJson) {
     const representativesUl = document.createElement("ul");
     representativesUl.id = "representatives-list";
-    // console.log(representativesJson.length);
     levels.forEach(level => {
         const representative = representativesJson[level][0];
         let representativeName;
+        debugger;
         if(representative["is_honourable"]) {
             representativeName = `The Honourable ${representative["first_name"]} ${representative["last_name"]}`;
         } else {

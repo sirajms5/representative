@@ -7,8 +7,8 @@
 
     try {
         $postalCode = getData('postal_code');
-        $latitude = getData('latitude');
-        $longitude = getData('longitude');
+        // $latitude = getData('latitude');
+        // $longitude = getData('longitude');
         $resultObj = "";
 
         if (!empty($postalCode)) {
@@ -49,15 +49,15 @@
                     insertIntoPostalCodeCoordinatesFound($resultObj);   
                 }
             }            
-        } elseif (!empty($latitude) && !empty($longitude)) { // user provided coordinates
-            $latitude = floatval($latitude);
-            $longitude = floatval($longitude);
+        // } elseif (!empty($latitude) && !empty($longitude)) { // user provided coordinates
+        //     $latitude = floatval($latitude);
+        //     $longitude = floatval($longitude);
 
-            $resultObj = array(
-                "success" => "Coordinates provided",
-                "latitude" => $latitude,
-                "longitude" => $longitude
-            );
+        //     $resultObj = array(
+        //         "success" => "Coordinates provided",
+        //         "latitude" => $latitude,
+        //         "longitude" => $longitude
+        //     );
         } else {
             echo json_encode(array("error" => "No valid input provided (postal code or coordinates)"));
         }
