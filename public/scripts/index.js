@@ -54,7 +54,7 @@ const partiesColorHex = {
 
 submitAddressButton.addEventListener("click", (event) => {
     event.preventDefault();
-    loadingDiv.style.display = "inline";
+    WaitSearch(true);
     representativesSection.replaceChildren();    
     const addressValue = addressInputField.value.trim();
     const isPostalCode = validateAddress(addressValue);
@@ -65,14 +65,14 @@ submitAddressButton.addEventListener("click", (event) => {
         
         xmlHttpRequestFetchAddress.onload = () => {
             if (xmlHttpRequestFetchAddress.status === 200) {
-                loadingDiv.style.display = "none";
+                WaitSearch(false);
                 // console.log("Address submitted successfully");
                 // console.log(xmlHttpRequestFetchAddress.responseText);
                 const response = JSON.parse(xmlHttpRequestFetchAddress.responseText);
                 console.log(response);
                 setupRepresentativesHTML(response);
             } else {
-                loadingDiv.style.display = "none";
+                WaitSearch(false);
                 console.error("Failed to connect to fetch-address.php");
             }
         };
@@ -84,7 +84,7 @@ submitAddressButton.addEventListener("click", (event) => {
 
         xmlHttpRequestFetchAddress.send(params);
     } else {
-        loadingDiv.style.display = "none";
+        WaitSearch(false);
         console.log("Invalid address provided.");
         // TODO: feedback in the UI
     }
@@ -92,21 +92,10 @@ submitAddressButton.addEventListener("click", (event) => {
 
 function validateAddress(addressValue) {
     const postalCodeRegex = /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/;
-    // const coordinateRegex = /^-?\d+(\.\d+)?,\s?-?\d+(\.\d+)?$/;
 
     if (postalCodeRegex.test(addressValue)) {
         console.log("Valid postal code");
         return true;
-    // } else if (coordinateRegex.test(addressValue)) {
-        // const [latitude, longitude] = addressValue.split(',').map(coord => parseFloat(coord.trim()));
-
-        // if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
-        //     console.log("Valid coordinates");
-        //     return { isPostalCode: false, isLongitudeLatitude: true, latitude, longitude };
-        // } else {
-        //     console.log("Invalid coordinates range");
-        //     return { isPostalCode: false, isLongitudeLatitude: false, latitude: null, longitude: null };
-        // }
     } else {
         console.log("Invalid address");
         return false;
@@ -501,5 +490,15 @@ function generateOfficesList(parentListNode, list) {
         officeLi.appendChild(faxcontainer);
 
         parentListNode.appendChild(officeLi);
+    }
+}
+
+function WaitSearch(isWaiting) {
+    if(isWaiting) {
+        loadingDiv.style.display = "inline";
+        submitAddressButton.disabled = true;
+    } else {
+        loadingDiv.style.display = "none";
+        submitAddressButton.disabled = false;
     }
 }

@@ -11,6 +11,39 @@
     padding-top: 5rem;
 }
 
+#search-wrapper {
+    display: flex;
+    flex-direction: row;
+    background: white;
+    border-radius: 1.75rem;
+    align-items: center;
+    gap: 1rem;
+}
+
+#search-icon {    
+    color: #222222;
+    padding-left: 0.875rem;
+}
+
+#address-submit-button{
+    color: white;
+    background-color: #00c895;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    padding: 0.875rem;
+    border-radius: 1.75rem;
+    cursor: pointer;
+}
+
+#address-input-field {
+    color: #222222;
+    font-size: 1rem;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
 #representatives-list,
 .legilature-offices-list,
 .constituency-offices-list {
@@ -143,6 +176,7 @@
 .loader {
     width: 60px;
     display: none;
+    margin-top: 1rem;
     aspect-ratio: 2;
     --_g: no-repeat radial-gradient(circle closest-side,#fff 90%,#0000);
     background: 

@@ -16,12 +16,15 @@
     <main id="main-wrapper">
       <h1>Who are my representatives?</h1>
       <form>
+        <div id="search-wrapper">          
+        <i class="fas fa-search" id="search-icon"></i>
         <input
           id="address-input-field"
           type="text"
-          placeholder="Enter your address..."
+          placeholder="Enter postal code..."
         />
-        <button id="address-submit-button">Submit</button>
+        <button id="address-submit-button">Search</button>
+      </div>
       </form>
       <div class="loader" id="loader"></div>
       <section id="representatives-section">
