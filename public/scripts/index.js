@@ -2,6 +2,7 @@ const submitAddressButton = document.getElementById("address-submit-button");
 const addressInputField = document.getElementById("address-input-field");
 const representativesSection = document.getElementById("representatives-section");
 const detailedWrapper = document.createElement("div");
+const loadingDiv = document.getElementById("loader");
 const levels = [
     "federal",
     "provincial",
@@ -53,6 +54,7 @@ const partiesColorHex = {
 
 submitAddressButton.addEventListener("click", (event) => {
     event.preventDefault();
+    loadingDiv.style.display = "inline";
     representativesSection.replaceChildren();    
     const addressValue = addressInputField.value.trim();
     const isPostalCode = validateAddress(addressValue);
@@ -63,12 +65,14 @@ submitAddressButton.addEventListener("click", (event) => {
         
         xmlHttpRequestFetchAddress.onload = () => {
             if (xmlHttpRequestFetchAddress.status === 200) {
+                loadingDiv.style.display = "none";
                 // console.log("Address submitted successfully");
                 // console.log(xmlHttpRequestFetchAddress.responseText);
                 const response = JSON.parse(xmlHttpRequestFetchAddress.responseText);
                 console.log(response);
                 setupRepresentativesHTML(response);
             } else {
+                loadingDiv.style.display = "none";
                 console.error("Failed to connect to fetch-address.php");
             }
         };
@@ -80,6 +84,7 @@ submitAddressButton.addEventListener("click", (event) => {
 
         xmlHttpRequestFetchAddress.send(params);
     } else {
+        loadingDiv.style.display = "none";
         console.log("Invalid address provided.");
         // TODO: feedback in the UI
     }
@@ -92,7 +97,7 @@ function validateAddress(addressValue) {
     if (postalCodeRegex.test(addressValue)) {
         console.log("Valid postal code");
         return true;
-    } else if (coordinateRegex.test(addressValue)) {
+    // } else if (coordinateRegex.test(addressValue)) {
         // const [latitude, longitude] = addressValue.split(',').map(coord => parseFloat(coord.trim()));
 
         // if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
@@ -114,7 +119,6 @@ function setupRepresentativesHTML(representativesJson) {
     levels.forEach(level => {
         const representative = representativesJson[level][0];
         let representativeName;
-        debugger;
         if(representative["is_honourable"]) {
             representativeName = `The Honourable ${representative["first_name"]} ${representative["last_name"]}`;
         } else {
