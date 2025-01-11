@@ -59,7 +59,7 @@
                     continue;
                 }
 
-                if (!isset($representatives[$repId])) {
+                if (!isset($representatives[$level][$repId])) {
                     $consituency = str_replace("—", " ", $row['constituency']);
                     $languages = str_replace("  ", " / ", $row['languages']);      
                     $isHonourable = $row["is_honourable"] == 1 ? true : false;  
@@ -110,7 +110,7 @@
                     }
                 }
             }            
-
+            
             $stmt->close();
             $representatives['federal'] = array_values($representatives['federal']);
             $representatives['provincial'] = array_values($representatives['provincial']);
@@ -121,7 +121,7 @@
             } else {
                 error_log("Federal data or province_or_territory is missing: " . $representatives['federal'], 3, "./logs/errors-log.log");
             }
-
+            
             return [
                 'federal' => $representatives['federal'],
                 'provincial' => $representatives['provincial'],
