@@ -39,9 +39,10 @@ h1 {
 }
 
 #address-submit-button{
-    color: white;
+    color: #242424;
     background-color: #00c895;
     font-size: 1rem;
+    font-weight: 600;
     border: none;
     outline: none;
     padding: 0.875rem;
