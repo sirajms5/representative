@@ -55,7 +55,7 @@
                 $repId = $row['representative_id'];
                 $level = strtolower($row['level']);
                 if (!in_array($level, ['federal', 'provincial', 'municipal'])) {
-                    error_log("Unknown level for representative ID $repId: " . $row['level'], 3, "./logs/errors-log.log");
+                    error_log("Unknown level for representative ID $repId: " . $row['level'] . "\n", 3, "./logs/errors-log.log");
                     continue;
                 }
 
@@ -102,7 +102,7 @@
                         default:
                             error_log(
                                 "Error in representative-crud.php: Unknown office type for representative " . 
-                                $representatives[$level][$repId]['first_name'] . " " . $representatives[$level][$repId]['last_name'], 
+                                $representatives[$level][$repId]['first_name'] . " " . $representatives[$level][$repId]['last_name'] . "\n", 
                                 3, 
                                 "./logs/errors-log.log"
                             );
@@ -118,8 +118,10 @@
 
             if (isset($representatives['federal'][0]['province_or_territory'])) {
                 $representatives['municipal'][0]['province_or_territory'] = $representatives['federal'][0]['province_or_territory'];
+            } else if (isset($representatives['provincial'][0]['province_or_territory'])) {
+                $representatives['municipal'][0]['province_or_territory'] = $representatives['provincial'][0]['province_or_territory'];
             } else {
-                error_log("Federal data or province_or_territory is missing: " . $representatives['federal'], 3, "./logs/errors-log.log");
+                error_log("Federal data or province_or_territory is missing: federal: " . $representatives['federal'] . " and provenical: " . $representatives["provincial"] . "\n", 3, "./logs/errors-log.log");
             }
             
             return [
@@ -128,7 +130,7 @@
                 'municipal' => $representatives['municipal']
             ];            
         } catch (Exception $exception) {
-            error_log("Error in representative-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            error_log("Error in representative-crud.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
             return array("error" => "Error in representative-crud.php: " . $exception->getMessage());
         }
     }

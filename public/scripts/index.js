@@ -70,7 +70,12 @@ submitAddressButton.addEventListener("click", (event) => {
                 // console.log(xmlHttpRequestFetchAddress.responseText);
                 const response = JSON.parse(xmlHttpRequestFetchAddress.responseText);
                 console.log(response);
-                setupRepresentativesHTML(response);
+                if(response["error"] !== undefined) {
+                    setupPostalCodeNotFound();
+                } else {
+                    setupRepresentativesHTML(response);
+                }
+                
             } else {
                 WaitSearch(false);
                 console.error("Failed to connect to fetch-address.php");
@@ -107,6 +112,10 @@ function setupRepresentativesHTML(representativesJson) {
     representativesUl.id = "representatives-list";
     levels.forEach(level => {
         const representative = representativesJson[level][0];
+        if(representative == null || representative["first_name"] == undefined) {
+            return;
+        }
+
         let representativeName;
         if(representative["is_honourable"]) {
             representativeName = `The Honourable ${representative["first_name"]} ${representative["last_name"]}`;
@@ -404,6 +413,8 @@ function setupRepresentativesHTML(representativesJson) {
                 generateOfficesList(constituencyOfficesListAllDetails, constituencyOffices);
                 representativeConstituencyOfficeContainerAllDetails.appendChild(constituencyOfficesListAllDetails);
                 representativeOfficeDetailsDivAllDetails.appendChild(representativeConstituencyOfficeContainerAllDetails);
+            } else {
+                representativeLegislatureOfficeContainerAllDetails.style.borderRight = "none";
             }
 
             detailsAndOfficesContainer.appendChild(representativeOfficeDetailsDivAllDetails);            
@@ -501,4 +512,11 @@ function WaitSearch(isWaiting) {
         loadingDiv.style.display = "none";
         submitAddressButton.disabled = false;
     }
+}
+
+function setupPostalCodeNotFound() {
+    const postalCodeNotFound = document.createElement("p");
+    postalCodeNotFound.id = "postal-code-not-found";
+    postalCodeNotFound.innerText = "Postal codel not found.";
+    representativesSection.appendChild(postalCodeNotFound);
 }

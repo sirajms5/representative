@@ -7,9 +7,8 @@
 
     try {
         $postalCode = getData('postal_code');
-        // $latitude = getData('latitude');
-        // $longitude = getData('longitude');
         $resultObj = "";
+        $isCoordsFound = false;
 
         if (!empty($postalCode)) {
             $postalCodeInDB = getCoordinatesByPostalCode($postalCode);
@@ -25,7 +24,9 @@
                         "longitude" => $postalCodeInDB['longitude'],
                         "displayName" => $postalCodeInDB['display_name'] ?? "N/A"
                     );
+                    $isCoordsFound = true;
                 } else {
+                    error_log("Error in fetch-address.php: Postal code not found.\n", 3, "./logs/errors-log.log");
                     echo json_encode(array("error" => "Postal code not found."));
                 }                
             }
@@ -36,6 +37,7 @@
 
                 if (isset($result['error'])) {
                     insertIntoPostalCodeCoordinatesNotFound($postalCode);  
+                    error_log("Error in fetch-address.php: " . $result['error'] . "\n", 3, "./logs/errors-log.log");
                     echo json_encode(array("error" => $result['error']));
                 } else {   
                     $resultObj = array(
@@ -46,18 +48,23 @@
                         "displayName" => $result['display_name']
                     );
     
+                    $isCoordsFound = true;
                     insertIntoPostalCodeCoordinatesFound($resultObj);   
                 }
-            }           
+            }   
+            
+            if($isCoordsFound) {
+                $representativesByCoordinates = getRepresentativesByCoordinates($resultObj['latitude'], $resultObj['longitude']);
+         
+                echo json_encode($representativesByCoordinates, true);
+            }
+            
         } else {
+            error_log("Error in fetch-address.php: No valid input provided (postal code or coordinates.\n", 3, "./logs/errors-log.log");
             echo json_encode(array("error" => "No valid input provided (postal code or coordinates)"));
         }
 
-        $representativesByCoordinates = getRepresentativesByCoordinates($resultObj['latitude'], $resultObj['longitude']);
-         
-        echo json_encode($representativesByCoordinates, true);
-
     } catch (Exception $exception) {
-        error_log("Error in fetch-address.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+        error_log("Error in fetch-address.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
     }
 ?>

@@ -16,7 +16,7 @@
             $insertQuery->bind_param("sddds", $postalCode, $latitude, $longitude, $isFound, $displayName);
             $insertQuery->execute();
         } catch (Exception $exception) {
-            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
         }
     }
 
@@ -28,7 +28,7 @@
             $insertQuery->bind_param("s", $postalCode);
             $insertQuery->execute();
         } catch (Exception $exception) {
-            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
         }
     }
 
@@ -53,7 +53,8 @@
                 return null; // No results found
             }            
         } catch (Exception $exception) {
-            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            error_log("Error in postal-code-coordinates-crud.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
+
             return null;
         }
     }

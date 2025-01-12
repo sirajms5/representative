@@ -38,7 +38,7 @@
 
             $nominatimResponse = curl_exec($ch);
             if ($nominatimResponse === false) {
-                error_log("Nominatim API cURL Error: " . curl_error($ch), 3, "./logs/errors-log.log");
+                error_log("Nominatim API cURL Error: " . curl_error($ch) . "\n", 3, "./logs/errors-log.log");
             }
     
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -69,6 +69,8 @@
             $openCageResponse  = curl_exec($ch);
 
             if ($openCageResponse  === false) {
+                error_log("Failed to fetch data from OpenCage API. cURL Error: " . curl_error($ch) . "\n", 3, "./logs/errors-log.log");
+
                 return array("error" => "Failed to fetch data from OpenCage API. cURL Error: " . curl_error($ch));
             }
 
@@ -76,20 +78,21 @@
             curl_close($ch);
 
             if ($responseCode === 200) {
-            $openCageData  = json_decode($openCageResponse , true);
-            if (!empty($openCageData['results']) && isset($openCageData['results'][0]['geometry']['lat'], $openCageData['results'][0]['geometry']['lng'])) {
-                return array(
-                    "latitude" => $openCageData ['results'][0]['geometry']['lat'],
-                    "longitude" => $openCageData ['results'][0]['geometry']['lng'],
-                    "postal_code" => $openCageData ['results'][0]["components"]["postcode"],
-                    "display_name" => $openCageData ['results'][0]['formatted']
-                );
-            } 
-        }
+                $openCageData  = json_decode($openCageResponse , true);
+                if (!empty($openCageData['results']) && isset($openCageData['results'][0]['geometry']['lat'], $openCageData['results'][0]['geometry']['lng'])) {
+                    return array(
+                        "latitude" => $openCageData ['results'][0]['geometry']['lat'],
+                        "longitude" => $openCageData ['results'][0]['geometry']['lng'],
+                        "postal_code" => $openCageData ['results'][0]["components"]["postcode"],
+                        "display_name" => $openCageData ['results'][0]['formatted']
+                    );
+                } 
+            }
 
-        return array("error" => "No results found for the provided postal code.");            
+            return array("error" => "No results found for the provided postal code.");  
+
         } catch (Exception $exception) {
-            error_log("Error in fetch-coordinates.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            error_log("Error in fetch-coordinates.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
         }
     }
 
@@ -98,7 +101,6 @@
     
         try {
             $lastRequestTime = null;
-            // Get the timestamp of the last request
             $query = "SELECT request_time FROM nominatim_requests ORDER BY request_time DESC LIMIT 1";
             $stmt = $conn->prepare($query);
             $stmt->execute();
@@ -113,7 +115,6 @@
                 return false; // Global rate limit exceeded
             }
         
-            // Insert the current request time into the database
             $insertQuery = "INSERT INTO nominatim_requests (request_time) VALUES (?)";
             $insertStmt = $conn->prepare($insertQuery);
             $insertStmt->bind_param("i", $currentTime);
@@ -123,19 +124,17 @@
         
             return true; // Global request allowed
         } catch (Exception $exception) {
-            error_log("Error in fetch-coordinates.php: " . $exception->getMessage(), 3, "./logs/errors-log.log");
+            error_log("Error in fetch-coordinates.php: " . $exception->getMessage() . "\n", 3, "./logs/errors-log.log");
         }
     }  
 
     function canMakeUserRequest() {
         $currentTime = time();
     
-        // Check if the user has a session variable for their last request time
         if (isset($_SESSION['last_request_time']) && ($currentTime - $_SESSION['last_request_time'] < 1)) {
             return false; // User-specific rate limit exceeded
         }
     
-        // Update the user's session with the current time
         $_SESSION['last_request_time'] = $currentTime;
         return true; // User-specific request allowed
     }
