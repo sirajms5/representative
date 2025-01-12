@@ -9,6 +9,19 @@
     justify-content: center;
     align-items: center;
     padding-top: 5rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 46px;
+}
+
+#serach-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
 #search-wrapper {
@@ -44,6 +57,14 @@
     outline: none;
 }
 
+#invalid-postal-code-error-message {
+    color: red;
+}
+
+#representatives-section {
+    text-align: start;
+}
+
 #representatives-list,
 .legilature-offices-list,
 .constituency-offices-list {
@@ -54,8 +75,24 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     gap: 3rem;
     flex-wrap: wrap;
+}
+
+.representative-name-all-details {
+    font-size: 24px;
+}
+
+.offices-container-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.legislature-office-title,
+.constituency-office-title {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .legislature-offices-list,
@@ -109,7 +146,8 @@
     padding-right: 1rem;
 }
 
-.representative-image-container {
+.representative-image-container,
+.representative-image-container-all-details {
     display: flex;
 }
 
@@ -140,13 +178,17 @@
     font-weight: bold;
 }
 
-.offices-toggler {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.representative-all-details-wrapper {
+    margin-top: 3rem;
 }
 
 .representative-offices-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.offices-details-container {
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -191,4 +233,32 @@
       40%{background-position:0% 100%, 50%   0%,100%  50%}
       60%{background-position:0%  50%, 50% 100%,100%   0%}
       80%{background-position:0%  50%, 50%  50%,100% 100%}
+  }
+
+  @media (max-width: 800px) {
+    .legislature-offices-list,
+    .constituency-offices-list {
+        grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  @media(max-width: 700px) {
+    .representative-main-details-with-image-all-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .representative-image-container-all-details {
+        justify-content: center;
+    }
+
+    .details-and-offices-container-all-details {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .representative-main-details-others-container-all-details {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, auto); 
+    }
   }

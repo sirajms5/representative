@@ -3,6 +3,8 @@ const addressInputField = document.getElementById("address-input-field");
 const representativesSection = document.getElementById("representatives-section");
 const detailedWrapper = document.createElement("div");
 const loadingDiv = document.getElementById("loader");
+const invalidPostalCode = document.getElementById("invalid-postal-code-error-message");
+const searchForm = document.getElementById("serach-form");
 const levels = [
     "federal",
     "provincial",
@@ -54,11 +56,15 @@ const partiesColorHex = {
 
 submitAddressButton.addEventListener("click", (event) => {
     event.preventDefault();
-    WaitSearch(true);
+    WaitSearch(true);    
     representativesSection.replaceChildren();    
     const addressValue = addressInputField.value.trim();
     const isPostalCode = validateAddress(addressValue);
     if (isPostalCode) {
+        if(searchForm.querySelector("#invalid-postal-code-error-message")) {
+            searchForm.removeChild(invalidPostalCode);
+        }
+        
         const xmlHttpRequestFetchAddress = new XMLHttpRequest();
         xmlHttpRequestFetchAddress.open("POST", "./private/php/fetch-address.php", true);
         xmlHttpRequestFetchAddress.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -66,8 +72,6 @@ submitAddressButton.addEventListener("click", (event) => {
         xmlHttpRequestFetchAddress.onload = () => {
             if (xmlHttpRequestFetchAddress.status === 200) {
                 WaitSearch(false);
-                // console.log("Address submitted successfully");
-                // console.log(xmlHttpRequestFetchAddress.responseText);
                 const response = JSON.parse(xmlHttpRequestFetchAddress.responseText);
                 console.log(response);
                 if(response["error"] !== undefined) {
@@ -90,8 +94,9 @@ submitAddressButton.addEventListener("click", (event) => {
         xmlHttpRequestFetchAddress.send(params);
     } else {
         WaitSearch(false);
-        console.log("Invalid address provided.");
-        // TODO: feedback in the UI
+        invalidPostalCode.innerText = "Invalid postal code. Expected format K1A 0A2."
+        searchForm.appendChild(invalidPostalCode);
+
     }
 });
 
@@ -137,8 +142,6 @@ function setupRepresentativesHTML(representativesJson) {
         representativeLevelDiv.appendChild(representativeLevel);
         representativeArticle.appendChild(representativeLevelDiv);
 
-        // const representativeDetailsWithImageDiv = document.createElement("div");
-        // representativeDetailsWithImageDiv.className = "representative-details-with-image-container";
         const representativeMainDetailsWithImage = document.createElement("div");
         representativeMainDetailsWithImage.className = "representative-main-details-with-image";
         const representativeImagecontainer = document.createElement("div");
@@ -245,7 +248,7 @@ function setupRepresentativesHTML(representativesJson) {
             const representativeMainDetailsWithImageAllDetails = document.createElement("div");
             representativeMainDetailsWithImageAllDetails.className = "representative-main-details-with-image-all-details";
             const representativeImagecontainerAllDetails = document.createElement("div");
-            representativeImagecontainerAllDetails.className = "representative-image-container";
+            representativeImagecontainerAllDetails.className = "representative-image-container-all-details";
             
             const representativeImgAllDetails = document.createElement("img");
             representativeImgAllDetails.className = "representative-image-all-details";
@@ -255,7 +258,7 @@ function setupRepresentativesHTML(representativesJson) {
             representativeMainDetailsWithImageAllDetails.appendChild(representativeImagecontainerAllDetails);
 
             const detailsAndOfficesContainer = document.createElement("div");
-            detailsAndOfficesContainer.className = "details-and-offices-container";
+            detailsAndOfficesContainer.className = "details-and-offices-container-all-details";
             const representativeMainDetailsAllDetails = document.createElement("div");
             representativeMainDetailsAllDetails.className = "representative-main-details-container";
 
@@ -263,7 +266,7 @@ function setupRepresentativesHTML(representativesJson) {
             const representativeNamecontainerAllDetails = document.createElement("div");
             representativeNamecontainerAllDetails.className = "representative-name-container";
             const representativeNameElementAllDetails = document.createElement("h3");
-            representativeNameElementAllDetails.className = "representative-name";
+            representativeNameElementAllDetails.className = "representative-name-all-details";
             const representativeAnchorAllDetails = document.createElement("a");        
             representativeAnchorAllDetails.href = sourceUrl;
             representativeAnchorAllDetails.target = "_blank";
@@ -373,12 +376,24 @@ function setupRepresentativesHTML(representativesJson) {
             // offices
             const representativeOfficeDetailsDivAllDetails = document.createElement("div");
             representativeOfficeDetailsDivAllDetails.className = "representative-offices-container";
+            const representativeOfficeTitle = document.createElement("p");
+            representativeOfficeTitle.className = "offices-container-title";
+            if((legislatureOffices.length > 0 && constituencyOffices.length > 0) || legislatureOffices.length > 1 || constituencyOffices.length > 1) {
+                representativeOfficeTitle.innerText = "Offices";
+            } else if (legislatureOffices.length > 0 || constituencyOffices.length > 0) {
+                representativeOfficeTitle.innerText = "Office";
+            }
+
+            representativeOfficeDetailsDivAllDetails.appendChild(representativeOfficeTitle);
+
+            const officesDetailsContainer = document.createElement("div");
+            officesDetailsContainer.className = "offices-details-container";
 
             const representativeLegislatureOfficeContainerAllDetails = document.createElement("div");
             representativeLegislatureOfficeContainerAllDetails.className = "representative-legislature-office-container";
             const representativeConstituencyOfficeContainerAllDetails = document.createElement("div");
             representativeConstituencyOfficeContainerAllDetails.className = "representative-constituency-office-container"
-            const legislatureOfficesTitleAllDetails = document.createElement("h4");
+            const legislatureOfficesTitleAllDetails = document.createElement("p");
             legislatureOfficesTitleAllDetails.className = "legislature-office-title";
             if(legislatureOffices.length >= 1) {
                 if(legislatureOffices.length > 1) {
@@ -392,13 +407,13 @@ function setupRepresentativesHTML(representativesJson) {
                 legislatureOfficesListAllDetails.className = "legilature-offices-list";
                 generateOfficesList(legislatureOfficesListAllDetails, legislatureOffices);
                 representativeLegislatureOfficeContainerAllDetails.appendChild(legislatureOfficesListAllDetails);
-                representativeOfficeDetailsDivAllDetails.appendChild(representativeLegislatureOfficeContainerAllDetails);
+                officesDetailsContainer.appendChild(representativeLegislatureOfficeContainerAllDetails);
                 representativeConstituencyOfficeContainerAllDetails.style.marginLeft = "3rem";
             } else {
                 representativeConstituencyOfficeContainerAllDetails.style.marginLeft = "0";
             }
             
-            const constituencyOfficesTitleAllDetails = document.createElement("h4");
+            const constituencyOfficesTitleAllDetails = document.createElement("p");
             constituencyOfficesTitleAllDetails.className = "constituency-office-title";
             if(constituencyOffices.length >= 1) {
                 if(constituencyOffices.length > 1) {
@@ -412,11 +427,12 @@ function setupRepresentativesHTML(representativesJson) {
                 constituencyOfficesListAllDetails.className = "constituency-offices-list";
                 generateOfficesList(constituencyOfficesListAllDetails, constituencyOffices);
                 representativeConstituencyOfficeContainerAllDetails.appendChild(constituencyOfficesListAllDetails);
-                representativeOfficeDetailsDivAllDetails.appendChild(representativeConstituencyOfficeContainerAllDetails);
+                officesDetailsContainer.appendChild(representativeConstituencyOfficeContainerAllDetails);
             } else {
                 representativeLegislatureOfficeContainerAllDetails.style.borderRight = "none";
             }
 
+            representativeOfficeDetailsDivAllDetails.appendChild(officesDetailsContainer);
             detailsAndOfficesContainer.appendChild(representativeOfficeDetailsDivAllDetails);            
             representativeMainDetailsWithImageAllDetails.appendChild(detailsAndOfficesContainer);
             detailedWrapper.appendChild(representativeMainDetailsWithImageAllDetails);
