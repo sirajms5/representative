@@ -267,15 +267,20 @@ function setupRepresentativesHTML(representativesJson) {
             representativeNamecontainerAllDetails.className = "representative-name-container";
             const representativeNameElementAllDetails = document.createElement("h3");
             representativeNameElementAllDetails.className = "representative-name-all-details";
-            const representativeAnchorAllDetails = document.createElement("a");        
-            representativeAnchorAllDetails.href = sourceUrl;
-            representativeAnchorAllDetails.target = "_blank";
-            representativeAnchorAllDetails.className = "representative-anchor";
-            representativeAnchorAllDetails.innerText = name;
-            representativeNameElementAllDetails.appendChild(representativeAnchorAllDetails);
-            representativeNamecontainerAllDetails.appendChild(representativeNameElementAllDetails);
+            if(sourceUrl !== "") {
+                const representativeAnchorAllDetails = document.createElement("a");        
+                representativeAnchorAllDetails.href = sourceUrl;
+                representativeAnchorAllDetails.target = "_blank";
+                representativeAnchorAllDetails.className = "representative-anchor";
+                representativeAnchorAllDetails.innerText = name;
+                representativeNameElementAllDetails.appendChild(representativeAnchorAllDetails);
+                representativeNamecontainerAllDetails.appendChild(representativeNameElementAllDetails);
+            } else {
+                representativeNameElementAllDetails.innerText = name;
+                representativeNamecontainerAllDetails.appendChild(representativeNameElementAllDetails);
+            }
+            
             representativeMainDetailsAllDetails.appendChild(representativeNamecontainerAllDetails); 
-
             const representativeMainDetailsOthersAllDetails = document.createElement("div");
             representativeMainDetailsOthersAllDetails.className = "representative-main-details-others-container-all-details";
 
