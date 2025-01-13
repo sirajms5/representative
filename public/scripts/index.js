@@ -5,6 +5,7 @@ const detailedWrapper = document.createElement("div");
 const loadingDiv = document.getElementById("loader");
 const invalidPostalCode = document.getElementById("invalid-postal-code-error-message");
 const searchForm = document.getElementById("serach-form");
+const bodyWrapper = document.getElementById("body-wrapper");
 const levels = [
     "federal",
     "provincial",
@@ -56,6 +57,7 @@ const partiesColorHex = {
 
 submitAddressButton.addEventListener("click", (event) => {
     event.preventDefault();
+    bodyHeightControl(true);
     WaitSearch(true);    
     representativesSection.replaceChildren();    
     const addressValue = addressInputField.value.trim();
@@ -76,7 +78,7 @@ submitAddressButton.addEventListener("click", (event) => {
                 console.log(response);
                 if(response["error"] !== undefined) {
                     setupPostalCodeNotFound();
-                } else {
+                } else { 
                     setupRepresentativesHTML(response);
                 }
                 
@@ -230,6 +232,7 @@ function setupRepresentativesHTML(representativesJson) {
         
         representativeMainDetailsWithImage.addEventListener("click", (event) => {        
             detailedWrapper.replaceChildren();
+            bodyHeightControl(false);
             detailedWrapper.className = "representative-all-details-wrapper";
             const target = event.currentTarget;
             const photoUrl = target.dataset.photoUrl;
@@ -538,6 +541,14 @@ function WaitSearch(isWaiting) {
 function setupPostalCodeNotFound() {
     const postalCodeNotFound = document.createElement("p");
     postalCodeNotFound.id = "postal-code-not-found";
-    postalCodeNotFound.innerText = "Postal codel not found.";
+    postalCodeNotFound.innerText = "Postal code not found.";
     representativesSection.appendChild(postalCodeNotFound);
+}
+
+function bodyHeightControl(isViewHeight) {
+    if(isViewHeight) {
+        bodyWrapper.style.height = "100vh;";
+    } else {
+        bodyWrapper.style.height = "auto";
+    }
 }

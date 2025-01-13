@@ -1,6 +1,7 @@
-#body-wrapper {
-    background-color: #222222;
-    color: white;
+#body-wrapper {    
+    background: linear-gradient(135deg, #8BC2CD, #889F96);
+    color: black;
+    height: 100vh;
 }
 
 #main-wrapper {    
@@ -39,15 +40,18 @@ h1 {
 }
 
 #address-submit-button{
-    color: #242424;
-    background-color: #00c895;
+    color: #FFFFFF;
+    background-color: #007B33;
     font-size: 1rem;
-    font-weight: 600;
     border: none;
     outline: none;
     padding: 0.875rem;
     border-radius: 1.75rem;
     cursor: pointer;
+}
+
+#address-submit-button:hover {
+    opacity: 0.9;
 }
 
 #address-input-field {
@@ -59,7 +63,7 @@ h1 {
 }
 
 #invalid-postal-code-error-message {
-    color: red;
+    color: #B22222;
 }
 
 #representatives-section {
@@ -68,7 +72,8 @@ h1 {
 
 #representatives-list,
 .legilature-offices-list,
-.constituency-offices-list {
+.constituency-offices-list,
+#footer-socials-list {
     padding-inline-start: 0px
 }
 
@@ -104,7 +109,8 @@ h1 {
 }
 
 .representative-list-item,
-.office-list-item {
+.office-list-item,
+#footer-socials-list {
     list-style: none;
 }
 
@@ -121,6 +127,11 @@ h1 {
     color: #000000;
     border-radius: 1rem;
     min-width: 20rem;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 1rem;
+    box-shadow: 2px 2px 4px black;
 }
 
 .representative-main-details-with-image {
@@ -133,6 +144,7 @@ h1 {
 
 .representative-image {
     border-top-left-radius: 0.8rem;
+    border-bottom-left-radius: 0.8rem;
     width: 6.25rem;
     height: 10.123rem;
 }
@@ -210,9 +222,26 @@ h1 {
 
 #footer-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
+}
+
+#footer-socials-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#postal-code-not-found {
+    color: orange;
+}
+
+.socials {
+    font-size: 18px;
 }
 
 /* loader */
