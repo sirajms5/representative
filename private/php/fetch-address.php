@@ -26,7 +26,7 @@
                     );
                     $isCoordsFound = true;
                 } else {
-                    error_log("Error in fetch-address.php: Postal code not found.\n", 3, "./logs/errors-log.log");
+                    error_log("Error in fetch-address.php: Postal code ". $postalCode . "not found.\n", 3, "./logs/errors-log.log");
                     echo json_encode(array("error" => "Postal code not found."));
                 }                
             }
@@ -60,7 +60,7 @@
             }
             
         } else {
-            error_log("Error in fetch-address.php: No valid input provided (postal code or coordinates.\n", 3, "./logs/errors-log.log");
+            error_log("Error in fetch-address.php: No valid input for the provided postal code: " . $postalCode . "\n", 3, "./logs/errors-log.log");
             echo json_encode(array("error" => "No valid input provided (postal code or coordinates)"));
         }
 
