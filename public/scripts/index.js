@@ -75,7 +75,6 @@ submitAddressButton.addEventListener("click", (event) => {
             if (xmlHttpRequestFetchAddress.status === 200) {
                 WaitSearch(false);
                 const response = JSON.parse(xmlHttpRequestFetchAddress.responseText);
-                console.log(response);
                 if(response["error"] !== undefined) {
                     setupPostalCodeNotFound();
                 } else { 
@@ -106,10 +105,8 @@ function validateAddress(addressValue) {
     const postalCodeRegex = /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/;
 
     if (postalCodeRegex.test(addressValue)) {
-        console.log("Valid postal code");
         return true;
     } else {
-        console.log("Invalid address");
         return false;
     }
 }
