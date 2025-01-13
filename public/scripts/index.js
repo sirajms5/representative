@@ -371,10 +371,17 @@ function setupRepresentativesHTML(representativesJson) {
             emailLabelAllDetails.className = "representative-detail-label labelAndValue";
             emailLabelAllDetails.innerText = "Email:"
             emailcontainerAllDetails.appendChild(emailLabelAllDetails);
-            const representativeEmailAllDetails = document.createElement("a");
-            representativeEmailAllDetails.className = "representative-email labelAndValue";
-            representativeEmailAllDetails.href = `mailto:${representative["email"]}`;
-            representativeEmailAllDetails.innerText = email;
+            let representativeEmailAllDetails = ""
+            if(email === "N/A") {
+                representativeEmailAllDetails = document.createElement("p");
+                representativeEmailAllDetails.className = "representative-email labelAndValue";
+            } else {
+                representativeEmailAllDetails = document.createElement("a");
+                representativeEmailAllDetails.className = "representative-email labelAndValue";
+                representativeEmailAllDetails.href = `mailto:${email}`;
+                representativeEmailAllDetails.innerText = email;
+            }
+            
             emailcontainerAllDetails.appendChild(representativeEmailAllDetails);
             representativeMainDetailsOthersAllDetails.appendChild(emailcontainerAllDetails);
 
@@ -547,7 +554,7 @@ function setupPostalCodeNotFound() {
 
 function bodyHeightControl(isViewHeight) {
     if(isViewHeight) {
-        bodyWrapper.style.height = "100vh;";
+        bodyWrapper.style.height = "100vh";
     } else {
         bodyWrapper.style.height = "auto";
     }

@@ -63,13 +63,18 @@
                     $consituency = str_replace("—", " ", $row['constituency']);
                     $languages = str_replace("  ", " / ", $row['languages']);      
                     $isHonourable = $row["is_honourable"] == 1 ? true : false;  
+                    $email = $row['email'];
+                    if (preg_match('/^\d/', $email)) {
+                        $email = 'N/A';
+                    }
+
                     $representatives[$level][$repId] = [
                         "first_name" => $row['first_name'],
                         "last_name" => $row['last_name'],
                         "constituency" => $consituency,
                         "province_or_territory" => $row['province_or_territory'],
                         "political_affiliation" => $row['political_affiliation'],
-                        "email" => $row['email'],
+                        "email" => $email,
                         "position" => $row['position'],
                         "photo_url" => $row['photo_url'],
                         "level" => $row['level'],

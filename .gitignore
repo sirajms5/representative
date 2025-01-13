@@ -13,3 +13,5 @@ private/java/converters
 vendor/
 composer.json
 composer.lock
+private/java/automation_testing
+private/java/db/DbManager.java

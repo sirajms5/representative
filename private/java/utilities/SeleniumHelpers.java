@@ -21,14 +21,15 @@ public class SeleniumHelpers {
     }
 
     public void sendKeysToWebElement(WebElement webElement, String keys) {
-        Helpers.sleep(1);
+        // Helpers.sleep(1);
         webElement.sendKeys(keys);
+        // Helpers.sleep(10);
     }
 
     public void clickElement(WebElement webElement) {
-        Helpers.sleep(1);
+        // Helpers.sleep(1);
         webElement.click();
-        Helpers.sleep(3);
+        // Helpers.sleep(10);
     }
 
     public WebElement getWebElementByXPath(WebDriver webDriver, String xPath) {

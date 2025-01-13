@@ -13,7 +13,6 @@ CREATE TABLE representatives (
     level VARCHAR(50),
     languages VARCHAR(50),
     url VARCHAR(255),
-    fed_uid VARCHAR(20),
     is_honourable BOOLEAN DEFAULT false,
     boundary_url VARCHAR(255),
     UNIQUE (position, level, boundary_external_id, first_name, last_name)            

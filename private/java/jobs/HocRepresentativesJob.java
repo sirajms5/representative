@@ -39,13 +39,14 @@ public class HocRepresentativesJob {
         }
 
         // Assign boundary polygon ID to HOC
-        List<Representative> fullList = representativeCRUD.getHocMembers(RepresentativePositionEnum.MP.getValue());
-        HocBoundaryPolygonsCRUD hocBoundaryPolygonsCRUD = new HocBoundaryPolygonsCRUD();
-        for(Representative hocRepresentative : fullList) {
-            String fedUid = hocBoundaryPolygonsCRUD.getFedUidByConstituency(hocRepresentative);
-            hocRepresentative.setFedUid(fedUid);
-            representativeCRUD.updateHocMemberFedUid(hocRepresentative);
-        }
+        // List<Representative> fullList = representativeCRUD.getHocMembers(RepresentativePositionEnum.MP.getValue());
+        // HocBoundaryPolygonsCRUD hocBoundaryPolygonsCRUD = new HocBoundaryPolygonsCRUD();
+        // for(Representative hocRepresentative : fullList) {
+        //     String fedUid = hocBoundaryPolygonsCRUD.getFedUidByConstituency(hocRepresentative);
+        //     // hocRepresentative.setFedUid(fedUid);
+        //     hocRepresentative.setBoundaryExternalId(fedUid);
+        //     representativeCRUD.updateHocMemberBondaryExternalId(hocRepresentative);
+        // }
 
         JsonWriter jsonWriter = new JsonWriter();
         jsonWriter.writeHocMembersJson();

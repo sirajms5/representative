@@ -22,7 +22,7 @@ public class Representative {
     private String level;
     private String email;
     private String url;
-    private String fedUid;
+    // private String fedUid;
     private String fullName;
     private String boundaryUrl;
 
@@ -220,13 +220,13 @@ public class Representative {
         this.url = url;
     }
 
-    public String getFedUid() {
-        return fedUid;
-    }
+    // public String getFedUid() {
+    //     return fedUid;
+    // }
 
-    public void setFedUid(String fedUid) {
-        this.fedUid = fedUid;
-    }
+    // public void setFedUid(String fedUid) {
+    //     this.fedUid = fedUid;
+    // }
 
     public String getFullName() {
         if (this.fullName == null) {
