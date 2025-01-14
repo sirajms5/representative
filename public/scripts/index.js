@@ -130,7 +130,7 @@ function setupRepresentativesHTML(representativesJson) {
         const representativeLi = document.createElement("li");
         representativeLi.className = "representative-list-item";
         const representativeArticle = document.createElement("article");
-        representativeArticle.className = "representative-article";
+        representativeArticle.className = "representative-article animate__animated animate__fadeIn";
         const representativeLevelDiv = document.createElement("div");
         representativeLevelDiv.className = "representative-level-container";
 
@@ -246,7 +246,7 @@ function setupRepresentativesHTML(representativesJson) {
 
             // representative image
             const representativeMainDetailsWithImageAllDetails = document.createElement("div");
-            representativeMainDetailsWithImageAllDetails.className = "representative-main-details-with-image-all-details";
+            representativeMainDetailsWithImageAllDetails.className = "representative-main-details-with-image-all-details animate__animated animate__fadeIn";
             const representativeImagecontainerAllDetails = document.createElement("div");
             representativeImagecontainerAllDetails.className = "representative-image-container-all-details";
             
