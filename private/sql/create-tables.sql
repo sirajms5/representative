@@ -129,3 +129,12 @@ CREATE TABLE boundary_id_tracker (
 
 -- initialize boundary_id_tracker with starting value
 INSERT INTO boundary_id_tracker (latest_boundary_id) VALUES ('10000000000000');
+
+CREATE TABLE request_queue (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id VARCHAR(255) NOT NULL,
+    postal_code VARCHAR(255) NOT NULL,
+    status ENUM('pending', 'processing', 'completed') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
